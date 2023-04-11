@@ -182,7 +182,8 @@ void ARadar::WriteLineTraces()
         ray.RelativeVelocity,
         ray.AzimuthAndElevation.X,
         ray.AzimuthAndElevation.Y,
-        ray.Distance
+        ray.Distance,
+        ray.label
       });
     }
   }

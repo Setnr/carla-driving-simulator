@@ -43,6 +43,7 @@ void AFaultyRadar::AddScenario(int ScenarioID)
 void AFaultyRadar::Set(const FActorDescription &ActorDescription)
 {
   Super::Set(ActorDescription);
+  UActorBlueprintFunctionLibrary::SetFaultyRadar(ActorDescription, this);
 }
 
 void AFaultyRadar::MoveRadar()
@@ -84,7 +85,8 @@ void AFaultyRadar::WriteLineTraces()
                 ray.RelativeVelocity,
                 ray.AzimuthAndElevation.X,
                 ray.AzimuthAndElevation.Y,
-                ray.Distance
+                ray.Distance,
+                ray.label
                 });
         }
     }
