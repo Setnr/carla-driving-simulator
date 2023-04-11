@@ -63,7 +63,20 @@ protected:
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Detection")
   int PointsPerSecond;
 
-private:
+  struct RayData {
+      float Radius;
+      float Angle;
+      bool Hitted;
+      float RelativeVelocity;
+      FVector2D AzimuthAndElevation;
+      float Distance;
+      int32_t label;
+  };
+
+  std::vector<RayData> Rays;
+
+  FRadarData RadarData;
+//private:
 
   void CalculateCurrentVelocity(const float DeltaTime);
 
@@ -71,7 +84,6 @@ private:
 
   float CalculateRelativeVelocity(const FHitResult& OutHit, const FVector& RadarLocation);
 
-  FRadarData RadarData;
 
   FCollisionQueryParams TraceParams;
 
@@ -80,14 +92,6 @@ private:
   /// Used to compute the velocity of the radar
   FVector PrevLocation;
 
-  struct RayData {
-    float Radius;
-    float Angle;
-    bool Hitted;
-    float RelativeVelocity;
-    FVector2D AzimuthAndElevation;
-    float Distance;
-  };
-
-  std::vector<RayData> Rays;
+  virtual void WriteLineTraces();
+  
 };

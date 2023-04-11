@@ -887,6 +887,97 @@ void UActorBlueprintFunctionLibrary::MakeRadarDefinition(
   Success = CheckActorDefinition(Definition);
 }
 
+
+
+FActorDefinition UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition()
+{
+    FActorDefinition Definition;
+    bool Success;
+    MakeFaultyRadarDefinition(Success, Definition);
+    check(Success);
+    return Definition;
+}
+
+void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
+    bool& Success,
+    FActorDefinition& Definition)
+{
+    FillIdAndTags(Definition, TEXT("sensor"), TEXT("other"), TEXT("faulty_radar"));
+    AddVariationsForSensor(Definition);
+
+    FActorVariation HorizontalFOV;
+    HorizontalFOV.Id = TEXT("horizontal_fov");
+    HorizontalFOV.Type = EActorAttributeType::Float;
+    HorizontalFOV.RecommendedValues = { TEXT("30") };
+    HorizontalFOV.bRestrictToRecommended = false;
+
+    FActorVariation VerticalFOV;
+    VerticalFOV.Id = TEXT("vertical_fov");
+    VerticalFOV.Type = EActorAttributeType::Float;
+    VerticalFOV.RecommendedValues = { TEXT("30") };
+    VerticalFOV.bRestrictToRecommended = false;
+
+    FActorVariation Range;
+    Range.Id = TEXT("range");
+    Range.Type = EActorAttributeType::Float;
+    Range.RecommendedValues = { TEXT("100") };
+    Range.bRestrictToRecommended = false;
+
+    FActorVariation PointsPerSecond;
+    PointsPerSecond.Id = TEXT("points_per_second");
+    PointsPerSecond.Type = EActorAttributeType::Int;
+    PointsPerSecond.RecommendedValues = { TEXT("1500") };
+    PointsPerSecond.bRestrictToRecommended = false;
+
+    // Noise seed
+    FActorVariation NoiseSeed;
+    NoiseSeed.Id = TEXT("noise_seed");
+    NoiseSeed.Type = EActorAttributeType::Int;
+    NoiseSeed.RecommendedValues = { TEXT("0") };
+    NoiseSeed.bRestrictToRecommended = false;
+
+    FActorVariation Scenario;
+    Scenario.Id = TEXT("scenario");
+    Scenario.Type = EActorAttributeType::Int;
+    Scenario.RecommendedValues = { TEXT("0") };
+    Scenario.bRestrictToRecommended = false;
+
+    FActorVariation LooseContact_Interval;
+    LooseContact_Interval.Id = TEXT("LooseContact_Interval");
+    LooseContact_Interval.Type = EActorAttributeType::Int;
+    LooseContact_Interval.RecommendedValues = { TEXT("0") };
+    LooseContact_Interval.bRestrictToRecommended = false;
+
+    FActorVariation LooseContact_Duration;
+    LooseContact_Duration.Id = TEXT("LooseContact_Duration");
+    LooseContact_Duration.Type = EActorAttributeType::Int;
+    LooseContact_Duration.RecommendedValues = { TEXT("0") };
+    LooseContact_Duration.bRestrictToRecommended = false;
+
+    FActorVariation LooseContact_Start;
+    LooseContact_Start.Id = TEXT("LooseContact_Start");
+    LooseContact_Start.Type = EActorAttributeType::Int;
+    LooseContact_Start.RecommendedValues = { TEXT("0") };
+    LooseContact_Start.bRestrictToRecommended = false;
+
+    Definition.Variations.Append({
+      HorizontalFOV,
+      VerticalFOV,
+      Range,
+      PointsPerSecond,
+      NoiseSeed,
+        Scenario,
+        LooseContact_Interval,
+        LooseContact_Duration,
+        LooseContact_Start});
+
+    Success = CheckActorDefinition(Definition);
+}
+
+
+
+
+
 FActorDefinition UActorBlueprintFunctionLibrary::MakeLidarDefinition(
     const FString &Id)
 {
@@ -1754,4 +1845,21 @@ void UActorBlueprintFunctionLibrary::SetRadar(
       RetrieveActorAttributeToInt("points_per_second", Description.Variations, 1500));
 }
 
+
+void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Description, AFaultyRadar* Radar)
+{
+    CARLA_ABFL_CHECK_ACTOR(Radar);
+    if (Description.Variations.Contains("scenario"))
+        Radar->AddScenario(RetrieveActorAttributeToInt("scenario", Description.Variations, 0));
+
+
+    if (Description.Variations.Contains("LooseContact_Interval"))
+        Radar->AddLooseContactInterval(RetrieveActorAttributeToFloat("LooseContact_Interval", Description.Variations, 0.0f));
+
+    if (Description.Variations.Contains("LooseContactDuration"))
+        Radar->AddLooseContactDuration(RetrieveActorAttributeToFloat("LooseContactDuration", Description.Variations, 0.0f));
+
+    if (Description.Variations.Contains("LooseContactStart"))
+        Radar->AddLooseContactStart(RetrieveActorAttributeToFloat("LooseContactStart", Description.Variations, 0.0f));
+}
 #undef CARLA_ABFL_CHECK_ACTOR

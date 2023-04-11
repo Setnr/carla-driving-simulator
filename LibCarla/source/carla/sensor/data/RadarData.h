@@ -24,11 +24,12 @@ namespace data {
     float azimuth;  // rad
     float altitude; // rad
     float depth;    // m
+    int32_t label;
   };
 
   class RadarData {
     static_assert(sizeof(float) == sizeof(uint32_t), "Invalid float size");
-    static_assert(sizeof(float) * 4 == sizeof(RadarDetection), "Invalid RadarDetection size");
+    static_assert(sizeof(float) * 4 + sizeof(int32_t)  == sizeof(RadarDetection), "Invalid RadarDetection size");
 
   public:
     explicit RadarData() = default;

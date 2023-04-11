@@ -236,6 +236,7 @@ class World(object):
             carla.MapLayer.Walls,
             carla.MapLayer.All
         ]
+        self.toggle_radar()
 
     def restart(self):
         self.player_max_speed = 1.589
@@ -1010,7 +1011,7 @@ class IMUSensor(object):
 # -- RadarSensor ---------------------------------------------------------------
 # ==============================================================================
 
-
+i = 0
 class RadarSensor(object):
     def __init__(self, parent_actor):
         self.sensor = None
@@ -1022,13 +1023,18 @@ class RadarSensor(object):
         self.velocity_range = 7.5 # m/s
         world = self._parent.get_world()
         self.debug = world.debug
-        bp = world.get_blueprint_library().find('sensor.other.radar')
-        bp.set_attribute('horizontal_fov', str(35))
+        bp = world.get_blueprint_library().find('sensor.other.faulty_radar')
+        bp.set_attribute('horizontal_fov', str(60))
         bp.set_attribute('vertical_fov', str(20))
+        bp.set_attribute('range', str(80))
+        bp.set_attribute("scenario",str(0))
+        bp.set_attribute('LooseContact_Interval', '10.0')
+        bp.set_attribute('LooseContact_Duration', '1.8')
+        bp.set_attribute('LooseContact_Start', '2.2')
         self.sensor = world.spawn_actor(
             bp,
             carla.Transform(
-                carla.Location(x=bound_x + 0.05, z=bound_z+0.05),
+                carla.Location(x=bound_x + 0.5, z=bound_z+0.5),
                 carla.Rotation(pitch=5)),
             attach_to=self._parent)
         # We need a weak reference to self to avoid circular reference.
@@ -1069,7 +1075,7 @@ class RadarSensor(object):
             self.debug.draw_point(
                 radar_data.transform.location + fw_vec,
                 size=0.075,
-                life_time=0.06,
+                life_time=0.8,
                 persistent_lines=False,
                 color=carla.Color(r, g, b))
 
@@ -1115,7 +1121,7 @@ class CameraManager(object):
             ['sensor.camera.semantic_segmentation', cc.CityScapesPalette, 'Camera Semantic Segmentation (CityScapes Palette)', {}],
             ['sensor.camera.instance_segmentation', cc.CityScapesPalette, 'Camera Instance Segmentation (CityScapes Palette)', {}],
             ['sensor.camera.instance_segmentation', cc.Raw, 'Camera Instance Segmentation (Raw)', {}],
-            ['sensor.lidar.ray_cast', None, 'Lidar (Ray-Cast)', {'range': '50'}],
+            ['sensor.lidar.ray_cast', None, 'Lidar (Ray-Cast)', {'range': '50', 'scenario':'2' ,'LooseContact_Interval':'10' ,'LooseContact_Duration':'5'  ,'LooseContact_Start':'5' }],
             ['sensor.camera.dvs', cc.Raw, 'Dynamic Vision Sensor', {}],
             ['sensor.camera.rgb', cc.Raw, 'Camera RGB Distorted',
                 {'lens_circle_multiplier': '3.0',
@@ -1136,7 +1142,7 @@ class CameraManager(object):
                     bp.set_attribute('gamma', str(gamma_correction))
                 for attr_name, attr_value in item[3].items():
                     bp.set_attribute(attr_name, attr_value)
-            elif item[0].startswith('sensor.lidar'):
+            elif item[0].startswith('sensor.faulty_lidar'):
                 self.lidar_range = 50
 
                 for attr_name, attr_value in item[3].items():
@@ -1188,7 +1194,7 @@ class CameraManager(object):
         self = weak_self()
         if not self:
             return
-        if self.sensors[self.index][0].startswith('sensor.lidar'):
+        if self.sensors[self.index][0].startswith('sensor.faulty_lidar'):
             points = np.frombuffer(image.raw_data, dtype=np.dtype('f4'))
             points = np.reshape(points, (int(points.shape[0] / 4), 4))
             lidar_data = np.array(points[:, :2])
