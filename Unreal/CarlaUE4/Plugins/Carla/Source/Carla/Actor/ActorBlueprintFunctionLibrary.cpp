@@ -944,19 +944,19 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
 
     FActorVariation LooseContact_Interval;
     LooseContact_Interval.Id = TEXT("LooseContact_Interval");
-    LooseContact_Interval.Type = EActorAttributeType::Int;
+    LooseContact_Interval.Type = EActorAttributeType::Float;
     LooseContact_Interval.RecommendedValues = { TEXT("0") };
     LooseContact_Interval.bRestrictToRecommended = false;
 
     FActorVariation LooseContact_Duration;
     LooseContact_Duration.Id = TEXT("LooseContact_Duration");
-    LooseContact_Duration.Type = EActorAttributeType::Int;
+    LooseContact_Duration.Type = EActorAttributeType::Float;
     LooseContact_Duration.RecommendedValues = { TEXT("0") };
     LooseContact_Duration.bRestrictToRecommended = false;
 
     FActorVariation LooseContact_Start;
     LooseContact_Start.Id = TEXT("LooseContact_Start");
-    LooseContact_Start.Type = EActorAttributeType::Int;
+    LooseContact_Start.Type = EActorAttributeType::Float;
     LooseContact_Start.RecommendedValues = { TEXT("0") };
     LooseContact_Start.bRestrictToRecommended = false;
 
@@ -1856,10 +1856,11 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
     if (Description.Variations.Contains("LooseContact_Interval"))
         Radar->AddLooseContactInterval(RetrieveActorAttributeToFloat("LooseContact_Interval", Description.Variations, 0.0f));
 
-    if (Description.Variations.Contains("LooseContactDuration"))
-        Radar->AddLooseContactDuration(RetrieveActorAttributeToFloat("LooseContactDuration", Description.Variations, 0.0f));
+    if (Description.Variations.Contains("LooseContact_Duration"))
+        Radar->AddLooseContactDuration(RetrieveActorAttributeToFloat("LooseContact_Duration", Description.Variations, 0.0f));
 
-    if (Description.Variations.Contains("LooseContactStart"))
-        Radar->AddLooseContactStart(RetrieveActorAttributeToFloat("LooseContactStart", Description.Variations, 0.0f));
+    if (Description.Variations.Contains("LooseContact_Start"))
+        Radar->AddLooseContactStart(RetrieveActorAttributeToFloat("LooseContact_Start", Description.Variations, 0.0f));
+
 }
 #undef CARLA_ABFL_CHECK_ACTOR
