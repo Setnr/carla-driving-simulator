@@ -57,5 +57,21 @@ void ACollisionSensor::OnCollisionEvent(
     // record the collision event
     if (Episode.GetRecorder()->IsEnabled())
       Episode.GetRecorder()->AddCollision(Actor, OtherActor);
+
+    auto CarlaActor = Episode.FindCarlaActor(Actor);
+    auto children = CarlaActor->GetChildren();
+    for (auto child : children) {
+        auto id = (FCarlaActor::IdType)(child);
+        if (Episode.GetActorRegistry().Contains(id)) {
+            UCarlaEpisode& ptr = const_cast<UCarlaEpisode&>(Episode);
+            auto childActor = ptr.FindCarlaActor(id);
+            AActor* childAActor = childActor->GetActor();
+            if (childAActor->GetClass() == AFaultyRadar::StaticClass()) 
+            {
+                AFaultyRadar* radar = reinterpret_cast<AFaultyRadar*>(childAActor);
+                radar->MoveRadar();
+            }
+        }
+    }
   }
 }
