@@ -14,7 +14,7 @@ After Conda is installed we need to create our environment
 
 Start the Anaconda Prompt
 
-![image](.\CondaSetup\CondaSetup_2.png)
+![image](./CondaSetup/CondaSetup_2.png)
 
 Now you move to the .\carla\Documentation Folder
 
@@ -47,4 +47,4 @@ Select the Python.exe
 
 It Should look like this now
 
-![image](./CondaSetup/CondaSetup_5.pnp)
+![image](./CondaSetup/CondaSetup_5.png)
