@@ -960,6 +960,48 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     LooseContact_Start.RecommendedValues = { TEXT("0") };
     LooseContact_Start.bRestrictToRecommended = false;
 
+    FActorVariation LooseContact_ProgressionRate;
+    LooseContact_ProgressionRate.Id = TEXT("LooseContact_ProgressionRate");
+    LooseContact_ProgressionRate.Type = EActorAttributeType::Float;
+    LooseContact_ProgressionRate.RecommendedValues = { TEXT("0") };
+    LooseContact_ProgressionRate.bRestrictToRecommended = false;
+
+    FActorVariation ConstantShift_Rotation;
+    ConstantShift_Rotation.Id = TEXT("ConstantShift_Rotation");
+    ConstantShift_Rotation.Type = EActorAttributeType::String;
+    ConstantShift_Rotation.RecommendedValues = { TEXT("0") };
+    ConstantShift_Rotation.bRestrictToRecommended = false;
+
+
+    FActorVariation ConstantShift_Interval;
+    ConstantShift_Interval.Id = TEXT("ConstantShift_Interval");
+    ConstantShift_Interval.Type = EActorAttributeType::Float;
+    ConstantShift_Interval.RecommendedValues = { TEXT("0") };
+    ConstantShift_Interval.bRestrictToRecommended = false;
+
+    FActorVariation ConstantShift_Start;
+    ConstantShift_Start.Id = TEXT("ConstantShift_Start");
+    ConstantShift_Start.Type = EActorAttributeType::Float;
+    ConstantShift_Start.RecommendedValues = { TEXT("0") };
+    ConstantShift_Start.bRestrictToRecommended = false;
+
+
+    FActorVariation RandomShift_Start;
+    RandomShift_Start.Id = TEXT("RandomShift_Start");
+    RandomShift_Start.Type = EActorAttributeType::Float;
+    RandomShift_Start.RecommendedValues = { TEXT("0") };
+    RandomShift_Start.bRestrictToRecommended = false;
+    FActorVariation RandomShift_End;
+    RandomShift_End.Id = TEXT("RandomShift_End");
+    RandomShift_End.Type = EActorAttributeType::Float;
+    RandomShift_End.RecommendedValues = { TEXT("0") };
+    RandomShift_End.bRestrictToRecommended = false;
+    FActorVariation RandomShif_StartOffset;
+    RandomShif_StartOffset.Id = TEXT("RandomShif_StartOffset");
+    RandomShif_StartOffset.Type = EActorAttributeType::Float;
+    RandomShif_StartOffset.RecommendedValues = { TEXT("0") };
+    RandomShif_StartOffset.bRestrictToRecommended = false;
+
     Definition.Variations.Append({
       HorizontalFOV,
       VerticalFOV,
@@ -969,7 +1011,15 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
         Scenario,
         LooseContact_Interval,
         LooseContact_Duration,
-        LooseContact_Start});
+        LooseContact_Start,
+        LooseContact_ProgressionRate,
+        ConstantShift_Rotation,
+        ConstantShift_Interval,
+        ConstantShift_Start,
+        RandomShift_Start,
+        RandomShift_End,
+        RandomShif_StartOffset
+        });
 
     Success = CheckActorDefinition(Definition);
 }
@@ -1846,21 +1896,53 @@ void UActorBlueprintFunctionLibrary::SetRadar(
 }
 
 
+#define IQZ_SENSOR_SET_MACRO(sensor,function,AttributeName,RetrieveFunction,StandardValue) if (Description.Variations.Contains(AttributeName)) {sensor->function(RetrieveFunction(AttributeName, Description.Variations, StandardValue));}
+
+
 void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Description, AFaultyRadar* Radar)
 {
     CARLA_ABFL_CHECK_ACTOR(Radar);
     if (Description.Variations.Contains("scenario"))
         Radar->AddScenario(RetrieveActorAttributeToInt("scenario", Description.Variations, 0));
 
+#pragma region Loose Contanct
+    //if (Description.Variations.Contains("LooseContact_Interval"))
+    //    Radar->AddLooseContactInterval(RetrieveActorAttributeToFloat("LooseContact_Interval", Description.Variations, 0.0f));
 
-    if (Description.Variations.Contains("LooseContact_Interval"))
-        Radar->AddLooseContactInterval(RetrieveActorAttributeToFloat("LooseContact_Interval", Description.Variations, 0.0f));
+    IQZ_SENSOR_SET_MACRO(Radar, AddLooseContactInterval, "LooseContact_Interval", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, AddLooseContactDuration, "LooseContact_Duration", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetProgressionRate, "LooseContact_ProgressionRate", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, AddLooseContactStart, "LooseContact_Start", RetrieveActorAttributeToFloat, 0.0f);
 
-    if (Description.Variations.Contains("LooseContact_Duration"))
-        Radar->AddLooseContactDuration(RetrieveActorAttributeToFloat("LooseContact_Duration", Description.Variations, 0.0f));
+    //if (Description.Variations.Contains("LooseContact_Duration"))
+    //    Radar->AddLooseContactDuration(RetrieveActorAttributeToFloat("LooseContact_Duration", Description.Variations, 0.0f));
 
-    if (Description.Variations.Contains("LooseContact_Start"))
-        Radar->AddLooseContactStart(RetrieveActorAttributeToFloat("LooseContact_Start", Description.Variations, 0.0f));
+    //if (Description.Variations.Contains("LooseContact_Start"))
+    //    Radar->AddLooseContactStart(RetrieveActorAttributeToFloat("LooseContact_Start", Description.Variations, 0.0f));
+
+    //if (Description.Variations.Contains("LooseContact_ProgressionRate"))
+    //    Radar->SetProgressionRate(RetrieveActorAttributeToFloat("LooseContact_ProgressionRate", Description.Variations, 0.0f));
+#pragma endregion
+
+
+#pragma region Constant Shift
+    IQZ_SENSOR_SET_MACRO(Radar, SetConstantShiftRotation, "ConstantShift_Rotation", RetrieveActorAttributeToString, "0;0;0");
+    IQZ_SENSOR_SET_MACRO(Radar, SetConstantShiftInterval, "ConstantShift_Interval", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetConstantShiftStart, "ConstantShift_Start", RetrieveActorAttributeToFloat, 0.0f);
+    //if (Description.Variations.Contains("ConstantShift_Rotation"))
+    //    Radar->SetConstantShiftRotation(RetrieveActorAttributeToString("ConstantShift_Rotation", Description.Variations, "0;0;0"));
+
+    //if (Description.Variations.Contains("ConstantShift_Interval"))
+    //    Radar->SetConstantShiftInterval(RetrieveActorAttributeToFloat("ConstantShift_Interval", Description.Variations, 0.0f));
+
+    //if (Description.Variations.Contains("ConstantShift_Start"))
+    //    Radar->SetConstantShiftStart(RetrieveActorAttributeToFloat("ConstantShift_Start", Description.Variations, 0.0f));
+#pragma endregion
+#pragma region Random Shift
+    IQZ_SENSOR_SET_MACRO(Radar, SetRandomShiftStart, "RandomShift_Start", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetRandomShiftEnd, "RandomShift_End", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetRandomShiftStartOffset, "RandomShif_StartOffset", RetrieveActorAttributeToFloat, 0.0f);
+#pragma endregion
 
 }
 #undef CARLA_ABFL_CHECK_ACTOR
