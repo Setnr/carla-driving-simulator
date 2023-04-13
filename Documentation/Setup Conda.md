@@ -2,7 +2,7 @@ Download miniconda from https://docs.conda.io/en/latest/miniconda.html
 
 it is suggested that you download the Python 3.8 Version
 
-![image](.\CondaSetup\CondaSetup_1.png)
+![image](./CondaSetup/CondaSetup_1.png)
 
 Install conda with the Installer. 
 
@@ -31,11 +31,11 @@ To import the environment into Visual Studio Code
 
 Click on your current interpreter in Visual Studio Code
 
-![image](.\CondaSetup\CondaSetup_3.png)
+![image](./CondaSetup/CondaSetup_3.png)
 
 Click on "Enter a interpreter path" and then on "Find" 
 
-![image](.\CondaSetup\CondaSetup_4.png)
+![image](./CondaSetup/CondaSetup_4.png)
 
 Head to the folder where you have miniconda installed.
 
@@ -47,4 +47,4 @@ Select the Python.exe
 
 It Should look like this now
 
-![image](.\CondaSetup\CondaSetup_5.pnp)
+![image](./CondaSetup/CondaSetup_5.pnp)
