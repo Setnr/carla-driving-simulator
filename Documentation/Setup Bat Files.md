@@ -22,6 +22,6 @@ Neue Variable hinzufügen mit dem Namen IQZ_VS_STARTUP
 und hier wird der Wert C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build
 aus dem vorherigen Zielinhalt
 
-![image](SetupBat_Step6.png)
+![image](.\BatSetup\SetupBat_Step6.png)
 
 alle Fenster mit ok bestätigen und so schliesen.
