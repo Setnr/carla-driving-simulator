@@ -93,6 +93,17 @@ import random
 import re
 import weakref
 
+
+from enum import Enum
+class Scenario(Enum):
+    RadarBlocked = 1
+    RadarLooseContact = 2
+    RadarConstantShift = 4
+    RadarVibration = 8
+    RadarVictim = 16
+    RadarRandomShift = 32
+    RadarCollosionShift = 64
+
 try:
     import pygame
     from pygame.locals import KMOD_CTRL
@@ -1023,18 +1034,30 @@ class RadarSensor(object):
         world = self._parent.get_world()
         self.debug = world.debug
         bp = world.get_blueprint_library().find('sensor.other.faulty_radar')
+        bp.set_attribute('scenario', str(Scenario.RadarLooseContact.value))
+
         bp.set_attribute('horizontal_fov', str(35))
         bp.set_attribute('vertical_fov', str(20))
-        bp.set_attribute('scenario', str(2))
+        #Set Paramters for Scnearios
         bp.set_attribute('LooseContact_Interval', str(10))
         bp.set_attribute('LooseContact_Duration', str(5))
         bp.set_attribute('LooseContact_Start', str(30))
+        bp.set_attribute('LooseContact_ProgressionRate', str(5))
+
+        bp.set_attribute('ConstantShift_Rotation', "10;0;0")
+        bp.set_attribute('ConstantShift_Interval', "10")
+        bp.set_attribute('ConstantShift_Start', "30")
+        
+        bp.set_attribute('RandomShift_Start', "10")
+        bp.set_attribute('RandomShift_End', "30")
+        bp.set_attribute('RandomShif_StartOffset', "30")
         self.sensor = world.spawn_actor(
             bp,
             carla.Transform(
                 carla.Location(x=bound_x + 0.05, z=bound_z+0.05),
                 carla.Rotation(pitch=5)),
             attach_to=self._parent)
+
         # We need a weak reference to self to avoid circular reference.
         weak_self = weakref.ref(self)
         self.sensor.listen(
@@ -1076,6 +1099,7 @@ class RadarSensor(object):
                 life_time=0.25,
                 persistent_lines=False,
                 color=carla.Color(r, g, b))
+                
 
 # ==============================================================================
 # -- CameraManager -------------------------------------------------------------
@@ -1379,6 +1403,5 @@ def main():
         print('\nCancelled by user. Bye!')
 
 
-if __name__ == '__main__':
-
+if __name__ == '__main__':   
     main()

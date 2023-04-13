@@ -10,7 +10,6 @@ import json
 import numpy as np 
 from pathlib import Path
 import argparse
-import weakref
 
 try:
     sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
@@ -20,19 +19,22 @@ try:
 except IndexError:
     pass
 import carla
-from automatic_control import  KeyboardControl, FadingText, HelpText
-from carla import ColorConverter as cc
+from automatic_control import CameraManager, KeyboardControl, FadingText, HelpText
 
 import h5
 
 SIMULATION_TIME = 150 # In Seconds
 TIMESTAMP = datetime.datetime.timestamp(datetime.datetime.now())
 CHUNNK = 5000
+SIMULATION_RUNS  = 1
+ID = -1
 RENDER_HUD = True
 
 display = pygame.display.set_mode(
             (1280, 720),
             pygame.HWSURFACE | pygame.DOUBLEBUF)
+display.fill((0,0,0))
+pygame.display.flip()
 
 class VehicleEnvironment:
     vehicle_list = []
@@ -61,7 +63,7 @@ class VehicleEnvironment:
         self.store_radar_data = store_radar_data
         self.detection_counter = 0 # Detection as in Frame
         self.dpoint_counter = 0 # Point as in database entry
-        self.hdffilename = f"C:\carla\PythonAPI\examples\Data\\"
+        self.hdffilename = f"C:\carla\PythonAPI\examples\Data{ID}\\"
         if not os.path.exists(self.hdffilename):
             os.makedirs(self.hdffilename)
         if not os.path.exists(self.hdffilename+"camera"):
@@ -99,9 +101,22 @@ class VehicleEnvironment:
         return max(min_v, min(value, max_v))
 
     def process_radar_data(self, data, radar):
+        #print(f"Current time in nanoseconds:{time.time_ns()}")
         velocity_range = 7.5 # m/s
         current_rot = data.transform.rotation
+        # TODO Abbruchbedingung
+        #trans  = radar.get_transform()
+        #rotation = trans.rotation
 
+        # Compute the new rotation of the radar sensor
+        #new_rotation = carla.Rotation(
+        #        pitch=rotation.pitch,
+        #        yaw=rotation.yaw + 0.002,
+        #        roll=rotation.roll
+        #    )
+
+            # Set the new rotation of the radar sensor
+        #radar.set_transform(carla.Transform(location =trans.location, rotation=new_rotation))
         for detect in data:
             azi = math.degrees(detect.azimuth)
             alt = math.degrees(detect.altitude)
@@ -190,7 +205,7 @@ class VehicleEnvironment:
         self.vehicle.set_autopilot(True)
 
         # Add Camera Manager to follow the ego vehicle with a view
-        self.camera_manager = CameraManager(self.vehicle, self.hud,2.2)
+        self.camera_manager = CameraManager(self.vehicle, self.hud)
         self.camera_manager.transform_index = cam_pos_id
         self.camera_manager.set_sensor(cam_index, notify=False)
 
@@ -421,65 +436,70 @@ def simulate(recording, store_radar_data):
     pygame.font.init()
 
     # Create agent and environment
-    hud = HUD(1280, 720)
+    hud = HUD(1080, 720)
 
-    world = None
-    env = None
-    recordingfile = ""
-    try:
-        print("Connecting to Simulation Environment ...")
-        # Create a client object that can run the agent and connect to the world
-        print("Creating client and connecting to host ...")
-        client = carla.Client('localhost', 2000)
-        client.set_timeout(5.0) # might need a longer timeout with bad hardware
-        time.sleep(5.0)
+    for i in range(0, SIMULATION_RUNS):
+        world = None
+        env = None
+        recordingfile = ""
+        global ID
+        ID = ID + 1
+        print(f"Starting Simmulation {ID}")
+        pygame.display.set_caption(f"Starting Simmulation {ID}")
+        try:
+            print("Connecting to Simulation Environment ...")
+            # Create a client object that can run the agent and connect to the world
+            print("Creating client and connecting to host ...")
+            client = carla.Client('localhost', 2000)
+            client.set_timeout(5.0) # might need a longer timeout with bad hardware
+            time.sleep(5.0)
 
-        traffic_manager = client.get_trafficmanager()
-        traffic_manager.set_synchronous_mode(True)            
-        
-        print("Creating Display ...")
-        # Get world object that was started by another source (hopefully)
-        world = client.get_world()
-        settings = world.get_settings()
-        settings.synchronous_mode = True
-        settings.fixed_delta_seconds = 0.05
-        world.apply_settings(settings)
+            traffic_manager = client.get_trafficmanager()
+            traffic_manager.set_synchronous_mode(True)
             
-        world.on_tick(lambda snapshot: hud.on_world_tick(snapshot))
-        print("Setting up Vehicle Environment ...")
-        env = VehicleEnvironment(hud, world, store_radar_data)
-        env.setup()
-
-        controller = KeyboardControl(env)
-        print("Running Simulation Loop ...")
-        clock = pygame.time.Clock()
-        end_time = env.start_time + SIMULATION_TIME
-        if recording:
-            recordingfile = f"recording{TIMESTAMP}.rec"  
-            client.start_recorder(str(Path().resolve().joinpath(recordingfile)), True)
-        
-        while time.time() <= end_time:
-            clock.tick()
-            world.tick()
-            if controller.parse_events():
-                return
-            env.tick(clock)
-            env.render(display)
-            pygame.display.flip()
-
-    finally:
-        # Clean up and call destruction routines
-        if recording:
-            client.stop_recorder()
-
-        if world is not None:
+            print("Creating Display ...")
+            # Get world object that was started by another source (hopefully)
+            world = client.get_world()
             settings = world.get_settings()
-            settings.synchronous_mode = False
-            settings.fixed_delta_seconds = None
+            settings.synchronous_mode = True
+            settings.fixed_delta_seconds = 0.05
             world.apply_settings(settings)
-        if env is not None:
-            env.destruct()
-        
+            
+            world.on_tick(lambda snapshot: hud.on_world_tick(snapshot))
+            print("Setting up Vehicle Environment ...")
+            env = VehicleEnvironment(hud, world, store_radar_data)
+            env.setup()
+
+            controller = KeyboardControl(env)
+            print("Running Simulation Loop ...")
+            clock = pygame.time.Clock()
+            end_time = env.start_time + SIMULATION_TIME
+            if recording:
+                recordingfile = f"recording{TIMESTAMP}.rec"  
+                client.start_recorder(str(Path().resolve().joinpath(recordingfile)), True)
+
+            while time.time() <= end_time:
+                clock.tick()
+                world.tick()
+
+                if controller.parse_events():
+                    return
+                env.tick(clock)
+                env.render(display)
+                pygame.display.flip()
+
+        finally:
+            # Clean up and call destruction routines
+            if recording:
+                client.stop_recorder()
+
+            if world is not None:
+                settings = world.get_settings()
+                settings.synchronous_mode = False
+                settings.fixed_delta_seconds = None
+                world.apply_settings(settings)
+            if env is not None:
+                env.destruct()
 
     pygame.quit()
    
@@ -529,151 +549,7 @@ def main():
     if args.playback:
         replay_recording(args.playback)
     else:
-        simulate(args.recording, True)
-
-
-
-# ==============================================================================
-# -- CameraManager -------------------------------------------------------------
-# ==============================================================================
-
-
-class CameraManager(object):
-    def __init__(self, parent_actor, hud, gamma_correction):
-        self.sensor = None
-        self.surface = None
-        self._parent = parent_actor
-        self.hud = hud
-        self.recording = False
-        bound_x = 0.5 + self._parent.bounding_box.extent.x
-        bound_y = 0.5 + self._parent.bounding_box.extent.y
-        bound_z = 0.5 + self._parent.bounding_box.extent.z
-        Attachment = carla.AttachmentType
-
-        if not self._parent.type_id.startswith("walker.pedestrian"):
-            self._camera_transforms = [
-                (carla.Transform(carla.Location(x=-2.0*bound_x, y=+0.0*bound_y, z=2.0*bound_z), carla.Rotation(pitch=8.0)), Attachment.SpringArmGhost),
-                (carla.Transform(carla.Location(x=+0.8*bound_x, y=+0.0*bound_y, z=1.3*bound_z)), Attachment.Rigid),
-                (carla.Transform(carla.Location(x=+1.9*bound_x, y=+1.0*bound_y, z=1.2*bound_z)), Attachment.SpringArmGhost),
-                (carla.Transform(carla.Location(x=-2.8*bound_x, y=+0.0*bound_y, z=4.6*bound_z), carla.Rotation(pitch=6.0)), Attachment.SpringArmGhost),
-                (carla.Transform(carla.Location(x=-1.0, y=-1.0*bound_y, z=0.4*bound_z)), Attachment.Rigid)]
-        else:
-            self._camera_transforms = [
-                (carla.Transform(carla.Location(x=-2.5, z=0.0), carla.Rotation(pitch=-8.0)), Attachment.SpringArmGhost),
-                (carla.Transform(carla.Location(x=1.6, z=1.7)), Attachment.Rigid),
-                (carla.Transform(carla.Location(x=2.5, y=0.5, z=0.0), carla.Rotation(pitch=-8.0)), Attachment.SpringArmGhost),
-                (carla.Transform(carla.Location(x=-4.0, z=2.0), carla.Rotation(pitch=6.0)), Attachment.SpringArmGhost),
-                (carla.Transform(carla.Location(x=0, y=-2.5, z=-0.0), carla.Rotation(yaw=90.0)), Attachment.Rigid)]
-
-        self.transform_index = 1
-        self.sensors = [
-            ['sensor.camera.rgb', cc.Raw, 'Camera RGB', {}],
-        ]
-        world = self._parent.get_world()
-        bp_library = world.get_blueprint_library()
-        for item in self.sensors:
-            bp = bp_library.find(item[0])
-            if item[0].startswith('sensor.camera'):
-                bp.set_attribute('image_size_x', str(hud.dim[0]))
-                bp.set_attribute('image_size_y', str(hud.dim[1]))
-                if bp.has_attribute('gamma'):
-                    bp.set_attribute('gamma', str(gamma_correction))
-                for attr_name, attr_value in item[3].items():
-                    bp.set_attribute(attr_name, attr_value)
-            elif item[0].startswith('sensor.lidar'):
-                self.lidar_range = 50
-
-                for attr_name, attr_value in item[3].items():
-                    bp.set_attribute(attr_name, attr_value)
-                    if attr_name == 'range':
-                        self.lidar_range = float(attr_value)
-
-            item.append(bp)
-        self.index = None
-
-    def toggle_camera(self):
-        self.transform_index = (self.transform_index + 1) % len(self._camera_transforms)
-        self.set_sensor(self.index, notify=False, force_respawn=True)
-
-    def set_sensor(self, index, notify=True, force_respawn=False):
-        index = index % len(self.sensors)
-        needs_respawn = True if self.index is None else \
-            (force_respawn or (self.sensors[index][2] != self.sensors[self.index][2]))
-        if needs_respawn:
-            if self.sensor is not None:
-                self.sensor.destroy()
-                self.surface = None
-            self.sensor = self._parent.get_world().spawn_actor(
-                self.sensors[index][-1],
-                self._camera_transforms[self.transform_index][0],
-                attach_to=self._parent,
-                attachment_type=self._camera_transforms[self.transform_index][1])
-            # We need to pass the lambda a weak reference to self to avoid
-            # circular reference.
-            weak_self = weakref.ref(self)
-            self.sensor.listen(lambda image: CameraManager._parse_image(weak_self, image))
-        if notify:
-            self.hud.notification(self.sensors[index][2])
-        self.index = index
-
-    def next_sensor(self):
-        self.set_sensor(self.index + 1)
-
-    def toggle_recording(self):
-        self.recording = not self.recording
-        self.hud.notification('Recording %s' % ('On' if self.recording else 'Off'))
-
-    def render(self, display):
-        if self.surface is not None:
-            display.blit(self.surface, (0, 0))
-
-    @staticmethod
-    def _parse_image(weak_self, image):
-        self = weak_self()
-        if not self:
-            return
-        if self.sensors[self.index][0].startswith('sensor.lidar'):
-            points = np.frombuffer(image.raw_data, dtype=np.dtype('f4'))
-            points = np.reshape(points, (int(points.shape[0] / 4), 4))
-            lidar_data = np.array(points[:, :2])
-            lidar_data *= min(self.hud.dim) / (2.0 * self.lidar_range)
-            lidar_data += (0.5 * self.hud.dim[0], 0.5 * self.hud.dim[1])
-            lidar_data = np.fabs(lidar_data)  # pylint: disable=E1111
-            lidar_data = lidar_data.astype(np.int32)
-            lidar_data = np.reshape(lidar_data, (-1, 2))
-            lidar_img_size = (self.hud.dim[0], self.hud.dim[1], 3)
-            lidar_img = np.zeros((lidar_img_size), dtype=np.uint8)
-            lidar_img[tuple(lidar_data.T)] = (255, 255, 255)
-            self.surface = pygame.surfarray.make_surface(lidar_img)
-        elif self.sensors[self.index][0].startswith('sensor.camera.dvs'):
-            # Example of converting the raw_data from a carla.DVSEventArray
-            # sensor into a NumPy array and using it as an image
-            dvs_events = np.frombuffer(image.raw_data, dtype=np.dtype([
-                ('x', np.uint16), ('y', np.uint16), ('t', np.int64), ('pol', np.bool)]))
-            dvs_img = np.zeros((image.height, image.width, 3), dtype=np.uint8)
-            # Blue is positive, red is negative
-            dvs_img[dvs_events[:]['y'], dvs_events[:]['x'], dvs_events[:]['pol'] * 2] = 255
-            self.surface = pygame.surfarray.make_surface(dvs_img.swapaxes(0, 1))
-        elif self.sensors[self.index][0].startswith('sensor.camera.optical_flow'):
-            image = image.get_color_coded_flow()
-            array = np.frombuffer(image.raw_data, dtype=np.dtype("uint8"))
-            array = np.reshape(array, (image.height, image.width, 4))
-            array = array[:, :, :3]
-            array = array[:, :, ::-1]
-            self.surface = pygame.surfarray.make_surface(array.swapaxes(0, 1))
-        else:
-            image.convert(self.sensors[self.index][1])
-            array = np.frombuffer(image.raw_data, dtype=np.dtype("uint8"))
-            array = np.reshape(array, (image.height, image.width, 4))
-            array = array[:, :, :3]
-            array = array[:, :, ::-1]
-            self.surface = pygame.surfarray.make_surface(array.swapaxes(0, 1))
-        if self.recording:
-            image.save_to_disk('_out/%08d' % image.frame)
-
-
+        simulate(args.recording, args.store_radar_data)
 
 if __name__ == '__main__':
     main()
-
-

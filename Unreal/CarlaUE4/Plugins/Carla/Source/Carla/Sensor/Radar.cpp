@@ -118,7 +118,7 @@ void ARadar::SendLineTraces(float DeltaTime)
     FCriticalSection Mutex;
     GetWorld()->GetPhysicsScene()->GetPxScene()->lockRead();
     {
-        //const auto& Episode = GetEpisode();
+        const auto& Episode = GetEpisode();
         TRACE_CPUPROFILER_EVENT_SCOPE(ParallelFor);
         ParallelFor(NumPoints, [&](int32 idx) {
             TRACE_CPUPROFILER_EVENT_SCOPE(ParallelForTask);
@@ -157,16 +157,17 @@ void ARadar::SendLineTraces(float DeltaTime)
                     TransformZAxis
                 );
 
-                /*Rays[idx].Distance = OutHit.Distance * TO_METERS;
+                Rays[idx].Distance = OutHit.Distance * TO_METERS;
                 Rays[idx].label = 0;
                 auto CarlaActor = Episode.FindCarlaActor(OutHit.GetActor());
-                check(CarlaActor);
-                auto Info = CarlaActor->GetActorInfo();
-                check(Info);
-                for (auto tag : Info->SemanticTags)
-                {
-                    Rays[idx].label |= 1 << ((int)tag - 1);
-                }*/
+                if (CarlaActor) {
+                    auto Info = CarlaActor->GetActorInfo();
+                    if (Info)
+                        for (auto tag : Info->SemanticTags)
+                        {
+                            Rays[idx].label |= 1 << ((int)tag - 1);
+                        }
+                }
             }
             });
     }

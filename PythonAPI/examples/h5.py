@@ -42,9 +42,11 @@ class RadarDetection(IsDescription):
 
 class RadarScenes:
     def __init__(self,hdffilename):
+
         self.h5file = open_file(hdffilename + "radar_data.h5", mode="w", title="Test hdf5 file")
         self.tbl_odom = self.h5file.create_table(where="/", name='odometry', description=Odometry, title="RadaData")
         self.tbl_radar = self.h5file.create_table(where="/", name='radar_data', description=RadarDetection, title="RadaData")
+
 
         self.TimeStamp = 0
         self.OdoMetryCounter = 0
