@@ -12,6 +12,7 @@
 #include "Carla/Game/CarlaEpisode.h"
 #include "Carla/Game/CarlaGameInstance.h"
 #include "Carla/Game/CarlaGameModeBase.h"
+#include "Carla/Sensor/FaultyRayCastLidar.h"
 
 ACollisionSensor::ACollisionSensor(const FObjectInitializer& ObjectInitializer)
   : Super(ObjectInitializer)
@@ -70,6 +71,11 @@ void ACollisionSensor::OnCollisionEvent(
             {
                 AFaultyRadar* radar = reinterpret_cast<AFaultyRadar*>(childAActor);
                 radar->MoveRadar();
+            }
+            if (childAActor->GetClass() == AFaultyRayCastLidar::StaticClass())
+            {
+                AFaultyRayCastLidar* lidar = reinterpret_cast<AFaultyRayCastLidar*>(childAActor);
+                lidar->MoveLidar();
             }
         }
     }
