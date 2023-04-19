@@ -15,6 +15,7 @@
 #include "Carla/Sensor/Radar.h"
 #include "Carla/Sensor/FaultyRadar.h"
 #include "Carla/Sensor/InertialMeasurementUnit.h"
+#include "Carla/Sensor/FaultyLidarDescription.h"
 
 #include "Kismet/BlueprintFunctionLibrary.h"
 
@@ -87,6 +88,14 @@ public:
       const FString &Id,
       bool &Success,
       FActorDefinition &Definition);
+  static FActorDefinition MakeFaultyLidarDefinition(
+      const FString& Id);
+
+  UFUNCTION(Category = "Carla Actor", BlueprintCallable)
+      static void MakeFaultyLidarDefinition(
+          const FString& Id,
+          bool& Success,
+          FActorDefinition& Definition);
 
   static FActorDefinition MakeGnssDefinition();
 
@@ -228,6 +237,7 @@ public:
   static void SetCamera(const FActorDescription &Description, AShaderBasedSensor *Camera);
 
   static void SetLidar(const FActorDescription &Description, FLidarDescription &Lidar);
+  static void SetFaultyLidar(const FActorDescription& Description, FLidarDescription& Lidar, FFaultyLidarDescription& FaultyLidar);
 
   static void SetGnss(const FActorDescription &Description, AGnssSensor *Gnss);
 

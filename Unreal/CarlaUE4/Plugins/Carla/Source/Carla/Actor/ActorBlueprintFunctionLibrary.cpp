@@ -16,6 +16,8 @@
 #include <limits>
 #include <stack>
 
+#define IQZ_SENSOR_SET_MACRO(sensor,function,AttributeName,RetrieveFunction,StandardValue) if (Description.Variations.Contains(AttributeName)) {sensor->function(RetrieveFunction(AttributeName, Description.Variations, StandardValue));}
+
 /// Checks validity of FActorDefinition.
 class FActorDefinitionValidator
 {
@@ -1146,6 +1148,216 @@ void UActorBlueprintFunctionLibrary::MakeLidarDefinition(
   Success = CheckActorDefinition(Definition);
 }
 
+
+
+FActorDefinition UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
+    const FString& Id)
+{
+    FActorDefinition Definition;
+    bool Success;
+    MakeFaultyLidarDefinition(Id, Success, Definition);
+    check(Success);
+    return Definition;
+}
+
+void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
+    const FString& Id,
+    bool& Success,
+    FActorDefinition& Definition)
+{
+    FillIdAndTags(Definition, TEXT("sensor"), TEXT("faulty_lidar"), Id);
+    AddRecommendedValuesForSensorRoleNames(Definition);
+    AddVariationsForSensor(Definition);
+    // Number of channels.
+    FActorVariation Channels;
+    Channels.Id = TEXT("channels");
+    Channels.Type = EActorAttributeType::Int;
+    Channels.RecommendedValues = { TEXT("32") };
+    // Range.
+    FActorVariation Range;
+    Range.Id = TEXT("range");
+    Range.Type = EActorAttributeType::Float;
+    Range.RecommendedValues = { TEXT("10.0") }; // 10 meters
+    // Points per second.
+    FActorVariation PointsPerSecond;
+    PointsPerSecond.Id = TEXT("points_per_second");
+    PointsPerSecond.Type = EActorAttributeType::Int;
+    PointsPerSecond.RecommendedValues = { TEXT("56000") };
+    // Frequency.
+    FActorVariation Frequency;
+    Frequency.Id = TEXT("rotation_frequency");
+    Frequency.Type = EActorAttributeType::Float;
+    Frequency.RecommendedValues = { TEXT("10.0") };
+    // Upper FOV limit.
+    FActorVariation UpperFOV;
+    UpperFOV.Id = TEXT("upper_fov");
+    UpperFOV.Type = EActorAttributeType::Float;
+    UpperFOV.RecommendedValues = { TEXT("10.0") };
+    // Lower FOV limit.
+    FActorVariation LowerFOV;
+    LowerFOV.Id = TEXT("lower_fov");
+    LowerFOV.Type = EActorAttributeType::Float;
+    LowerFOV.RecommendedValues = { TEXT("-30.0") };
+    // Horizontal FOV.
+    FActorVariation HorizontalFOV;
+    HorizontalFOV.Id = TEXT("horizontal_fov");
+    HorizontalFOV.Type = EActorAttributeType::Float;
+    HorizontalFOV.RecommendedValues = { TEXT("360.0") };
+    // Atmospheric Attenuation Rate.
+    FActorVariation AtmospAttenRate;
+    AtmospAttenRate.Id = TEXT("atmosphere_attenuation_rate");
+    AtmospAttenRate.Type = EActorAttributeType::Float;
+    AtmospAttenRate.RecommendedValues = { TEXT("0.004") };
+    // Noise seed
+    FActorVariation NoiseSeed;
+    NoiseSeed.Id = TEXT("noise_seed");
+    NoiseSeed.Type = EActorAttributeType::Int;
+    NoiseSeed.RecommendedValues = { TEXT("0") };
+    NoiseSeed.bRestrictToRecommended = false;
+    // Dropoff General Rate
+    FActorVariation DropOffGenRate;
+    DropOffGenRate.Id = TEXT("dropoff_general_rate");
+    DropOffGenRate.Type = EActorAttributeType::Float;
+    DropOffGenRate.RecommendedValues = { TEXT("0.45") };
+    // Dropoff intensity limit.
+    FActorVariation DropOffIntensityLimit;
+    DropOffIntensityLimit.Id = TEXT("dropoff_intensity_limit");
+    DropOffIntensityLimit.Type = EActorAttributeType::Float;
+    DropOffIntensityLimit.RecommendedValues = { TEXT("0.8") };
+    // Dropoff at zero intensity.
+    FActorVariation DropOffAtZeroIntensity;
+    DropOffAtZeroIntensity.Id = TEXT("dropoff_zero_intensity");
+    DropOffAtZeroIntensity.Type = EActorAttributeType::Float;
+    DropOffAtZeroIntensity.RecommendedValues = { TEXT("0.4") };
+    // Noise in lidar cloud points.
+    FActorVariation StdDevLidar;
+    StdDevLidar.Id = TEXT("noise_stddev");
+    StdDevLidar.Type = EActorAttributeType::Float;
+    StdDevLidar.RecommendedValues = { TEXT("0.0") };
+
+    FActorVariation Scenario;
+    Scenario.Id = TEXT("scenario");
+    Scenario.Type = EActorAttributeType::Int;
+    Scenario.RecommendedValues = { TEXT("0") };
+    Scenario.bRestrictToRecommended = false;
+
+    FActorVariation LooseContact_Interval;
+    LooseContact_Interval.Id = TEXT("LooseContact_Interval");
+    LooseContact_Interval.Type = EActorAttributeType::Float;
+    LooseContact_Interval.RecommendedValues = { TEXT("0") };
+    LooseContact_Interval.bRestrictToRecommended = false;
+
+    FActorVariation LooseContact_Duration;
+    LooseContact_Duration.Id = TEXT("LooseContact_Duration");
+    LooseContact_Duration.Type = EActorAttributeType::Float;
+    LooseContact_Duration.RecommendedValues = { TEXT("0") };
+    LooseContact_Duration.bRestrictToRecommended = false;
+
+    FActorVariation LooseContact_Start;
+    LooseContact_Start.Id = TEXT("LooseContact_Start");
+    LooseContact_Start.Type = EActorAttributeType::Float;
+    LooseContact_Start.RecommendedValues = { TEXT("0") };
+    LooseContact_Start.bRestrictToRecommended = false;
+
+    FActorVariation LooseContact_ProgressionRate;
+    LooseContact_ProgressionRate.Id = TEXT("LooseContact_ProgressionRate");
+    LooseContact_ProgressionRate.Type = EActorAttributeType::Float;
+    LooseContact_ProgressionRate.RecommendedValues = { TEXT("0") };
+    LooseContact_ProgressionRate.bRestrictToRecommended = false;
+
+    FActorVariation ConstantShift_Rotation;
+    ConstantShift_Rotation.Id = TEXT("ConstantShift_Rotation");
+    ConstantShift_Rotation.Type = EActorAttributeType::String;
+    ConstantShift_Rotation.RecommendedValues = { TEXT("0") };
+    ConstantShift_Rotation.bRestrictToRecommended = false;
+
+
+    FActorVariation ConstantShift_Interval;
+    ConstantShift_Interval.Id = TEXT("ConstantShift_Interval");
+    ConstantShift_Interval.Type = EActorAttributeType::Float;
+    ConstantShift_Interval.RecommendedValues = { TEXT("0") };
+    ConstantShift_Interval.bRestrictToRecommended = false;
+
+    FActorVariation ConstantShift_Start;
+    ConstantShift_Start.Id = TEXT("ConstantShift_Start");
+    ConstantShift_Start.Type = EActorAttributeType::Float;
+    ConstantShift_Start.RecommendedValues = { TEXT("0") };
+    ConstantShift_Start.bRestrictToRecommended = false;
+
+
+    FActorVariation RandomShift_Start;
+    RandomShift_Start.Id = TEXT("RandomShift_Start");
+    RandomShift_Start.Type = EActorAttributeType::Float;
+    RandomShift_Start.RecommendedValues = { TEXT("0") };
+    RandomShift_Start.bRestrictToRecommended = false;
+    FActorVariation RandomShift_End;
+    RandomShift_End.Id = TEXT("RandomShift_End");
+    RandomShift_End.Type = EActorAttributeType::Float;
+    RandomShift_End.RecommendedValues = { TEXT("0") };
+    RandomShift_End.bRestrictToRecommended = false;
+    FActorVariation RandomShif_StartOffset;
+    RandomShif_StartOffset.Id = TEXT("RandomShif_StartOffset");
+    RandomShif_StartOffset.Type = EActorAttributeType::Float;
+    RandomShif_StartOffset.RecommendedValues = { TEXT("0") };
+    RandomShif_StartOffset.bRestrictToRecommended = false;
+
+
+    if (Id == "ray_cast") {
+        Definition.Variations.Append({
+          Channels,
+          Range,
+          PointsPerSecond,
+          Frequency,
+          UpperFOV,
+          LowerFOV,
+          AtmospAttenRate,
+          NoiseSeed,
+          DropOffGenRate,
+          DropOffIntensityLimit,
+          DropOffAtZeroIntensity,
+          StdDevLidar,
+          HorizontalFOV,
+            Scenario,
+            LooseContact_Interval,
+            LooseContact_Duration,
+            LooseContact_Start,
+            LooseContact_ProgressionRate,
+            ConstantShift_Rotation,
+            ConstantShift_Interval,
+            ConstantShift_Start,
+            RandomShift_Start,
+            RandomShift_End,
+            RandomShif_StartOffset });
+    }
+    else if (Id == "ray_cast_semantic") {
+        Definition.Variations.Append({
+          Channels,
+          Range,
+          PointsPerSecond,
+          Frequency,
+          UpperFOV,
+          LowerFOV,
+          HorizontalFOV,
+            Scenario,
+            LooseContact_Interval,
+            LooseContact_Duration,
+            LooseContact_Start,
+            LooseContact_ProgressionRate,
+            ConstantShift_Rotation,
+            ConstantShift_Interval,
+            ConstantShift_Start,
+            RandomShift_Start,
+            RandomShift_End,
+            RandomShif_StartOffset });
+    }
+    else {
+        DEBUG_ASSERT(false);
+    }
+
+    Success = CheckActorDefinition(Definition);
+}
+
+
 FActorDefinition UActorBlueprintFunctionLibrary::MakeGnssDefinition()
 {
   FActorDefinition Definition;
@@ -1808,6 +2020,31 @@ void UActorBlueprintFunctionLibrary::SetLidar(
       RetrieveActorAttributeToFloat("noise_stddev", Description.Variations, Lidar.NoiseStdDev);
 }
 
+
+void UActorBlueprintFunctionLibrary::SetFaultyLidar(const FActorDescription& Description, FLidarDescription& Lidar, FFaultyLidarDescription& FaultyLidar) {
+    UActorBlueprintFunctionLibrary::SetLidar(Description, Lidar);
+    FaultyLidar.AddScenario(RetrieveActorAttributeToInt("scenario", Description.Variations, 0));
+
+#pragma region Loose Contanct
+    FaultyLidar.LooseContact_Interval = RetrieveActorAttributeToFloat("LooseContact_Interval", Description.Variations, 0.0f);
+    FaultyLidar.LooseContact_Duration = RetrieveActorAttributeToFloat("LooseContact_Duration", Description.Variations, 0.0f);
+    FaultyLidar.LooseContact_ProgressionRate = RetrieveActorAttributeToFloat("LooseContact_ProgressionRate", Description.Variations, 0.0f);
+    FaultyLidar.LooseContact_StartOffset = RetrieveActorAttributeToFloat("LooseContact_Start", Description.Variations, 0.0f);
+#pragma endregion
+
+
+#pragma region Constant Shift
+    FaultyLidar.SetConstantShiftRotation(RetrieveActorAttributeToString("ConstantShift_Rotation", Description.Variations, "0;0;0"));
+    FaultyLidar.ConstantShift_Interval = RetrieveActorAttributeToFloat("ConstantShift_Interval", Description.Variations, 0.0f);
+    FaultyLidar.ConstantShift_StartOffset = RetrieveActorAttributeToFloat("ConstantShift_Start", Description.Variations, 0.0f);
+#pragma endregion
+#pragma region Random Shift
+    FaultyLidar.RandomShift_Start = RetrieveActorAttributeToFloat("RandomShift_Start", Description.Variations, 0.0f);
+    FaultyLidar.RandomShift_End = RetrieveActorAttributeToFloat("RandomShift_End", Description.Variations, 0.0f);
+    FaultyLidar.RandomShif_StartOffset = RetrieveActorAttributeToFloat("RandomShif_StartOffset", Description.Variations, 0.0f);
+#pragma endregion
+}
+
 void UActorBlueprintFunctionLibrary::SetGnss(
     const FActorDescription &Description,
     AGnssSensor *Gnss)
@@ -1896,8 +2133,6 @@ void UActorBlueprintFunctionLibrary::SetRadar(
 }
 
 
-#define IQZ_SENSOR_SET_MACRO(sensor,function,AttributeName,RetrieveFunction,StandardValue) if (Description.Variations.Contains(AttributeName)) {sensor->function(RetrieveFunction(AttributeName, Description.Variations, StandardValue));}
-
 
 void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Description, AFaultyRadar* Radar)
 {
@@ -1906,22 +2141,10 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
         Radar->AddScenario(RetrieveActorAttributeToInt("scenario", Description.Variations, 0));
 
 #pragma region Loose Contanct
-    //if (Description.Variations.Contains("LooseContact_Interval"))
-    //    Radar->AddLooseContactInterval(RetrieveActorAttributeToFloat("LooseContact_Interval", Description.Variations, 0.0f));
-
     IQZ_SENSOR_SET_MACRO(Radar, AddLooseContactInterval, "LooseContact_Interval", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, AddLooseContactDuration, "LooseContact_Duration", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetProgressionRate, "LooseContact_ProgressionRate", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, AddLooseContactStart, "LooseContact_Start", RetrieveActorAttributeToFloat, 0.0f);
-
-    //if (Description.Variations.Contains("LooseContact_Duration"))
-    //    Radar->AddLooseContactDuration(RetrieveActorAttributeToFloat("LooseContact_Duration", Description.Variations, 0.0f));
-
-    //if (Description.Variations.Contains("LooseContact_Start"))
-    //    Radar->AddLooseContactStart(RetrieveActorAttributeToFloat("LooseContact_Start", Description.Variations, 0.0f));
-
-    //if (Description.Variations.Contains("LooseContact_ProgressionRate"))
-    //    Radar->SetProgressionRate(RetrieveActorAttributeToFloat("LooseContact_ProgressionRate", Description.Variations, 0.0f));
 #pragma endregion
 
 
@@ -1929,14 +2152,6 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
     IQZ_SENSOR_SET_MACRO(Radar, SetConstantShiftRotation, "ConstantShift_Rotation", RetrieveActorAttributeToString, "0;0;0");
     IQZ_SENSOR_SET_MACRO(Radar, SetConstantShiftInterval, "ConstantShift_Interval", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetConstantShiftStart, "ConstantShift_Start", RetrieveActorAttributeToFloat, 0.0f);
-    //if (Description.Variations.Contains("ConstantShift_Rotation"))
-    //    Radar->SetConstantShiftRotation(RetrieveActorAttributeToString("ConstantShift_Rotation", Description.Variations, "0;0;0"));
-
-    //if (Description.Variations.Contains("ConstantShift_Interval"))
-    //    Radar->SetConstantShiftInterval(RetrieveActorAttributeToFloat("ConstantShift_Interval", Description.Variations, 0.0f));
-
-    //if (Description.Variations.Contains("ConstantShift_Start"))
-    //    Radar->SetConstantShiftStart(RetrieveActorAttributeToFloat("ConstantShift_Start", Description.Variations, 0.0f));
 #pragma endregion
 #pragma region Random Shift
     IQZ_SENSOR_SET_MACRO(Radar, SetRandomShiftStart, "RandomShift_Start", RetrieveActorAttributeToFloat, 0.0f);
