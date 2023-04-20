@@ -99,7 +99,6 @@ void AFaultyRadar::WriteLineTraces()
     float time = GetWorld()->GetTimeSeconds();
     if (this->Scenario & ScenarioID::RadarLooseContact)
     {
-
         if (time >= this->LooseContact_Start)
         {
             if (time >= this->LooseContact_Start + this->LooseContact_Duration)
@@ -159,7 +158,6 @@ void AFaultyRadar::WriteLineTraces()
             MoveRadar(this->ConstantShift_Rotation);
         }
     }
-
 
     if (this->Scenario & ScenarioID::RadarRandomShift)
     {

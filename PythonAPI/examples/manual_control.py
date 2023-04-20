@@ -1036,11 +1036,12 @@ class RadarSensor(object):
         world = self._parent.get_world()
         self.debug = world.debug
         bp = world.get_blueprint_library().find('sensor.other.faulty_radar')
-        bp.set_attribute('scenario', str(Scenario.RadarDisturbance.value))
+        bp.set_attribute('scenario', str(Scenario.RadarConstantShift.value))
 
         bp.set_attribute('horizontal_fov', str(35))
         bp.set_attribute('vertical_fov', str(20))
         bp.set_attribute('range', str(70))
+
 
 
         bp.set_attribute('RadarDisturbance_Interval', str(10))
@@ -1054,15 +1055,14 @@ class RadarSensor(object):
         bp.set_attribute('RadarSpoof_ProgressionRate', str(1))
         bp.set_attribute('RadarSpoof_CutOff', str(35))
 
-        #Set Paramters for Scnearios
         bp.set_attribute('LooseContact_Interval', str(10))
         bp.set_attribute('LooseContact_Duration', str(5))
         bp.set_attribute('LooseContact_Start', str(30))
         bp.set_attribute('LooseContact_ProgressionRate', str(5))
 
         bp.set_attribute('ConstantShift_Rotation', "10;0;0")
-        bp.set_attribute('ConstantShift_Interval', "10")
-        bp.set_attribute('ConstantShift_Start', "30")
+        bp.set_attribute('ConstantShift_Interval', "5")
+        bp.set_attribute('ConstantShift_Start', "15")
         
         bp.set_attribute('RandomShift_Start', "10")
         bp.set_attribute('RandomShift_End', "30")
