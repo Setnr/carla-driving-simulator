@@ -27,7 +27,6 @@ public:
   void AddLooseContactDuration(float Duration);
   void AddLooseContactStart(float StartTime);
   void SetProgressionRate(float Rate);
-
   void SetConstantShiftRotation(FString string);
   void SetConstantShiftInterval(float Interval) {
 	  this->ConstantShift_Interval = Interval;
@@ -35,7 +34,6 @@ public:
   void SetConstantShiftStart(float Start) {
 	  this->ConstantShift_StartOffset = Start;
   }
-
   void SetRandomShiftStart(float Start) {
 	  this->RandomShift_Start = Start;
   }
@@ -45,11 +43,39 @@ public:
   void SetRandomShiftStartOffset(float Start) {
 	  RandomShif_StartOffset = Start;
   }
+
+  void SetRadarDisturbance_Interval(float Interval) {
+	  this->RadarDisturbance_Interval = Interval;
+  }
+  void SetRadarDisturbance_Duration(float Duration) {
+	  this->RadarDisturbance_Duration = Duration;
+  }
+  void SetRadarDisturbance_StartOffset(float Offset) {
+	  this->RadarDisturbance_StartOffset = Offset;
+  }
+  void SetRadarDisturbance_ProgressionRate(float ProgressionRate) {
+	  this->RadarDisturbance_ProgressionRate = ProgressionRate;
+  }
+
+  void SetRadarSpoof_Interval(float Interval) {
+	  this->RadarSpoof_Interval = Interval;
+  }
+  void SetRadarSpoof_Duration(float Duration) {
+	  this->RadarSpoof_Duration = Duration;
+  }
+  void SetRadarSpoof_StartOffset(float Offset) {
+	  this->RadarSpoof_StartOffset = Offset;
+  }
+  void SetRadarSpoof_ProgressionRate(float ProgressionRate) {
+	  this->RadarSpoof_ProgressionRate = ProgressionRate;
+  }
+  void SetRadarSpoof_CutOff(float CutOff) {
+	  this->RadarSpoof_CutOff = CutOff;
+  }
   void MoveRadar(FRotator rot);
   void MoveRadar(); // Moves the Radar -> Used For RadarCollosionShift
 
 private:
-
 	bool isBlocked;
 	enum ScenarioID 
 	{
@@ -57,9 +83,10 @@ private:
 		RadarLooseContact = 0x2,
 		RadarConstantShift = 0x4,
 		RadarVibration = 0x8,
-		RadarVictim = 0x10,
+		RadarDisturbance = 0x10,
 		RadarRandomShift = 0x20,
-		RadarCollosionShift = 0x80
+		RadarCollosionShift = 0x40,
+		RadarSpoofing = 0x80
 	};
 
 	int Scenario;
@@ -81,7 +108,23 @@ private:
 	float RandomShift_Time = 0.0f;
 	float RandomShif_StartOffset;
 
+	float RadarDisturbance_Interval;
+	float RadarDisturbance_Duration;
+	float RadarDisturbance_StartOffset;
+	float RadarDisturbance_Start;
+	float RadarDisturbance_ProgressionRate;
+
+	float RadarSpoof_Interval;
+	float RadarSpoof_Duration;
+	float RadarSpoof_StartOffset;
+	float RadarSpoof_Start;
+	float RadarSpoof_ProgressionRate;
+	float RadarSpoof_CutOff;
+
+
   virtual void WriteLineTraces();
   void BeginPlay() override;
   
+  void DisturbeRadar();
+  void SpoofRadar();
 };

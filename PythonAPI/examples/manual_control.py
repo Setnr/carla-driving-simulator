@@ -96,13 +96,15 @@ import weakref
 
 from enum import Enum
 class Scenario(Enum):
+
     RadarBlocked = 1
     RadarLooseContact = 2
     RadarConstantShift = 4
     RadarVibration = 8
-    RadarVictim = 16
+    RadarDisturbance = 16
     RadarRandomShift = 32
     RadarCollosionShift = 64
+    RadarSpoofing = 128
 
 try:
     import pygame
@@ -1034,10 +1036,24 @@ class RadarSensor(object):
         world = self._parent.get_world()
         self.debug = world.debug
         bp = world.get_blueprint_library().find('sensor.other.faulty_radar')
-        bp.set_attribute('scenario', str(Scenario.RadarLooseContact.value))
+        bp.set_attribute('scenario', str(Scenario.RadarDisturbance.value))
 
         bp.set_attribute('horizontal_fov', str(35))
         bp.set_attribute('vertical_fov', str(20))
+        bp.set_attribute('range', str(70))
+
+
+        bp.set_attribute('RadarDisturbance_Interval', str(10))
+        bp.set_attribute('RadarDisturbance_Duration', str(8))
+        bp.set_attribute('RadarDisturbance_StartOffset', str(30))
+        bp.set_attribute('RadarDisturbance_ProgressionRate', str(1))
+
+        bp.set_attribute('RadarSpoof_Interval', str(10))
+        bp.set_attribute('RadarSpoof_Duration', str(5))
+        bp.set_attribute('RadarSpoof_StartOffset', str(30))
+        bp.set_attribute('RadarSpoof_ProgressionRate', str(1))
+        bp.set_attribute('RadarSpoof_CutOff', str(35))
+
         #Set Paramters for Scnearios
         bp.set_attribute('LooseContact_Interval', str(10))
         bp.set_attribute('LooseContact_Duration', str(5))
@@ -1145,11 +1161,23 @@ class CameraManager(object):
             ['sensor.camera.instance_segmentation', cc.Raw, 'Camera Instance Segmentation (Raw)', {}],
             ['sensor.faulty_lidar.ray_cast', None, 'Lidar (Ray-Cast)', {
                                                                         'range': '50', 
-                                                                        "scenario" : "2", 
-                                                                        "horizontal_fov" : "90",
-                                                                        'LooseContact_Interval': '10.0',
-                                                                        'LooseContact_Duration': '5.0',
-                                                                        'LooseContact_Start': '30.0'
+                                                                        "horizontal_fov" : "360",
+                                                                        #"scenario" : "32", 
+                                                                       
+                                                                        #Szenario 32 Random Shift At Random Time
+                                                                        #"RandomShift_Start" : "5", 
+                                                                        #"RandomShift_End" : "15", 
+                                                                        #"RandomShif_StartOffset" : "10", 
+                                                                        
+                                                                        #Szenario 4 Fix Shift
+                                                                        #"ConstantShift_Rotation" : "10;0;0",
+                                                                        #"ConstantShift_Interval" : "10",
+                                                                        #"ConstantShift_Start" : "10",
+
+                                                                        # Szenario 2 Loose Contact
+                                                                        #'LooseContact_Interval': '10.0',
+                                                                        #'LooseContact_Duration': '5.0',
+                                                                        #'LooseContact_Start': '30.0'
                                                                         }],
             ['sensor.camera.dvs', cc.Raw, 'Dynamic Vision Sensor', {}],
             ['sensor.camera.rgb', cc.Raw, 'Camera RGB Distorted',

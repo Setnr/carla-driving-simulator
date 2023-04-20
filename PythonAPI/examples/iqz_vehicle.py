@@ -34,6 +34,18 @@ display = pygame.display.set_mode(
             (1280, 720),
             pygame.HWSURFACE | pygame.DOUBLEBUF)
 
+from enum import Enum
+class Scenario(Enum):
+
+    RadarBlocked = 1
+    RadarLooseContact = 2
+    RadarConstantShift = 4
+    RadarVibration = 8
+    RadarDisturbance = 16
+    RadarRandomShift = 32
+    RadarCollosionShift = 64
+    RadarSpoofing = 128
+
 class VehicleEnvironment:
     vehicle_list = []
     sensor_list = []
@@ -199,10 +211,12 @@ class VehicleEnvironment:
         front_radar_model.set_attribute('horizontal_fov', str(35))
         front_radar_model.set_attribute('vertical_fov', str(20))
         front_radar_model.set_attribute('range', str(80))
-        front_radar_model.set_attribute("scenario",str(2))
-        front_radar_model.set_attribute('LooseContact_Interval', '10.0')
-        front_radar_model.set_attribute('LooseContact_Duration', '1.8')
-        front_radar_model.set_attribute('LooseContact_Start', '2.2')
+        front_radar_model.set_attribute("scenario",str(Scenario.RadarDisturbance.value))
+
+        front_radar_model.set_attribute('RadarDisturbance_Interval', str(10))
+        front_radar_model.set_attribute('RadarDisturbance_Duration', str(8))
+        front_radar_model.set_attribute('RadarDisturbance_StartOffset', str(30))
+        front_radar_model.set_attribute('RadarDisturbance_ProgressionRate', str(0))
 
         bound_x = 0.5 + self.vehicle.bounding_box.extent.x
         bound_z = 0.5 + self.vehicle.bounding_box.extent.z
@@ -430,18 +444,18 @@ def simulate(recording, store_radar_data):
         print("Connecting to Simulation Environment ...")
         # Create a client object that can run the agent and connect to the world
         print("Creating client and connecting to host ...")
-        client = carla.Client('localhost', 2000)
+        client = carla.Client('192.168.178.42', 2000)
         client.set_timeout(5.0) # might need a longer timeout with bad hardware
         time.sleep(5.0)
 
         traffic_manager = client.get_trafficmanager()
-        traffic_manager.set_synchronous_mode(True)            
+        traffic_manager.set_synchronous_mode(False)            
         
         print("Creating Display ...")
         # Get world object that was started by another source (hopefully)
         world = client.get_world()
         settings = world.get_settings()
-        settings.synchronous_mode = True
+        settings.synchronous_mode = False
         settings.fixed_delta_seconds = 0.05
         world.apply_settings(settings)
             
@@ -449,7 +463,7 @@ def simulate(recording, store_radar_data):
         print("Setting up Vehicle Environment ...")
         env = VehicleEnvironment(hud, world, store_radar_data)
         env.setup()
-
+        print("Vehicel got setup")
         controller = KeyboardControl(env)
         print("Running Simulation Loop ...")
         clock = pygame.time.Clock()

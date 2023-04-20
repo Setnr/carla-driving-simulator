@@ -1004,6 +1004,60 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     RandomShif_StartOffset.RecommendedValues = { TEXT("0") };
     RandomShif_StartOffset.bRestrictToRecommended = false;
 
+    FActorVariation RadarDisturbance_Interval;
+    RadarDisturbance_Interval.Id = TEXT("RadarDisturbance_Interval");
+    RadarDisturbance_Interval.Type = EActorAttributeType::Float;
+    RadarDisturbance_Interval.RecommendedValues = { TEXT("0") };
+    RadarDisturbance_Interval.bRestrictToRecommended = false;
+
+    FActorVariation RadarDisturbance_Duration;
+    RadarDisturbance_Duration.Id = TEXT("RadarDisturbance_Duration");
+    RadarDisturbance_Duration.Type = EActorAttributeType::Float;
+    RadarDisturbance_Duration.RecommendedValues = { TEXT("0") };
+    RadarDisturbance_Duration.bRestrictToRecommended = false;
+
+    FActorVariation RadarDisturbance_StartOffset;
+    RadarDisturbance_StartOffset.Id = TEXT("RadarDisturbance_StartOffset");
+    RadarDisturbance_StartOffset.Type = EActorAttributeType::Float;
+    RadarDisturbance_StartOffset.RecommendedValues = { TEXT("0") };
+    RadarDisturbance_StartOffset.bRestrictToRecommended = false;
+
+    FActorVariation RadarDisturbance_ProgressionRate;
+    RadarDisturbance_ProgressionRate.Id = TEXT("RadarDisturbance_ProgressionRate");
+    RadarDisturbance_ProgressionRate.Type = EActorAttributeType::Float;
+    RadarDisturbance_ProgressionRate.RecommendedValues = { TEXT("0") };
+    RadarDisturbance_ProgressionRate.bRestrictToRecommended = false;
+
+    FActorVariation RadarSpoof_Interval;
+    RadarSpoof_Interval.Id = TEXT("RadarSpoof_Interval");
+    RadarSpoof_Interval.Type = EActorAttributeType::Float;
+    RadarSpoof_Interval.RecommendedValues = { TEXT("0") };
+    RadarSpoof_Interval.bRestrictToRecommended = false;
+
+    FActorVariation RadarSpoof_Duration;
+    RadarSpoof_Duration.Id = TEXT("RadarSpoof_Duration");
+    RadarSpoof_Duration.Type = EActorAttributeType::Float;
+    RadarSpoof_Duration.RecommendedValues = { TEXT("0") };
+    RadarSpoof_Duration.bRestrictToRecommended = false;
+
+    FActorVariation RadarSpoof_StartOffset;
+    RadarSpoof_StartOffset.Id = TEXT("RadarSpoof_StartOffset");
+    RadarSpoof_StartOffset.Type = EActorAttributeType::Float;
+    RadarSpoof_StartOffset.RecommendedValues = { TEXT("0") };
+    RadarSpoof_StartOffset.bRestrictToRecommended = false;
+
+    FActorVariation RadarSpoof_ProgressionRate;
+    RadarSpoof_ProgressionRate.Id = TEXT("RadarSpoof_ProgressionRate");
+    RadarSpoof_ProgressionRate.Type = EActorAttributeType::Float;
+    RadarSpoof_ProgressionRate.RecommendedValues = { TEXT("0") };
+    RadarSpoof_ProgressionRate.bRestrictToRecommended = false;
+
+    FActorVariation RadarSpoof_CutOff;
+    RadarSpoof_CutOff.Id = TEXT("RadarSpoof_CutOff");
+    RadarSpoof_CutOff.Type = EActorAttributeType::Float;
+    RadarSpoof_CutOff.RecommendedValues = { TEXT("0") };
+    RadarSpoof_CutOff.bRestrictToRecommended = false;
+
     Definition.Variations.Append({
       HorizontalFOV,
       VerticalFOV,
@@ -1020,7 +1074,16 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
         ConstantShift_Start,
         RandomShift_Start,
         RandomShift_End,
-        RandomShif_StartOffset
+        RandomShif_StartOffset,
+        RadarDisturbance_Interval,
+        RadarDisturbance_Duration,
+        RadarDisturbance_StartOffset,
+        RadarDisturbance_ProgressionRate,
+        RadarSpoof_Interval,
+        RadarSpoof_Duration,
+        RadarSpoof_StartOffset,
+        RadarSpoof_ProgressionRate,
+        RadarSpoof_CutOff
         });
 
     Success = CheckActorDefinition(Definition);
@@ -2157,6 +2220,19 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
     IQZ_SENSOR_SET_MACRO(Radar, SetRandomShiftStart, "RandomShift_Start", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetRandomShiftEnd, "RandomShift_End", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetRandomShiftStartOffset, "RandomShif_StartOffset", RetrieveActorAttributeToFloat, 0.0f);
+#pragma endregion
+#pragma region Radar Disturbance
+    IQZ_SENSOR_SET_MACRO(Radar, SetRadarDisturbance_Interval, "RadarDisturbance_Interval", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetRadarDisturbance_Duration, "RadarDisturbance_Duration", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetRadarDisturbance_StartOffset, "RadarDisturbance_StartOffset", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetRadarDisturbance_ProgressionRate, "RadarDisturbance_ProgressionRate", RetrieveActorAttributeToFloat, 0.0f);
+#pragma endregion
+#pragma region Radar Spoofing
+    IQZ_SENSOR_SET_MACRO(Radar, SetRadarSpoof_Interval, "RadarSpoof_Interval", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetRadarSpoof_Duration, "RadarSpoof_Duration", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetRadarSpoof_StartOffset, "RadarSpoof_StartOffset", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetRadarSpoof_ProgressionRate, "RadarSpoof_ProgressionRate", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetRadarSpoof_CutOff, "RadarSpoof_CutOff", RetrieveActorAttributeToFloat, 0.0f);
 #pragma endregion
 
 }
