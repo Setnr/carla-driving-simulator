@@ -1,2 +1,2 @@
 cd C:\carla\PythonApi\examples\
-python manual_control.py
+python manual_control.py -a

@@ -54,8 +54,8 @@ void AFaultyRadar::SetConstantShiftRotation(FString string)
     string.ParseIntoArray(Tokens, Delims, false);
     if (Tokens.Num() != 3) 
     {
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("ConstantShiftArray is broken, couldn´t read 3 values there!"));
-        UE_LOG(LogTemp, Error, TEXT("ConstantShiftArray is broken, couldn´t read 3 values there!"));
+        //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("ConstantShiftArray is broken, couldn´t read 3 values there!"));
+        //UE_LOG(LogTemp, Error, TEXT("ConstantShiftArray is broken, couldn´t read 3 values there!"));
         return;
     }
     ConstantShift_Rotation.Yaw = FCString::Atof(*Tokens[0]);
@@ -88,8 +88,10 @@ void AFaultyRadar::MoveRadar(FRotator rot)
 void AFaultyRadar::BeginPlay()
 {
   Super::BeginPlay();
-  this->LooseContact_Start = this->LooseContact_StartOffset + GetWorld()->GetTimeSeconds();
-  this->ConstantShift_Start = this->ConstantShift_StartOffset + GetWorld()->GetTimeSeconds();
+  LooseContact_Start = LooseContact_StartOffset + GetWorld()->GetTimeSeconds();
+  ConstantShift_Start = ConstantShift_StartOffset + GetWorld()->GetTimeSeconds();
+  RadarDisturbance_Start = RadarDisturbance_StartOffset + GetWorld()->GetTimeSeconds();
+  RadarSpoof_Start = RadarSpoof_StartOffset + GetWorld()->GetTimeSeconds();
   PrevLocation = GetActorLocation();
 }
 void AFaultyRadar::WriteLineTraces()
@@ -106,6 +108,31 @@ void AFaultyRadar::WriteLineTraces()
                 this->LooseContact_Interval -= LooseContact_ProgressionRate;
             }
             return;
+        }
+    }
+
+    if (this->Scenario & ScenarioID::RadarDisturbance)
+    {
+        if (time >= this->RadarDisturbance_Start)
+        {
+            if (time >= this->RadarDisturbance_Start + RadarDisturbance_Duration) 
+            {
+                RadarDisturbance_Start += RadarDisturbance_Interval;
+                RadarDisturbance_Interval -= RadarDisturbance_ProgressionRate;
+            }
+            DisturbeRadar();
+        }
+    }
+    if (this->Scenario & ScenarioID::RadarSpoofing)
+    {
+        if (time >= this->RadarSpoof_Start)
+        {
+            if (time >= this->RadarSpoof_Start + RadarSpoof_Duration)
+            {
+                RadarSpoof_Start += RadarSpoof_Interval;
+                RadarSpoof_Interval -= RadarSpoof_ProgressionRate;
+            }
+            SpoofRadar();
         }
     }
 
@@ -148,6 +175,38 @@ void AFaultyRadar::WriteLineTraces()
                 rotator.Pitch = FMath::FRandRange(-1.5f, 1.5f);
             MoveRadar(rotator);
             RandomShift_Time = FMath::RandRange(this->RandomShift_Start, this->RandomShift_End);
+        }
+    }
+}
+
+void AFaultyRadar::DisturbeRadar() 
+{
+    //ToDo:
+    // How to Disturbe exactly?
+    for (auto& ray : Rays) 
+    {
+        if (ray.Hitted) 
+        {
+            if (FMath::FRand() < 0.1f)
+            {
+                ray.RelativeVelocity = ray.RelativeVelocity * -1; //Just Disturbe Velocity at current State
+            }
+        }
+    }
+}
+
+void AFaultyRadar::SpoofRadar()
+{
+    //ToDo:
+    // How to Disturbe exactly?
+    for (auto& ray : Rays)
+    {
+        if (ray.Hitted)
+        {
+            if (ray.Distance > RadarSpoof_CutOff) 
+            {
+                ray.Hitted = false;
+            }
         }
     }
 }

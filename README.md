@@ -1,4 +1,71 @@
-CARLA Simulator
+This Repo is inteded to extend the Carla-Driving-Simulator with new Sensors.
+It is Targeted to implement Sensor-Failure-Models to generate Datasets where such a Failure can be seen.
+
+The Radar aswell as the Lidar got extended by certain models.
+```
+class Scenario(Enum):
+
+    RadarBlocked = 1
+    RadarLooseContact = 2
+    RadarConstantShift = 4
+    RadarVibration = 8
+    RadarDisturbance = 16
+    RadarRandomShift = 32
+    RadarCollosionShift = 64
+    RadarSpoofing = 128
+```
+At the Current state
+* Loose Contact (Data Transfer Loss)
+	* LooseContact_Interval (Interval the Failure appears)
+	* LooseContact_Duration (Duration of the Failure)
+	* LooseContact_ProgressionRate (The ammount the Interval gets decresed to Increase the Rate of Failure during the simulation)
+	* LooseContact_StartOffset (How many seconds after creation of the Sensor the Failure will appear for the First time)
+* Constant Shift
+	* ConstantShift_Rotation (The Yaw, Pitch and Roll how the Radar will shift every time "Yaw;Pitch;Roll")
+	* ConstantShift_Interval (The Interval the Radar will get shifted)
+	* ConstantShift_StartOffset (How many seconds after creation of the Sensor the Failure will appear for the First time)
+* Random Shift (__Failure will appear at a random Time between Start and End and will rotate a random ammount__)
+	* RandomShift_Start (Min Duration when a failure can appear the next time)
+	* RandomShift_End (Max Duration when a failure will appear)
+	* RandomShif_StartOffset (How many seconds after creation of the Sensor the Failure will appear for the First time)
+* Collision Shift
+	* No Paramters Used at the current state of development
+* Disturbance
+	* RadarDisturbance_Interval (Intervall of the error appearence)
+	* RadarDisturbance_Duration (Duration of the error)
+	* RadarDisturbance_StartOffset (Time after creation of the sensor when the error will first appear)
+	* RadarDisturbance_ProgressionRate The ammount the Interval gets decresed to Increase the Rate of Failure during the simulation)
+* Spoofing __This is intedended to simulate a attack on the sensor__
+	* RadarSpoof_Interval (Intervall of the error appearence)
+	* RadarSpoof_Duration (Duration of the error)
+	* RadarSpoof_StartOffset (Time after creation of the sensor when the error will first appear)
+	* RadarSpoof_ProgressionRate The ammount the Interval gets decresed to Increase the Rate of Failure during the simulation)
+	* RadarSpoof_CutOff (The effective Range on where it gets reduced to, during the spoofing attack)
+
+
+are currently implemented with given Paramters.
+
+To Acces the Radar/Lidar following code can be used:
+```
+        front_radar_model = self.world.get_blueprint_library().find('sensor.other.faulty_radar')
+        front_radar_model = self.world.get_blueprint_library().find('sensor.faulty_lidar.ray_cast')
+```
+
+Usage Example:
+```
+        front_radar_model = self.world.get_blueprint_library().find('sensor.other.faulty_radar')
+        front_radar_model.set_attribute('horizontal_fov', str(35))
+        front_radar_model.set_attribute('vertical_fov', str(20))
+        front_radar_model.set_attribute('range', str(80))
+        front_radar_model.set_attribute("scenario",str(Scenario.RadarLooseContact.value))
+        front_radar_model.set_attribute('LooseContact_Interval', '10.0')
+        front_radar_model.set_attribute('LooseContact_Duration', '1.8')
+        front_radar_model.set_attribute('LooseContact_Start', '2.2')
+```
+
+All Sensors work as shown in the Carla Documentation and are extended by the previous shown Paramters.
+
+CARLA Simulator - Offical ReadMe
 ===============
 
 [![Build Status](https://travis-ci.org/carla-simulator/carla.svg?branch=master)](https://travis-ci.org/carla-simulator/carla)
