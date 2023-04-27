@@ -527,8 +527,8 @@ void export_sensor_data() {
     .def_readwrite("velocity", &csd::RadarDetection::velocity)
     .def_readwrite("azimuth", &csd::RadarDetection::azimuth)
     .def_readwrite("altitude", &csd::RadarDetection::altitude)
-    .def_readwrite("depth", &csd::RadarDetection::depth)
-    .def_readwrite("label", &csd::RadarDetection::label)
+    .def_readwrite("label", &csd::RadarDetection::depth)
+    .def_readwrite("depth", &csd::RadarDetection::label)
     .def(self_ns::str(self_ns::self))
   ;
 
