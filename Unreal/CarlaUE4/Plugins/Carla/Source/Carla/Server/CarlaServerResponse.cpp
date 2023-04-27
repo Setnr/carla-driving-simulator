@@ -6,7 +6,7 @@
 
 #include "CarlaServerResponse.h"
 
-FString GetStringError(ECarlaServerResponse Response)
+/*FString GetStringError(ECarlaServerResponse Response)
 {
   switch (Response)
   {
@@ -39,3 +39,4 @@ FString GetStringError(ECarlaServerResponse Response)
   }
   return "unknown error";
 }
+*/
