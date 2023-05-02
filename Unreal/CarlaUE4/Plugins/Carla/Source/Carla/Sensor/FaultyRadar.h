@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
+#include "ProceduralMeshComponent.h"
+
 #include "Carla/Sensor/Radar.h"
 #include "FaultyRadar.generated.h"
 
@@ -121,10 +124,16 @@ private:
 	float RadarSpoof_ProgressionRate;
 	float RadarSpoof_CutOff;
 
+	void GenerateHexagonMesh(UProceduralMeshComponent* OutMesh, float Radius);
+	TArray<UProceduralMeshComponent*> MeshComponents;
+
 
   virtual void WriteLineTraces();
   void BeginPlay() override;
   
   void DisturbeRadar();
   void SpoofRadar();
+
+
+  //virtual void OnConstruction(const FTransform& Transform) override;
 };

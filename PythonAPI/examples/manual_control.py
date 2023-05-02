@@ -1035,8 +1035,8 @@ class RadarSensor(object):
         self.velocity_range = 7.5 # m/s
         world = self._parent.get_world()
         self.debug = world.debug
-        bp = world.get_blueprint_library().find('sensor.other.faulty_radar')
-        bp.set_attribute('scenario', str(Scenario.RadarLooseContact.value))
+        bp = world.get_blueprint_library().find('sensor.other.radar')
+        #bp.set_attribute('scenario', str(Scenario.RadarLooseContact.value))
 
         bp.set_attribute('horizontal_fov', str(35))
         bp.set_attribute('vertical_fov', str(20))
@@ -1044,33 +1044,33 @@ class RadarSensor(object):
 
 
 
-        bp.set_attribute('RadarDisturbance_Interval', str(10))
-        bp.set_attribute('RadarDisturbance_Duration', str(8))
-        bp.set_attribute('RadarDisturbance_StartOffset', str(30))
-        bp.set_attribute('RadarDisturbance_ProgressionRate', str(1))
+        #bp.set_attribute('RadarDisturbance_Interval', str(10))
+        #bp.set_attribute('RadarDisturbance_Duration', str(8))
+        #bp.set_attribute('RadarDisturbance_StartOffset', str(30))
+        #bp.set_attribute('RadarDisturbance_ProgressionRate', str(1))
 
-        bp.set_attribute('RadarSpoof_Interval', str(10)) #Spoofing ist hier falsch, eigentlich ist das Interference, das muss angepasst werden
-        bp.set_attribute('RadarSpoof_Duration', str(5))
-        bp.set_attribute('RadarSpoof_StartOffset', str(30))
-        bp.set_attribute('RadarSpoof_ProgressionRate', str(1))
-        bp.set_attribute('RadarSpoof_CutOff', str(35))
+        #bp.set_attribute('RadarSpoof_Interval', str(10)) #Spoofing ist hier falsch, eigentlich ist das Interference, das muss angepasst werden
+        #bp.set_attribute('RadarSpoof_Duration', str(5))
+        #bp.set_attribute('RadarSpoof_StartOffset', str(30))
+        #bp.set_attribute('RadarSpoof_ProgressionRate', str(1))
+        #bp.set_attribute('RadarSpoof_CutOff', str(35))
 
-        bp.set_attribute('LooseContact_Interval', str(10))
-        bp.set_attribute('LooseContact_Duration', str(0.35))
-        bp.set_attribute('LooseContact_Start', str(5))
-        bp.set_attribute('LooseContact_ProgressionRate', str(1))
+        #bp.set_attribute('LooseContact_Interval', str(10))
+        #bp.set_attribute('LooseContact_Duration', str(0.35))
+        #bp.set_attribute('LooseContact_Start', str(5))
+        #bp.set_attribute('LooseContact_ProgressionRate', str(1))
 
-        bp.set_attribute('ConstantShift_Rotation', "0.5;0;0")
-        bp.set_attribute('ConstantShift_Interval', "1")
-        bp.set_attribute('ConstantShift_Start', "15")
+        #bp.set_attribute('ConstantShift_Rotation', "0.5;0;0")
+        #bp.set_attribute('ConstantShift_Interval', "1")
+        #bp.set_attribute('ConstantShift_Start', "15")
         
-        bp.set_attribute('RandomShift_Start', "10")
-        bp.set_attribute('RandomShift_End', "30")
-        bp.set_attribute('RandomShif_StartOffset', "30")
+        #bp.set_attribute('RandomShift_Start', "10")
+        #bp.set_attribute('RandomShift_End', "30")
+        #bp.set_attribute('RandomShif_StartOffset', "30")
         self.sensor = world.spawn_actor(
             bp,
             carla.Transform(
-                carla.Location(x=bound_x + 0.05, z=bound_z+0.05),
+                carla.Location(x=bound_x + 0.05, z=bound_z + 0.05),
                 carla.Rotation(pitch=5)),
             attach_to=self._parent)
 

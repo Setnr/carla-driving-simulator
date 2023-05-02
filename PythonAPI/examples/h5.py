@@ -168,7 +168,7 @@ class RadarScenes:
             return 11
         for i in range(32):
             NewLabel = 11
-            if label >> i & 1: 
+            if int(label) >> i & 1: 
                 i = i + 1 #Offset wegen der 0 damit Label 0 = 0 und label 1 = 1 muss beim bitshift 1 versetzt werden daher in carla selbst (tag - 1 in Radar.cpp)
                 if i == 14:
                     NewLabel = 0
