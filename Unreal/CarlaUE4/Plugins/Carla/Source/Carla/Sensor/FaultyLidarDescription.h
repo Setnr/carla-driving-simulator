@@ -53,8 +53,8 @@ struct FFaultyLidarDescription
       string.ParseIntoArray(Tokens, Delims, false);
       if (Tokens.Num() != 3)
       {
-          GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("ConstantShiftArray is broken, couldn´t read 3 values there!"));
-          UE_LOG(LogTemp, Error, TEXT("ConstantShiftArray is broken, couldn´t read 3 values there!"));
+          GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("ConstantShiftArray is broken, could not read 3 values there!"));
+          UE_LOG(LogTemp, Error, TEXT("ConstantShiftArray is broken, couldnot read 3 values there!"));
           return;
       }
       ConstantShift_Rotation.Yaw = FCString::Atof(*Tokens[0]);

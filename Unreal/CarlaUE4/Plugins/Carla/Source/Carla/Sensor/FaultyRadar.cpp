@@ -4,8 +4,10 @@
 // This work is licensed under the terms of the MIT license.
 // For a copy, see <https://opensource.org/licenses/MIT>.
 
+#include "DrawDebugHelpers.h"
 
 #include "Carla/Sensor/FaultyRadar.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "Carla/Actor/ActorBlueprintFunctionLibrary.h"
 
 FActorDefinition AFaultyRadar::GetSensorDefinition()
@@ -20,6 +22,7 @@ AFaultyRadar::AFaultyRadar(const FObjectInitializer& ObjectInitializer)
     this->LooseContact_Duration = 2.5f;
     this->LooseContact_StartOffset = 15.0f;
     this->LooseContact_ProgressionRate = 0.0f;
+
 }
 
 void AFaultyRadar::AddLooseContactInterval(float Interval)
@@ -93,7 +96,109 @@ void AFaultyRadar::BeginPlay()
   RadarDisturbance_Start = RadarDisturbance_StartOffset + GetWorld()->GetTimeSeconds();
   RadarSpoof_Start = RadarSpoof_StartOffset + GetWorld()->GetTimeSeconds();
   PrevLocation = GetActorLocation();
+  return;
+
+/* 
 }
+void AFaultyRadar::OnConstruction(const FTransform& Transform)
+{
+    Super::OnConstruction(Transform);
+    */
+
+    FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 1.0f;
+    for (auto Comp : MeshComponents) {
+        Comp->DestroyComponent();
+    }
+    MeshComponents.Empty();
+
+    for (int32 i = 0; i < 3; i++)
+    {
+
+        UProceduralMeshComponent* MeshComponent = NewObject<UProceduralMeshComponent>(this);
+        MeshComponent->SetMobility(EComponentMobility::Movable);
+        
+        auto Radius = FMath::RandRange(75.f, 75.f);
+        GenerateHexagonMesh(MeshComponent, Radius);
+        FVector ForwardVector = this->GetActorForwardVector();
+        FVector Origin = this->GetActorLocation();
+        FTransform Transform(FRotator(FMath::FRandRange(-VerticalFOV, VerticalFOV), FMath::FRandRange(-HorizontalFOV, HorizontalFOV), 0));
+        auto MoveVec =  Transform.TransformPosition(Origin);
+
+        TArray<FVector> Vertices;
+            
+        DrawDebugLine(GetWorld(), GetActorForwardVector(), GetActorForwardVector()*50.f, FColor::Red, false, 5000);
+        DrawDebugLine(GetWorld(), GetActorForwardVector().GetSafeNormal(), GetActorForwardVector().GetSafeNormal() * 50.f, FColor::Green, false, 5000);
+
+        MeshComponent->SetRelativeLocation((GetActorForwardVector()*2.f)  + MoveVec);
+        MeshComponent->SetRelativeRotation(GetActorRotation() + FRotator(-90.0f, 0.0f, 0.0f));
+        MeshComponent->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
+
+        MeshComponent->AttachToComponent(this->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+        MeshComponents.Add(MeshComponent);
+        MeshComponent->RegisterComponent();
+        //MeshComponent->SetVisibility(false);
+        UMaterialInterface* Material = MeshComponent->GetMaterial(0);
+        UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(Material, MeshComponent);
+        DynamicMaterial->SetScalarParameterValue(TEXT("OpacityAmount"), 0.f);
+    }
+}
+void AFaultyRadar::GenerateHexagonMesh(UProceduralMeshComponent* OutMesh, float Radius)
+{
+    const int32 NumVertices = 7;
+    const int32 NumTriangles = 6;
+
+    TArray< FVector > Vertices;
+    TArray< int32 > Triangles;
+    TArray< FVector > Normals;
+    TArray< FVector2D > UVs;
+    TArray<FLinearColor> Colors;
+    TArray< FProcMeshTangent > Tangents;
+
+
+
+    // Generate vertices
+    float angle = PI / 3.0f;
+
+    for (int i = 0; i < 6; i++)
+    {
+        float x = Radius * FMath::Cos(angle * i);
+        float y = Radius * FMath::Sin(angle * i);
+        Vertices.Add(FVector(x, y, 0));
+    }
+    for (int i = 0; i < Vertices.Num(); i++)
+    {
+        Normals.Add(FVector(0.f, 0.f, 1.f));
+    }
+    UVs.Add(FVector2D(0.f, 0.f));
+    UVs.Add(FVector2D(1.f, 0.f));
+    UVs.Add(FVector2D(1.f, 1.f));
+    UVs.Add(FVector2D(0.f, 1.f));
+    UVs.Add(FVector2D(0.f, 1.f));
+    UVs.Add(FVector2D(0.f, 1.f));
+    Colors.Add(FLinearColor::Red);
+    Colors.Add(FLinearColor::Red);
+    Colors.Add(FLinearColor::Red);
+    Colors.Add(FLinearColor::Red);
+    Colors.Add(FLinearColor::Red);
+    Colors.Add(FLinearColor::Red);
+    // Front-facing triangles
+    Triangles.Add(0);
+    Triangles.Add(1);
+    Triangles.Add(2);
+    Triangles.Add(0);
+    Triangles.Add(2);
+    Triangles.Add(3);
+    Triangles.Add(0);
+    Triangles.Add(3);
+    Triangles.Add(4);
+    Triangles.Add(0);
+    Triangles.Add(4);
+    Triangles.Add(5);
+
+    // Create mesh section
+    OutMesh->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+}
+
 void AFaultyRadar::WriteLineTraces()
 {
     float time = GetWorld()->GetTimeSeconds();
