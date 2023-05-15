@@ -13,6 +13,7 @@
 #include "FaultyRadar.generated.h"
 
 
+
 UCLASS()
 class CARLA_API AFaultyRadar : public ARadar
 {
@@ -89,7 +90,7 @@ private:
 		RadarDisturbance = 0x10,
 		RadarRandomShift = 0x20,
 		RadarCollosionShift = 0x40,
-		RadarSpoofing = 0x80
+		RadarInterference = 0x80
 	};
 
 	int Scenario;
@@ -124,8 +125,7 @@ private:
 	float RadarSpoof_ProgressionRate;
 	float RadarSpoof_CutOff;
 
-	void GenerateHexagonMesh(UProceduralMeshComponent* OutMesh, float Radius);
-	TArray<UProceduralMeshComponent*> MeshComponents;
+	void GenerateHexagon(int Ammount);
 
 
   virtual void WriteLineTraces();
@@ -135,5 +135,8 @@ private:
   void SpoofRadar();
 
 
-  //virtual void OnConstruction(const FTransform& Transform) override;
+  bool once = true;
+  virtual void OnConstruction(const FTransform& Transform) override;
+  virtual void Destroyed() override;
+  TArray<AActor*> BlockObjects;
 };

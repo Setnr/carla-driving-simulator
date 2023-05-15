@@ -7,6 +7,7 @@
 #include "DrawDebugHelpers.h"
 
 #include "Carla/Sensor/FaultyRadar.h"
+#include "Carla/Sensor/HexagonActor.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Carla/Actor/ActorBlueprintFunctionLibrary.h"
 
@@ -22,8 +23,12 @@ AFaultyRadar::AFaultyRadar(const FObjectInitializer& ObjectInitializer)
     this->LooseContact_Duration = 2.5f;
     this->LooseContact_StartOffset = 15.0f;
     this->LooseContact_ProgressionRate = 0.0f;
+    this->SetVerticalFOV(20);
+    this->SetHorizontalFOV(35);
+
 
 }
+
 
 void AFaultyRadar::AddLooseContactInterval(float Interval)
 {
@@ -90,113 +95,71 @@ void AFaultyRadar::MoveRadar(FRotator rot)
 
 void AFaultyRadar::BeginPlay()
 {
-  Super::BeginPlay();
-  LooseContact_Start = LooseContact_StartOffset + GetWorld()->GetTimeSeconds();
-  ConstantShift_Start = ConstantShift_StartOffset + GetWorld()->GetTimeSeconds();
-  RadarDisturbance_Start = RadarDisturbance_StartOffset + GetWorld()->GetTimeSeconds();
-  RadarSpoof_Start = RadarSpoof_StartOffset + GetWorld()->GetTimeSeconds();
-  PrevLocation = GetActorLocation();
-  return;
-
-/* 
+    Super::BeginPlay();
+    LooseContact_Start = LooseContact_StartOffset + GetWorld()->GetTimeSeconds();
+    ConstantShift_Start = ConstantShift_StartOffset + GetWorld()->GetTimeSeconds();
+    RadarDisturbance_Start = RadarDisturbance_StartOffset + GetWorld()->GetTimeSeconds();
+    RadarSpoof_Start = RadarSpoof_StartOffset + GetWorld()->GetTimeSeconds();
+    PrevLocation = GetActorLocation();
+    return;
 }
+ 
+
 void AFaultyRadar::OnConstruction(const FTransform& Transform)
 {
     Super::OnConstruction(Transform);
-    */
 
-    FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 1.0f;
-    for (auto Comp : MeshComponents) {
-        Comp->DestroyComponent();
-    }
-    MeshComponents.Empty();
+}
+void AFaultyRadar::GenerateHexagon(int Ammount)
+{
+    float Range = 1;
+    float CalculateHFOV = HorizontalFOV + 4.f;
+    float CalculateVFOV = VerticalFOV + 4.f;
 
-    for (int32 i = 0; i < 3; i++)
+
+    const float MaxRx = FMath::Tan(FMath::DegreesToRadians(CalculateHFOV * 0.5f)) * Range;
+    const float MaxRy = FMath::Tan(FMath::DegreesToRadians(CalculateVFOV * 0.5f)) * Range;
+    const FTransform& ActorTransform = GetActorTransform();
+    const FRotator& TransformRotator = ActorTransform.Rotator();
+    const FVector& RadarLocation = GetActorLocation();
+    float Sin, Cos;
+
+    for (int32 i = 0; i < Ammount; i++)
     {
+        const float Radius =RandomEngine->GetUniformFloat();
+        const float Angle = RandomEngine->GetUniformFloatInRange(0.0f, carla::geom::Math::Pi2<float>());
+        FMath::SinCos(&Sin, &Cos, Angle);
+        const FVector EndLocation = RadarLocation + TransformRotator.RotateVector({
+              Range,
+              MaxRx * Radius * Cos,
+              MaxRy * Radius * Sin
+            });
 
-        UProceduralMeshComponent* MeshComponent = NewObject<UProceduralMeshComponent>(this);
-        MeshComponent->SetMobility(EComponentMobility::Movable);
-        
-        auto Radius = FMath::RandRange(75.f, 75.f);
-        GenerateHexagonMesh(MeshComponent, Radius);
-        FVector ForwardVector = this->GetActorForwardVector();
-        FVector Origin = this->GetActorLocation();
-        FTransform Transform(FRotator(FMath::FRandRange(-VerticalFOV, VerticalFOV), FMath::FRandRange(-HorizontalFOV, HorizontalFOV), 0));
-        auto MoveVec =  Transform.TransformPosition(Origin);
-
-        TArray<FVector> Vertices;
-            
-        DrawDebugLine(GetWorld(), GetActorForwardVector(), GetActorForwardVector()*50.f, FColor::Red, false, 5000);
-        DrawDebugLine(GetWorld(), GetActorForwardVector().GetSafeNormal(), GetActorForwardVector().GetSafeNormal() * 50.f, FColor::Green, false, 5000);
-
-        MeshComponent->SetRelativeLocation((GetActorForwardVector()*2.f)  + MoveVec);
-        MeshComponent->SetRelativeRotation(GetActorRotation() + FRotator(-90.0f, 0.0f, 0.0f));
-        MeshComponent->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
-
-        MeshComponent->AttachToComponent(this->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
-        MeshComponents.Add(MeshComponent);
-        MeshComponent->RegisterComponent();
-        //MeshComponent->SetVisibility(false);
-        UMaterialInterface* Material = MeshComponent->GetMaterial(0);
-        UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(Material, MeshComponent);
-        DynamicMaterial->SetScalarParameterValue(TEXT("OpacityAmount"), 0.f);
+        AHexagonActor* Hexagon = GetWorld()->SpawnActor<AHexagonActor>(EndLocation, FRotator(0.f, 0.f, 0.f));
+        if (Hexagon != nullptr)
+        {
+            float Radius = FMath::FRandRange(.0001f, .0050f);
+            Hexagon->CreateHexagonMesh(Radius);
+            Hexagon->AttachToActor(this,FAttachmentTransformRules(EAttachmentRule::KeepWorld,true));
+            Hexagon->SetOwner(this);
+            Hexagon->SetActorRotation(this->GetActorRotation() + FRotator(90.f, 0.f, 0.f));
+            BlockObjects.Add(Hexagon);
+        }
     }
 }
-void AFaultyRadar::GenerateHexagonMesh(UProceduralMeshComponent* OutMesh, float Radius)
+
+void AFaultyRadar::Destroyed()
 {
-    const int32 NumVertices = 7;
-    const int32 NumTriangles = 6;
-
-    TArray< FVector > Vertices;
-    TArray< int32 > Triangles;
-    TArray< FVector > Normals;
-    TArray< FVector2D > UVs;
-    TArray<FLinearColor> Colors;
-    TArray< FProcMeshTangent > Tangents;
-
-
-
-    // Generate vertices
-    float angle = PI / 3.0f;
-
-    for (int i = 0; i < 6; i++)
+    // Notify ObjectBs that this object is destroyed
+    for (AActor* ObjectB : BlockObjects)
     {
-        float x = Radius * FMath::Cos(angle * i);
-        float y = Radius * FMath::Sin(angle * i);
-        Vertices.Add(FVector(x, y, 0));
+        if (ObjectB != nullptr)
+        {
+            ObjectB->Destroy();
+        }
     }
-    for (int i = 0; i < Vertices.Num(); i++)
-    {
-        Normals.Add(FVector(0.f, 0.f, 1.f));
-    }
-    UVs.Add(FVector2D(0.f, 0.f));
-    UVs.Add(FVector2D(1.f, 0.f));
-    UVs.Add(FVector2D(1.f, 1.f));
-    UVs.Add(FVector2D(0.f, 1.f));
-    UVs.Add(FVector2D(0.f, 1.f));
-    UVs.Add(FVector2D(0.f, 1.f));
-    Colors.Add(FLinearColor::Red);
-    Colors.Add(FLinearColor::Red);
-    Colors.Add(FLinearColor::Red);
-    Colors.Add(FLinearColor::Red);
-    Colors.Add(FLinearColor::Red);
-    Colors.Add(FLinearColor::Red);
-    // Front-facing triangles
-    Triangles.Add(0);
-    Triangles.Add(1);
-    Triangles.Add(2);
-    Triangles.Add(0);
-    Triangles.Add(2);
-    Triangles.Add(3);
-    Triangles.Add(0);
-    Triangles.Add(3);
-    Triangles.Add(4);
-    Triangles.Add(0);
-    Triangles.Add(4);
-    Triangles.Add(5);
 
-    // Create mesh section
-    OutMesh->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+    Super::Destroyed();
 }
 
 void AFaultyRadar::WriteLineTraces()
@@ -227,7 +190,7 @@ void AFaultyRadar::WriteLineTraces()
             DisturbeRadar();
         }
     }
-    if (this->Scenario & ScenarioID::RadarSpoofing)
+    if (this->Scenario & ScenarioID::RadarInterference)
     {
         if (time >= this->RadarSpoof_Start)
         {
@@ -260,7 +223,8 @@ void AFaultyRadar::WriteLineTraces()
         if (time >= this->ConstantShift_Start)
         {
             this->ConstantShift_Start += this->ConstantShift_Interval;
-            MoveRadar(this->ConstantShift_Rotation);
+            //MoveRadar(this->ConstantShift_Rotation);
+            GenerateHexagon(50);
         }
     }
 
@@ -313,4 +277,3 @@ void AFaultyRadar::SpoofRadar()
         }
     }
 }
-
