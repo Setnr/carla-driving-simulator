@@ -1,5 +1,7 @@
-This Repo is inteded to extend the Carla-Driving-Simulator with new Sensors.
-It is Targeted to implement Sensor-Failure-Models to generate Datasets where such a Failure can be seen.
+This repository is inteded to extend the Carla-Driving-Simulator by a faulty version of the implemented sensors.
+In the real world, several factors influence the normal operation of sensors and thus an ideal output may be easily simulated, yet not realistic.
+The goal of this work is to create a modified version of the existing radar and lidar sensor, that is capable of producing falsified data, matching various real-world effects and influences.
+In the end, these sensors can be used to create a more realistic perpection output, or to train and validate other applications with incorrect sensor outputs.
 
 The Radar aswell as the Lidar got extended by certain models.
 ```python
