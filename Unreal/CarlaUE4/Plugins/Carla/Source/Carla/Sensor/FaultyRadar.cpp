@@ -138,7 +138,7 @@ void AFaultyRadar::GenerateHexagon(int Ammount)
         AHexagonActor* Hexagon = GetWorld()->SpawnActor<AHexagonActor>(EndLocation, FRotator(0.f, 0.f, 0.f));
         if (Hexagon != nullptr)
         {
-            float Radius = FMath::FRandRange(.0001f, .0050f);
+            float Radius = FMath::FRandRange(.001f, .050f);//.0001f, .0050f);
             Hexagon->CreateHexagonMesh(Radius);
             Hexagon->AttachToActor(this,FAttachmentTransformRules(EAttachmentRule::KeepWorld,true));
             Hexagon->SetOwner(this);
