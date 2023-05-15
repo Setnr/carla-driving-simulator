@@ -13,6 +13,7 @@
 #include "Runtime/Core/Public/Async/ParallelFor.h"
 
 #include "carla/geom/Math.h"
+#include "Carla/Sensor/HexagonActor.h"
 
 FActorDefinition ARadar::GetSensorDefinition()
 {
@@ -196,6 +197,10 @@ float ARadar::CalculateRelativeVelocity(const FHitResult& OutHit, const FVector&
   constexpr float TO_METERS = 1e-2;
 
   const TWeakObjectPtr<AActor> HittedActor = OutHit.Actor;
+  if (HittedActor->IsA<AHexagonActor>())
+  {
+     return 0.0f;
+  }
   const FVector TargetVelocity = HittedActor->GetVelocity();
   const FVector TargetLocation = OutHit.ImpactPoint;
   const FVector Direction = (TargetLocation - RadarLocation).GetSafeNormal();
