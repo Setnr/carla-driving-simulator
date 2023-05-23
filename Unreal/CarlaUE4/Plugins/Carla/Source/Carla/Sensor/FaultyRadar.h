@@ -139,4 +139,6 @@ private:
   virtual void OnConstruction(const FTransform& Transform) override;
   virtual void Destroyed() override;
   TArray<AActor*> BlockObjects;
+
+  bool MoveOnce = true;
 };

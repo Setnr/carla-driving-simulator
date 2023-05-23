@@ -70,12 +70,12 @@ void ACollisionSensor::OnCollisionEvent(
             if (childAActor->GetClass() == AFaultyRadar::StaticClass()) 
             {
                 AFaultyRadar* radar = reinterpret_cast<AFaultyRadar*>(childAActor);
-                radar->MoveRadar();
+                radar->MoveRadar(NormalImpulse.Rotation());
             }
             if (childAActor->GetClass() == AFaultyRayCastLidar::StaticClass())
             {
                 AFaultyRayCastLidar* lidar = reinterpret_cast<AFaultyRayCastLidar*>(childAActor);
-                lidar->MoveLidar();
+                lidar->MoveLidar(NormalImpulse.Rotation());
             }
         }
     }

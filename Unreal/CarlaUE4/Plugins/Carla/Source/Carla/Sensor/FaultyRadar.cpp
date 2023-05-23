@@ -82,7 +82,7 @@ void AFaultyRadar::MoveRadar()
     if(this->Scenario & ScenarioID::RadarCollosionShift)
     {
         auto rot = this->GetActorRotation();
-        rot.Yaw += 10;
+        rot.Yaw += 20;
         this->SetActorRotation(rot);
     }
 }
