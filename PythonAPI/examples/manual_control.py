@@ -1159,25 +1159,28 @@ class CameraManager(object):
             ['sensor.camera.semantic_segmentation', cc.CityScapesPalette, 'Camera Semantic Segmentation (CityScapes Palette)', {}],
             ['sensor.camera.instance_segmentation', cc.CityScapesPalette, 'Camera Instance Segmentation (CityScapes Palette)', {}],
             ['sensor.camera.instance_segmentation', cc.Raw, 'Camera Instance Segmentation (Raw)', {}],
-            ['sensor.faulty_lidar.ray_cast', None, 'Lidar (Ray-Cast)', {
+            ['sensor.faulty_lidar.ray_cast', None, 'Lidar (Ray-Cast)', { #faulty_lidar an 3 stelle für lidar
                                                                         'range': '50', 
                                                                         "horizontal_fov" : "360",
-                                                                        #"scenario" : "32", 
+                                                                        "rotation_frequency" : "25",
+                                                                        "points_per_second" : "128000",
+                                                                        "scenario" : "4", 
                                                                        
-                                                                        #Szenario 32 Random Shift At Random Time
+                                                                        #Szenario 3 Random Shift At Random Time
                                                                         #"RandomShift_Start" : "5", 
                                                                         #"RandomShift_End" : "15", 
                                                                         #"RandomShif_StartOffset" : "10", 
                                                                         
                                                                         #Szenario 4 Fix Shift
-                                                                        #"ConstantShift_Rotation" : "10;0;0",
-                                                                        #"ConstantShift_Interval" : "10",
-                                                                        #"ConstantShift_Start" : "10",
+                                                                        "ConstantShift_Rotation" : "0;10;10",
+                                                                        "ConstantShift_Interval" : "5",
+                                                                        "ConstantShift_Start" : "5",
 
                                                                         # Szenario 2 Loose Contact
-                                                                        #'LooseContact_Interval': '10.0',
-                                                                        #'LooseContact_Duration': '5.0',
-                                                                        #'LooseContact_Start': '30.0'
+                                                                        #'LooseContact_Interval': '3.0',
+                                                                        #'LooseContact_Duration': '0.5',
+                                                                        #'LooseContact_Start': '5.0',
+                                                                        #'LooseContact_ProgressionRate' : '1.0'
                                                                         }],
             ['sensor.camera.dvs', cc.Raw, 'Dynamic Vision Sensor', {}],
             ['sensor.camera.rgb', cc.Raw, 'Camera RGB Distorted',
@@ -1199,7 +1202,7 @@ class CameraManager(object):
                     bp.set_attribute('gamma', str(gamma_correction))
                 for attr_name, attr_value in item[3].items():
                     bp.set_attribute(attr_name, attr_value)
-            elif item[0].startswith('sensor.faulty_lidar'):
+            elif item[0].startswith('sensor.faulty_lidar'): #faulty_
                 self.lidar_range = 50
 
                 for attr_name, attr_value in item[3].items():
@@ -1251,7 +1254,7 @@ class CameraManager(object):
         self = weak_self()
         if not self:
             return
-        if self.sensors[self.index][0].startswith('sensor.faulty_lidar'):
+        if self.sensors[self.index][0].startswith('sensor.faulty_lidar'): #
             points = np.frombuffer(image.raw_data, dtype=np.dtype('f4'))
             points = np.reshape(points, (int(points.shape[0] / 4), 4))
             lidar_data = np.array(points[:, :2])

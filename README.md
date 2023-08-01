@@ -15,8 +15,10 @@ class Scenario(Enum):
     RadarRandomShift = 32
     RadarCollosionShift = 64
     RadarSpoofing = 128
+	RadarBlockage = 256
+
 ```
-At the Current state
+At the Current state the Radar supports the following Failure modes, while the LiDAR only supports the first 3 Models.
 * Loose Contact (Data Transfer Loss)
 	* LooseContact_Interval (Interval the Failure appears)
 	* LooseContact_Duration (Duration of the Failure)
@@ -43,7 +45,10 @@ At the Current state
 	* RadarSpoof_StartOffset (Time after creation of the sensor when the error will first appear)
 	* RadarSpoof_ProgressionRate The ammount the Interval gets decresed to Increase the Rate of Failure during the simulation)
 	* RadarSpoof_CutOff (The effective Range on where it gets reduced to, during the spoofing attack)
-
+* Blockage
+	* Blockage_Start (When the Blockage will Start to generate Hexagons in the FOV of the Radar)
+	* Blockage_Interval (The Intervall when new Hexagons will get added)
+	* Blockage_HexagonAmmount (The Ammount of Hexagons which will be spawned within the FOV of the Sensor)
 
 are currently implemented with given Paramters.
 

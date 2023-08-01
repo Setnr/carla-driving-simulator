@@ -224,6 +224,13 @@ void AFaultyRadar::WriteLineTraces()
         {
             this->ConstantShift_Start += this->ConstantShift_Interval;
             //MoveRadar(this->ConstantShift_Rotation);
+        }
+    }
+    if (this->Scenario == ScenarioID::RadarBlockage) 
+    {
+        if (time >= this->Blockage_Start)
+        {
+            this->Blockage_Start += this->Blockage_Interval;
             GenerateHexagon(50);
         }
     }
