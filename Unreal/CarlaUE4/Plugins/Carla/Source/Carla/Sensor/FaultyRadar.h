@@ -76,6 +76,16 @@ public:
   void SetRadarSpoof_CutOff(float CutOff) {
 	  this->RadarSpoof_CutOff = CutOff;
   }
+
+  void SetBlockageStart(float Start) {
+	  this->Blockage_Start = Start;
+  }
+  void SetBlockageInterval(float Interval) {
+	  this->Blockage_Interval = Interval;
+  }
+  void SetBlockageHexagonAmmounts(int Ammount) {
+	  this->Blockage_HexagonAmmounts = Ammount;
+  }
   void MoveRadar(FRotator rot);
   void MoveRadar(); // Moves the Radar -> Used For RadarCollosionShift
 
@@ -90,7 +100,8 @@ private:
 		RadarDisturbance = 0x10,
 		RadarRandomShift = 0x20,
 		RadarCollosionShift = 0x40,
-		RadarInterference = 0x80
+		RadarInterference = 0x80,
+		RadarBlockage = 0x100
 	};
 
 	int Scenario;
@@ -124,6 +135,10 @@ private:
 	float RadarSpoof_Start;
 	float RadarSpoof_ProgressionRate;
 	float RadarSpoof_CutOff;
+
+	float Blockage_Start;
+	float Blockage_Interval;
+	int Blockage_HexagonAmmounts;
 
 	void GenerateHexagon(int Ammount);
 

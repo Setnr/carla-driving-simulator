@@ -2106,6 +2106,7 @@ void UActorBlueprintFunctionLibrary::SetFaultyLidar(const FActorDescription& Des
     FaultyLidar.RandomShift_End = RetrieveActorAttributeToFloat("RandomShift_End", Description.Variations, 0.0f);
     FaultyLidar.RandomShif_StartOffset = RetrieveActorAttributeToFloat("RandomShif_StartOffset", Description.Variations, 0.0f);
 #pragma endregion
+
 }
 
 void UActorBlueprintFunctionLibrary::SetGnss(
@@ -2233,6 +2234,13 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
     IQZ_SENSOR_SET_MACRO(Radar, SetRadarSpoof_StartOffset, "RadarSpoof_StartOffset", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetRadarSpoof_ProgressionRate, "RadarSpoof_ProgressionRate", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetRadarSpoof_CutOff, "RadarSpoof_CutOff", RetrieveActorAttributeToFloat, 0.0f);
+#pragma endregion
+
+
+#pragma region Blockage
+    IQZ_SENSOR_SET_MACRO(Radar, SetBlockageStart, "Blockage_Start", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetBlockageInterval, "Blockage_Interval", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetBlockageHexagonAmmounts, "Blockage_HexagonAmmount", RetrieveActorAttributeToInt, 0);
 #pragma endregion
 
 }

@@ -18,7 +18,8 @@ struct FFaultyLidarDescription
 	  RadarVibration = 0x8,
 	  RadarVictim = 0x10,
 	  RadarRandomShift = 0x20,
-	  RadarCollosionShift = 0x80
+	  RadarCollosionShift = 0x80,
+      RadarBlockage = 0x100
   };
 
   int Scenario;
