@@ -1,8 +1,11 @@
-This repository is inteded to extend the Carla-Driving-Simulator by a faulty version of the implemented sensors.
+# Carla Faulty Sensor Extension
+This repository is intended to extend the Carla-Driving-Simulator by a faulty version of the implemented sensors.
 In the real world, several factors influence the normal operation of sensors and thus an ideal output may be easily simulated, yet not realistic.
 The goal of this work is to create a modified version of the existing radar and lidar sensor, that is capable of producing falsified data, matching various real-world effects and influences.
-In the end, these sensors can be used to create a more realistic perpection output, or to train and validate other applications with incorrect sensor outputs.
+In the end, these sensors can be used to create a more realistic perception output, or to train and validate other applications with incorrect sensor outputs.
 
+
+## General
 The Radar aswell as the Lidar got extended by certain models.
 ```python
 class Scenario(Enum):
@@ -19,46 +22,47 @@ class Scenario(Enum):
 
 ```
 At the Current state the Radar supports the following Failure modes, while the LiDAR only supports the first 3 Models.
-* Loose Contact (Data Transfer Loss)
-	* LooseContact_Interval (Interval the Failure appears)
-	* LooseContact_Duration (Duration of the Failure)
-	* LooseContact_ProgressionRate (The ammount the Interval gets decresed to Increase the Rate of Failure during the simulation)
-	* LooseContact_StartOffset (How many seconds after creation of the Sensor the Failure will appear for the First time)
-* Constant Shift
-	* ConstantShift_Rotation (The Yaw, Pitch and Roll how the Radar will shift every time "Yaw;Pitch;Roll")
-	* ConstantShift_Interval (The Interval the Radar will get shifted)
-	* ConstantShift_StartOffset (How many seconds after creation of the Sensor the Failure will appear for the First time)
-* Random Shift (__Failure will appear at a random Time between Start and End and will rotate a random ammount__)
-	* RandomShift_Start (Min Duration when a failure can appear the next time)
-	* RandomShift_End (Max Duration when a failure will appear)
-	* RandomShif_StartOffset (How many seconds after creation of the Sensor the Failure will appear for the First time)
-* Collision Shift
-	* No Paramters Used at the current state of development
-* Disturbance
-	* RadarDisturbance_Interval (Intervall of the error appearence)
-	* RadarDisturbance_Duration (Duration of the error)
-	* RadarDisturbance_StartOffset (Time after creation of the sensor when the error will first appear)
-	* RadarDisturbance_ProgressionRate The ammount the Interval gets decresed to Increase the Rate of Failure during the simulation)
-* Spoofing __This is intedended to simulate a attack on the sensor__
-	* RadarSpoof_Interval (Intervall of the error appearence)
-	* RadarSpoof_Duration (Duration of the error)
-	* RadarSpoof_StartOffset (Time after creation of the sensor when the error will first appear)
-	* RadarSpoof_ProgressionRate The ammount the Interval gets decresed to Increase the Rate of Failure during the simulation)
-	* RadarSpoof_CutOff (The effective Range on where it gets reduced to, during the spoofing attack)
-* Blockage
-	* Blockage_Start (When the Blockage will Start to generate Hexagons in the FOV of the Radar)
-	* Blockage_Interval (The Intervall when new Hexagons will get added)
-	* Blockage_HexagonAmmount (The Ammount of Hexagons which will be spawned within the FOV of the Sensor)
+* __Loose Contact__ (Data transfer error/loss)
+	* LooseContact_Interval (interval the failure (re)appears)
+	* LooseContact_Duration (duration of the failure)
+	* LooseContact_ProgressionRate (the amount the interval gets decreased to increase the failure rate during the simulation)
+	* LooseContact_StartOffset (time as amount of seconds after the sensor's creation the failure will appear for the first time)
+* __Constant Shift__ (Constantly shifting FOV of the sensor e.g. due to a flawed mounting)
+	* ConstantShift_Rotation (the yaw, pitch and roll describing how the Radar will shift every time "Yaw;Pitch;Roll")
+	* ConstantShift_Interval (the interval the Radar will get shifted)
+	* ConstantShift_StartOffset (time as amount of seconds after the sensor's creation the failure will appear for the first time)
+* __Random Shift__ (Failure will appear at a random time between start and end and will rotate a random amount)
+	* RandomShift_Start (minimal duration the failure can appear the next time)
+	* RandomShift_End (max duration the failure will appear)
+	* RandomShif_StartOffset (time as amount of seconds after the sensor's creation the failure will appear for the first time)
+* __Collision Shift__ (FOV shift after a collision has been detected)
+	* No parameters used at the current state of development
+* __Disturbance__ (Signal based disturbances due to interference, leading to distance/velocity falsification)
+	* RadarDisturbance_Interval (interval the failure (re)appears)
+	* RadarDisturbance_Duration (duration of the failure)
+	* RadarDisturbance_StartOffset (time as amount of seconds after the sensor's creation the failure will appear for the first time)
+	* RadarDisturbance_ProgressionRate (the amount the interval gets decreased to increase the failure rate during the simulation)
+* __Spoofing__ (A spoofing attack is a type of disturbance that leads to a decrease of its covered distance)
+	* RadarSpoof_Interval (interval the attack (re)appears)
+	* RadarSpoof_Duration (duration of the attack)
+	* RadarSpoof_StartOffset (time as amount of seconds after the sensor's creation the attack will occur for the first time)
+	* RadarSpoof_ProgressionRate (the amount the interval gets decreased to increase the attack rate during the simulation)
+	* RadarSpoof_CutOff (range the sensor gets reduced to during the spoofing attack)
+* __Blockage__ (Obscuration due to mud/foliage/ice etc. Will generate actual objects in front of the sensor (as hexagons))
+	* Blockage_Start (time as amount of seconds after the sensor's creation the failure will appear for the first time)
+	* Blockage_Interval (interval in that new hexagons are added)
+	* Blockage_HexagonAmmount (the amount of hexagons which will be spawned within the FOV of the sensor (per tick))
 
-are currently implemented with given Paramters.
 
-To Acces the Radar/Lidar following code can be used:
+## Usage
+
+Declaration and initialization of the faulty Radar and Lidar model:
 ```python
         front_radar_model = self.world.get_blueprint_library().find('sensor.other.faulty_radar')
-        front_radar_model = self.world.get_blueprint_library().find('sensor.faulty_lidar.ray_cast')
+        front_lidar_model = self.world.get_blueprint_library().find('sensor.faulty_lidar.ray_cast')
 ```
 
-Usage Example:
+Parametrization example:
 ```python
         front_radar_model = self.world.get_blueprint_library().find('sensor.other.faulty_radar')
         front_radar_model.set_attribute('horizontal_fov', str(35))
@@ -70,12 +74,12 @@ Usage Example:
         front_radar_model.set_attribute('LooseContact_Start', '2.2')
 ```
 
-All Sensors work as shown in the Carla Documentation and are extended by the previous shown Paramters.
+The faulty sensors are created in accordance with the existing Carla sensors and are extended by the previously shown parameters.
 
 
 ### <font color='red'>THIS PROJECT CURRENTLY ONLY SUPPORTS PYTHON, AT THE CURRENT STATE THE SENSOR CAN NOT BE USED IN BLUEPRINTS</font>
 
-CARLA Simulator - Offical ReadMe
+CARLA Simulator - Official ReadMe
 ===============
 
 [![Build Status](https://travis-ci.org/carla-simulator/carla.svg?branch=master)](https://travis-ci.org/carla-simulator/carla)
