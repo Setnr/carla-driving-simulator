@@ -1058,6 +1058,24 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     RadarSpoof_CutOff.RecommendedValues = { TEXT("0") };
     RadarSpoof_CutOff.bRestrictToRecommended = false;
 
+    FActorVariation RadarBlockage_Start;
+    RadarBlockage_Start.Id = TEXT("Blockage_Start");
+    RadarBlockage_Start.Type = EActorAttributeType::Float;
+    RadarBlockage_Start.RecommendedValues = { TEXT("0") };
+    RadarBlockage_Start.bRestrictToRecommended = false;
+
+    FActorVariation RadarBlockage_Interval;
+    RadarBlockage_Interval.Id = TEXT("Blockage_Interval");
+    RadarBlockage_Interval.Type = EActorAttributeType::Float;
+    RadarBlockage_Interval.RecommendedValues = { TEXT("0") };
+    RadarBlockage_Interval.bRestrictToRecommended = false;
+
+    FActorVariation RadarBlockage_HexagonAmmount;
+    RadarBlockage_HexagonAmmount.Id = TEXT("Blockage_HexagonAmmount");
+    RadarBlockage_HexagonAmmount.Type = EActorAttributeType::Int;
+    RadarBlockage_HexagonAmmount.RecommendedValues = { TEXT("0") };
+    RadarBlockage_HexagonAmmount.bRestrictToRecommended = false;
+
     Definition.Variations.Append({
       HorizontalFOV,
       VerticalFOV,
@@ -1083,7 +1101,10 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
         RadarSpoof_Duration,
         RadarSpoof_StartOffset,
         RadarSpoof_ProgressionRate,
-        RadarSpoof_CutOff
+        RadarSpoof_CutOff,
+        RadarBlockage_Start,
+        RadarBlockage_Interval,
+        RadarBlockage_HexagonAmmount
         });
 
     Success = CheckActorDefinition(Definition);
@@ -2241,6 +2262,8 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
     IQZ_SENSOR_SET_MACRO(Radar, SetBlockageStart, "Blockage_Start", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetBlockageInterval, "Blockage_Interval", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetBlockageHexagonAmmounts, "Blockage_HexagonAmmount", RetrieveActorAttributeToInt, 0);
+    //if (Description.Variations.Contains("Blockage_HexagonAmmount"))
+    //    Radar->SetBlockageHexagonAmmounts(RetrieveActorAttributeToInt("Blockage_HexagonAmmount", Description.Variations, 0));
 #pragma endregion
 
 }

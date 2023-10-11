@@ -45,6 +45,7 @@ class Scenario(Enum):
     RadarRandomShift = 32
     RadarCollosionShift = 64
     RadarSpoofing = 128
+    RadarBlockage = 256
 
 class VehicleEnvironment:
     vehicle_list = []
@@ -199,7 +200,7 @@ class VehicleEnvironment:
             print("Error spawning ego vehicle")
             exit(1)
         self.vehicle_list.append(self.vehicle)
-        self.vehicle.set_autopilot(True)
+        self.vehicle.set_autopilot(False)
 
         # Add Camera Manager to follow the ego vehicle with a view
         self.camera_manager = CameraManager(self.vehicle, self.hud,2.2)
@@ -211,12 +212,12 @@ class VehicleEnvironment:
         front_radar_model.set_attribute('horizontal_fov', str(35))
         front_radar_model.set_attribute('vertical_fov', str(20))
         front_radar_model.set_attribute('range', str(80))
-        front_radar_model.set_attribute("scenario",str(Scenario.RadarDisturbance.value))
+        front_radar_model.set_attribute("scenario",str(Scenario.RadarBlockage.value))
 
-        front_radar_model.set_attribute('RadarDisturbance_Interval', str(10))
-        front_radar_model.set_attribute('RadarDisturbance_Duration', str(8))
-        front_radar_model.set_attribute('RadarDisturbance_StartOffset', str(30))
-        front_radar_model.set_attribute('RadarDisturbance_ProgressionRate', str(0))
+        front_radar_model.set_attribute('Blockage_Start', str(80))
+        front_radar_model.set_attribute('Blockage_Interval', str(8))
+        front_radar_model.set_attribute('Blockage_HexagonAmmount', str(25))
+        #front_radar_model.set_attribute('RadarDisturbance_ProgressionRate', str(0))
 
         bound_x = 0.5 + self.vehicle.bounding_box.extent.x
         bound_z = 0.5 + self.vehicle.bounding_box.extent.z
@@ -444,8 +445,8 @@ def simulate(recording, store_radar_data):
         print("Connecting to Simulation Environment ...")
         # Create a client object that can run the agent and connect to the world
         print("Creating client and connecting to host ...")
-        client = carla.Client('192.168.178.42', 2000)
-        client.set_timeout(5.0) # might need a longer timeout with bad hardware
+        client = carla.Client('127.0.0.1', 2000)
+        client.set_timeout(8.0) # might need a longer timeout with bad hardware
         time.sleep(5.0)
 
         traffic_manager = client.get_trafficmanager()

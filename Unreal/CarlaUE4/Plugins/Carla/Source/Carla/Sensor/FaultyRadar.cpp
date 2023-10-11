@@ -62,8 +62,8 @@ void AFaultyRadar::SetConstantShiftRotation(FString string)
     string.ParseIntoArray(Tokens, Delims, false);
     if (Tokens.Num() != 3) 
     {
-        //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("ConstantShiftArray is broken, couldn´t read 3 values there!"));
-        //UE_LOG(LogTemp, Error, TEXT("ConstantShiftArray is broken, couldn´t read 3 values there!"));
+        //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("ConstantShiftArray is broken, couldnï¿½t read 3 values there!"));
+        //UE_LOG(LogTemp, Error, TEXT("ConstantShiftArray is broken, couldnï¿½t read 3 values there!"));
         return;
     }
     ConstantShift_Rotation.Yaw = FCString::Atof(*Tokens[0]);
@@ -144,7 +144,8 @@ void AFaultyRadar::GenerateHexagon(int Ammount)
             Hexagon->SetOwner(this);
             Hexagon->SetActorRotation(this->GetActorRotation() + FRotator(90.f, 0.f, 0.f));
             BlockObjects.Add(Hexagon);
-        }
+        }else
+            UE_LOG(LogTemp, Error, TEXT("Hexagon == nullptr!"));
     }
 }
 
@@ -226,12 +227,12 @@ void AFaultyRadar::WriteLineTraces()
             //MoveRadar(this->ConstantShift_Rotation);
         }
     }
-    if (this->Scenario == ScenarioID::RadarBlockage) 
+    if (this->Scenario & ScenarioID::RadarBlockage) 
     {
         if (time >= this->Blockage_Start)
         {
             this->Blockage_Start += this->Blockage_Interval;
-            GenerateHexagon(50);
+            GenerateHexagon(this->Blockage_HexagonAmmounts);
         }
     }
 
