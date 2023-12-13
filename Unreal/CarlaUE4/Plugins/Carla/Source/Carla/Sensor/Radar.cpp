@@ -178,18 +178,7 @@ void ARadar::SendLineTraces(float DeltaTime)
 void ARadar::WriteLineTraces()
 {
   // Write the detections in the output structure
-  for (auto& ray : Rays) {
-    if (ray.Hitted) {
-      RadarData.WriteDetection({
-        ray.RelativeVelocity,
-        ray.AzimuthAndElevation.X,
-        ray.AzimuthAndElevation.Y,
-        ray.Distance,
-        ray.label
-      });
-    }
-  }
-
+  WriteLineTraces(Rays);
 }
 
 float ARadar::CalculateRelativeVelocity(const FHitResult& OutHit, const FVector& RadarLocation)

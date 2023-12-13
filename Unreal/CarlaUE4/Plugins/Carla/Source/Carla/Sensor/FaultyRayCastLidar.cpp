@@ -23,22 +23,22 @@ void AFaultyRayCastLidar::Set(const FActorDescription &ActorDescription)
   UActorBlueprintFunctionLibrary::SetFaultyLidar(ActorDescription, LidarDescription, FaultyLidarDescription);
   Super::Set(LidarDescription);
 
-  FaultyLidarDescription.LooseContact_Start = FaultyLidarDescription.LooseContact_StartOffset + GetWorld()->GetTimeSeconds();
+  FaultyLidarDescription.PackageLoss_Start = FaultyLidarDescription.PackageLoss_StartOffset + GetWorld()->GetTimeSeconds();
   FaultyLidarDescription.ConstantShift_Start = FaultyLidarDescription.ConstantShift_StartOffset + GetWorld()->GetTimeSeconds();
 }
 
 void AFaultyRayCastLidar::ComputeAndSaveDetections(const FTransform& SensorTransform) 
 {
     float time = GetWorld()->GetTimeSeconds();
-    if (FaultyLidarDescription.Scenario & FFaultyLidarDescription::ScenarioID::RadarLooseContact)
+    if (FaultyLidarDescription.Scenario & FFaultyLidarDescription::ScenarioID::RadarPackageLoss)
     {
 
-        if (time >= FaultyLidarDescription.LooseContact_Start)
+        if (time >= FaultyLidarDescription.PackageLoss_Start)
         {
-            if (time >= FaultyLidarDescription.LooseContact_Start + FaultyLidarDescription.LooseContact_Duration)
+            if (time >= FaultyLidarDescription.PackageLoss_Start + FaultyLidarDescription.PackageLoss_Duration)
             {
-                FaultyLidarDescription.LooseContact_Start += FaultyLidarDescription.LooseContact_Interval;
-                FaultyLidarDescription.LooseContact_Interval -= FaultyLidarDescription.LooseContact_ProgressionRate;
+                FaultyLidarDescription.PackageLoss_Start += FaultyLidarDescription.PackageLoss_Interval;
+                FaultyLidarDescription.PackageLoss_Interval -= FaultyLidarDescription.PackageLoss_IntervallDegradation;
             }
             return;
         }

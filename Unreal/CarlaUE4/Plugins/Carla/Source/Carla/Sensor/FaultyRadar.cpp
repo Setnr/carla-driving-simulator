@@ -19,28 +19,35 @@ FActorDefinition AFaultyRadar::GetSensorDefinition()
 AFaultyRadar::AFaultyRadar(const FObjectInitializer& ObjectInitializer)
   : Super(ObjectInitializer)
 {
-    this->LooseContact_Interval = 15.0f;
-    this->LooseContact_Duration = 2.5f;
-    this->LooseContact_StartOffset = 15.0f;
-    this->LooseContact_ProgressionRate = 0.0f;
     this->SetVerticalFOV(20);
     this->SetHorizontalFOV(35);
 
+    this->PackageLoss_Interval = 15.0f;
+    this->PackageLoss_Duration = 2.5f;
+    this->PackageLoss_StartOffset = 15.0f;
+    this->PackageLoss_Start = FLT_MAX;
+    this->PackageLoss_IntervallDegradation = 0.0f;
+    this->PackageLoss_DurationDegradation = 0.0f;
 
+    this->PackageDelay_Start = FLT_MAX;
+    this->PackageDelay_DelaySize = 0;
+    this->PackageDelay_WriteRingBufferPtr = 0;
+    this->PackageDelay_ReadRingBufferPtr = 0;
+    this->PackageDelay_RingBufferMaxUseSize = 100;
 }
 
 
-void AFaultyRadar::AddLooseContactInterval(float Interval)
+void AFaultyRadar::AddPackageLossInterval(float Interval)
 {
-    this->LooseContact_Interval = Interval;
+    this->PackageLoss_Interval = Interval;
 }
-void AFaultyRadar::AddLooseContactDuration(float Duration)
+void AFaultyRadar::AddPackageLossDuration(float Duration)
 {
-    this->LooseContact_Duration = Duration;
+    this->PackageLoss_Duration = Duration;
 }
-void AFaultyRadar::AddLooseContactStart(float StartTime)
+void AFaultyRadar::AddPackageLossStart(float StartTime)
 {
-    this->LooseContact_StartOffset = StartTime;
+    this->PackageLoss_StartOffset = StartTime;
 }
 
 void AFaultyRadar::AddScenario(int ScenarioID)
@@ -52,7 +59,7 @@ void AFaultyRadar::AddScenario(int ScenarioID)
 
 void AFaultyRadar::SetProgressionRate(float Rate)
 {
-    this->LooseContact_ProgressionRate = Rate;
+    this->PackageLoss_IntervallDegradation = Rate;
 }
 
 void AFaultyRadar::SetConstantShiftRotation(FString string) 
@@ -96,7 +103,7 @@ void AFaultyRadar::MoveRadar(FRotator rot)
 void AFaultyRadar::BeginPlay()
 {
     Super::BeginPlay();
-    LooseContact_Start = LooseContact_StartOffset + GetWorld()->GetTimeSeconds();
+    PackageLoss_Start = PackageLoss_StartOffset + GetWorld()->GetTimeSeconds();
     ConstantShift_Start = ConstantShift_StartOffset + GetWorld()->GetTimeSeconds();
     RadarDisturbance_Start = RadarDisturbance_StartOffset + GetWorld()->GetTimeSeconds();
     RadarSpoof_Start = RadarSpoof_StartOffset + GetWorld()->GetTimeSeconds();
@@ -166,14 +173,15 @@ void AFaultyRadar::Destroyed()
 void AFaultyRadar::WriteLineTraces()
 {
     float time = GetWorld()->GetTimeSeconds();
-    if (this->Scenario & ScenarioID::RadarLooseContact)
+    if (this->Scenario & ScenarioID::RadarPackageLoss)
     {
-        if (time >= this->LooseContact_Start)
+        if (time >= this->PackageLoss_Start)
         {
-            if (time >= this->LooseContact_Start + this->LooseContact_Duration)
+            if (time >= this->PackageLoss_Start + this->PackageLoss_Duration)
             {
-                this->LooseContact_Start += this->LooseContact_Interval;
-                this->LooseContact_Interval -= LooseContact_ProgressionRate;
+                this->PackageLoss_Start += this->PackageLoss_Interval;
+                this->PackageLoss_Interval -= PackageLoss_IntervallDegradation;
+                this->PackageLoss_Duration += PackageLoss_DurationDegradation;
             }
             return;
         }
@@ -203,17 +211,41 @@ void AFaultyRadar::WriteLineTraces()
             SpoofRadar();
         }
     }
-
-    for (auto& ray : Rays) {
-        if (ray.Hitted) {
-            RadarData.WriteDetection({
-                ray.RelativeVelocity,
-                ray.AzimuthAndElevation.X,
-                ray.AzimuthAndElevation.Y,
-                ray.Distance,
-                ray.label
-                });
+    if(this->ScenarioID & ScenarioID::RadarPackageDelay && time >= this->PackageDelay_Start)
+    {
+        if(PackageDelay_RingBufferMaxUseSize > RadarDelay_RingBufferSize)
+        {
+            UE_LOG(LogTemp, Error, TEXT("RingBufferMaxUseSize too Big! Please adjust and rerun the simulation!"));
+            return;
         }
+
+        if(time >= PackageDelay_DegradationZeit)
+        {
+            PackageDelay_DelaySize += PackageDelay_DegradationSize;
+            PackageDelay_DegradationZeit += PackageDelay_Interval;
+        }
+        
+        PackageDelay_RingBuffer[PackageDelay_WriteRingBufferPtr] = Rays;
+        PackageDelay_WriteRingBufferPtr++;
+        if(PackageDelay_WriteRingBufferPtr >= PackageDelay_RingBufferMaxUseSize)
+            PackageDelay_WriteRingBufferPtr = 0;
+
+        if(!(PackageDelay_WaitCounter < PackageDelay_DelaySize))
+        {
+            auto RayList = PackageDelay_RingBuffer[PackageDelay_ReadRingBufferPtr];
+            WriteLineTraces(RayList);
+            PackageDelay_ReadRingBufferPtr++;
+            if(PackageDelay_ReadRingBufferPtr  >= PackageDelay_RingBufferMaxUseSize)
+                PackageDelay_ReadRingBufferPtr = 0;
+        }
+        else
+        {
+            PackageDelay_WaitCounter++;
+        }
+    }
+    else
+    {
+        WriteLineTraces(Rays);
     }
 
 

@@ -12,7 +12,7 @@
 #include "Carla/Sensor/Radar.h"
 #include "FaultyRadar.generated.h"
 
-
+#define RadarDelay_RingBufferSize 100
 
 UCLASS()
 class CARLA_API AFaultyRadar : public ARadar
@@ -27,9 +27,9 @@ public:
   void Set(const FActorDescription &Description) override;
 
   void AddScenario(int SzenarioID);
-  void AddLooseContactInterval(float Interval);
-  void AddLooseContactDuration(float Duration);
-  void AddLooseContactStart(float StartTime);
+  void AddPackageLossInterval(float Interval);
+  void AddPackageLossDuration(float Duration);
+  void AddPackageLossStart(float StartTime);
   void SetProgressionRate(float Rate);
   void SetConstantShiftRotation(FString string);
   void SetConstantShiftInterval(float Interval) {
@@ -88,30 +88,70 @@ public:
   }
   void MoveRadar(FRotator rot);
   void MoveRadar(); // Moves the Radar -> Used For RadarCollosionShift
-
+  void SetDurationDegradation(float DurationDegradation)
+  {
+	this->PackageLoss_DurationDegradation = DurationDegradation;
+  }
 private:
 	bool isBlocked;
 	enum ScenarioID 
 	{
+		None = 0x0,
 		RadarBlocked = 0x1,
-		RadarLooseContact = 0x2,
+		RadarPackageLoss = 0x2,
 		RadarConstantShift = 0x4,
 		RadarVibration = 0x8,
 		RadarDisturbance = 0x10,
 		RadarRandomShift = 0x20,
 		RadarCollosionShift = 0x40,
 		RadarInterference = 0x80,
-		RadarBlockage = 0x100
+		RadarBlockage = 0x100,
+		RadarPackageDelay = 0x200
 	};
 
 	int Scenario;
 	
-	float LooseContact_Interval;
-	float LooseContact_Duration;
-	float LooseContact_StartOffset;
-	float LooseContact_Start;
-	
-	float LooseContact_ProgressionRate;
+	float PackageLoss_Interval;
+	float PackageLoss_Duration;
+	float PackageLoss_StartOffset;
+	float PackageLoss_Start;
+
+	float PackageLoss_IntervallDegradation;
+	float PackageLoss_DurationDegradation;
+
+
+	float PackageDelay_Start; // Wann tritt der Fehler zuerst auf
+	float PackageDelay_DegradationZeit; //Hilfsvariable um die Intervalle zu tracken
+	float PackageDelay_Interval; //In welchem Zeitintervall verschlechter sich der Fehler
+	int PackageDelay_DegradationSize; // Wie viele Packete werden nach jedem Intervall neu versetzt
+	int PackageDelay_DelaySize; //Wie viele Packete sind versetzt, zu diesem Zeitpunkt in der Sim.
+								// Kann initial gesetzt werden um zu sagen wie viele Packete beim ersten Auftreten versetzt werden sollen.
+	int PackageDelay_WaitCounter; // Wie viele Packete sind zu dem Zeitpunkt schon versetzt
+
+	std::vector<RayData>[RadarDelay_RingBufferSize] PackageDelay_RingBuffer
+	int PackageDelay_WriteRingBufferPtr;
+	int PackageDelay_ReadRingBufferPtr
+	int PackageDelay_RingBufferMaxUseSize;
+
+
+	void SetPackageDelay_Start(float Start)
+	{
+		PackageDelay_Start = Start;
+	}
+	void SetPackageDelay_Interval(float Interval)
+	{
+		PackageDelay_Interval = Interval;
+		PackageDelay_DegradationZeit = PackageDelay_Start + Interval;
+	}
+	void SetPackageDelay_DegradationSize(int Size){
+		PackageDelay_DegradationSize = Size;
+	}
+	void SetPackageDelay_DelaySize(int Size){
+		PackageDelay_DelaySize = Size;
+	}
+	void SetPackageDelay_RingBufferMaxUseSize(int Size){
+		PackageDelay_RingBufferMaxUseSize = Size;
+	}
 
 	FRotator ConstantShift_Rotation;
 	float ConstantShift_Interval;

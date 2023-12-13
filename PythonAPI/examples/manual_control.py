@@ -98,13 +98,15 @@ from enum import Enum
 class Scenario(Enum):
 
     RadarBlocked = 1
-    RadarLooseContact = 2
+    RadarPackageLoss = 2
     RadarConstantShift = 4
     RadarVibration = 8
     RadarDisturbance = 16
     RadarRandomShift = 32
     RadarCollosionShift = 64
     RadarSpoofing = 128
+    RadarBlockage = 256
+    RadarPackageDelay = 512
 
 try:
     import pygame
@@ -1044,10 +1046,11 @@ class RadarSensor(object):
 
 
 
-        #bp.set_attribute('RadarDisturbance_Interval', str(10))
-        #bp.set_attribute('RadarDisturbance_Duration', str(8))
-        #bp.set_attribute('RadarDisturbance_StartOffset', str(30))
-        #bp.set_attribute('RadarDisturbance_ProgressionRate', str(1))
+        #bp.set_attribute('PackageLoss_Interval', str(10))
+        #bp.set_attribute('PackageLoss_Duration', str(8))
+        #bp.set_attribute('PackageLoss_Start', str(30))
+        #bp.set_attribute('PackageLoss_IntervallDegradation', str(1))
+        #bp.set_attribute('PackageLoss_DurationDegradation', str(1))
 
         #bp.set_attribute('RadarSpoof_Interval', str(10)) #Spoofing ist hier falsch, eigentlich ist das Interference, das muss angepasst werden
         #bp.set_attribute('RadarSpoof_Duration', str(5))
@@ -1067,6 +1070,15 @@ class RadarSensor(object):
         #bp.set_attribute('RandomShift_Start', "10")
         #bp.set_attribute('RandomShift_End', "30")
         #bp.set_attribute('RandomShif_StartOffset', "30")
+
+        #bp.set_attribute('PackageDelay_Start', str(10)) #Wann tritt der Fehler zuerst auf
+        #bp.set_attribute('PackageDelay_Interval', str(10)) #In welchem Zeitintervall verschlechter sich der Fehler (Start muss vorher gesetzt werden!)
+        #bp.set_attribute('PackageDelay_DegradationSize', str(5)) #Wie viele Packete werden nach jedem Intervall neu versetzt
+        #bp.set_attribute('PackageDelay_DelaySize', str(3))#Wie viele Packete werden beim ersten Auftreten versetzt (neu setzen währen der Simulation bricht die Simulation)
+        #bp.set_attribute('PackageDelay_RingBufferMaxUseSize', str(10)) #Theoretische Größe des RingBuffers (Hat Einfluss ab wann und wie viele Packete verloren werden) MAX GRÖßE 100!!!!
+
+
+
         self.sensor = world.spawn_actor(
             bp,
             carla.Transform(

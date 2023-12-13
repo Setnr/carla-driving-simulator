@@ -11,22 +11,24 @@ The Radar aswell as the Lidar got extended by certain models.
 class Scenario(Enum):
 
     RadarBlocked = 1
-    RadarLooseContact = 2
+    RadarPackageLoss = 2
     RadarConstantShift = 4
     RadarVibration = 8
     RadarDisturbance = 16
     RadarRandomShift = 32
     RadarCollosionShift = 64
     RadarSpoofing = 128
-	RadarBlockage = 256
+    RadarBlockage = 256
+    RadarPackageDelay = 512
 
 ```
 At the Current state the Radar supports the following Failure modes, while the LiDAR only supports the first 3 Models.
-* __Loose Contact__ (Data transfer error/loss)
-	* LooseContact_Interval (interval the failure (re)appears)
-	* LooseContact_Duration (duration of the failure)
-	* LooseContact_ProgressionRate (the amount the interval gets decreased to increase the failure rate during the simulation)
-	* LooseContact_StartOffset (time as amount of seconds after the sensor's creation the failure will appear for the first time)
+* __Package Loss__ (Data transfer error/loss)
+	* PackageLoss_Interval (interval the failure (re)appears)
+	* PackageLoss_Duration (duration of the failure)
+	* PackageLoss_IntervallDegradation (the amount the interval gets decreased to increase the failure rate during the simulation)
+	* PackageLoss_DurationDegradation (the amount the Duration gets increased to increase the failure duration during the simulation)
+	* PackageLoss_Start (time as amount of seconds after the sensor's creation the failure will appear for the first time)
 * __Constant Shift__ (Constantly shifting FOV of the sensor e.g. due to a flawed mounting)
 	* ConstantShift_Rotation (the yaw, pitch and roll describing how the Radar will shift every time "Yaw;Pitch;Roll")
 	* ConstantShift_Interval (the interval the Radar will get shifted)
@@ -52,7 +54,12 @@ At the Current state the Radar supports the following Failure modes, while the L
 	* Blockage_Start (time as amount of seconds after the sensor's creation the failure will appear for the first time)
 	* Blockage_Interval (interval in that new hexagons are added)
 	* Blockage_HexagonAmmount (the amount of hexagons which will be spawned within the FOV of the sensor (per tick))
-
+*__Package Delay__
+	* PackageDelay_Start (time when the first delay will occure)
+	* PackageDelay_Interval (interval when the next dely will occure)
+	* PackageDelay_DelaySize (how many packages will be delayed at the first failure)
+	* PackageDelay_DegradationSize (how many packages will be delayed at following failures, can be adjusted during the simulation)
+	* PackageDelay_RingBufferMaxUseSize (Defines the size of the PackageRingBuffer (max 100), this will influence the time when packages will be lost and how many packages will be lost during the simulation)
 
 ## Usage
 

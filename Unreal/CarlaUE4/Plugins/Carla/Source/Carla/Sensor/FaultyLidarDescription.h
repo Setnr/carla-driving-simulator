@@ -13,7 +13,7 @@ struct FFaultyLidarDescription
   enum ScenarioID
   {
 	  RadarBlocked = 0x1,
-	  RadarLooseContact = 0x2,
+	  RadarPackageLoss = 0x2,
 	  RadarConstantShift = 0x4,
 	  RadarVibration = 0x8,
 	  RadarVictim = 0x10,
@@ -24,12 +24,12 @@ struct FFaultyLidarDescription
 
   int Scenario;
 
-  float LooseContact_Interval;
-  float LooseContact_Duration;
-  float LooseContact_StartOffset;
-  float LooseContact_Start;
+  float PackageLoss_Interval;
+  float PackageLoss_Duration;
+  float PackageLoss_StartOffset;
+  float PackageLoss_Start;
 
-  float LooseContact_ProgressionRate;
+  float PackageLoss_IntervallDegradation;
 
   FRotator ConstantShift_Rotation;
   float ConstantShift_Interval;

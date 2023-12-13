@@ -944,29 +944,35 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     Scenario.RecommendedValues = { TEXT("0") };
     Scenario.bRestrictToRecommended = false;
 
-    FActorVariation LooseContact_Interval;
-    LooseContact_Interval.Id = TEXT("LooseContact_Interval");
-    LooseContact_Interval.Type = EActorAttributeType::Float;
-    LooseContact_Interval.RecommendedValues = { TEXT("0") };
-    LooseContact_Interval.bRestrictToRecommended = false;
+    FActorVariation PackageLoss_Interval;
+    PackageLoss_Interval.Id = TEXT("PackageLoss_Interval");
+    PackageLoss_Interval.Type = EActorAttributeType::Float;
+    PackageLoss_Interval.RecommendedValues = { TEXT("0") };
+    PackageLoss_Interval.bRestrictToRecommended = false;
 
-    FActorVariation LooseContact_Duration;
-    LooseContact_Duration.Id = TEXT("LooseContact_Duration");
-    LooseContact_Duration.Type = EActorAttributeType::Float;
-    LooseContact_Duration.RecommendedValues = { TEXT("0") };
-    LooseContact_Duration.bRestrictToRecommended = false;
+    FActorVariation PackageLoss_Duration;
+    PackageLoss_Duration.Id = TEXT("PackageLoss_Duration");
+    PackageLoss_Duration.Type = EActorAttributeType::Float;
+    PackageLoss_Duration.RecommendedValues = { TEXT("0") };
+    PackageLoss_Duration.bRestrictToRecommended = false;
 
-    FActorVariation LooseContact_Start;
-    LooseContact_Start.Id = TEXT("LooseContact_Start");
-    LooseContact_Start.Type = EActorAttributeType::Float;
-    LooseContact_Start.RecommendedValues = { TEXT("0") };
-    LooseContact_Start.bRestrictToRecommended = false;
+    FActorVariation PackageLoss_Start;
+    PackageLoss_Start.Id = TEXT("PackageLoss_Start");
+    PackageLoss_Start.Type = EActorAttributeType::Float;
+    PackageLoss_Start.RecommendedValues = { TEXT("0") };
+    PackageLoss_Start.bRestrictToRecommended = false;
 
-    FActorVariation LooseContact_ProgressionRate;
-    LooseContact_ProgressionRate.Id = TEXT("LooseContact_ProgressionRate");
-    LooseContact_ProgressionRate.Type = EActorAttributeType::Float;
-    LooseContact_ProgressionRate.RecommendedValues = { TEXT("0") };
-    LooseContact_ProgressionRate.bRestrictToRecommended = false;
+    FActorVariation PackageLoss_IntervallDegradation;
+    PackageLoss_IntervallDegradation.Id = TEXT("PackageLoss_IntervallDegradation");
+    PackageLoss_IntervallDegradation.Type = EActorAttributeType::Float;
+    PackageLoss_IntervallDegradation.RecommendedValues = { TEXT("0") };
+    PackageLoss_IntervallDegradation.bRestrictToRecommended = false;
+
+    FActorVariation PackageLoss_DurationDegradation;
+    PackageLoss_DurationDegradation.Id = TEXT("PackageLoPackageLoss_DurationDegradationss_IntervallDegradation");
+    PackageLoss_DurationDegradation.Type = EActorAttributeType::Float;
+    PackageLoss_DurationDegradation.RecommendedValues = { TEXT("0") };
+    PackageLoss_DurationDegradation.bRestrictToRecommended = false;
 
     FActorVariation ConstantShift_Rotation;
     ConstantShift_Rotation.Id = TEXT("ConstantShift_Rotation");
@@ -1076,6 +1082,36 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     RadarBlockage_HexagonAmmount.RecommendedValues = { TEXT("0") };
     RadarBlockage_HexagonAmmount.bRestrictToRecommended = false;
 
+    FActorVariation PackageDelay_Start;
+    PackageDelay_Start.Id = TEXT("PackageDelay_Start");
+    PackageDelay_Start.Type = EActorAttributeType::Float;
+    PackageDelay_Start.RecommendedValues = { TEXT("0") };
+    PackageDelay_Start.bRestrictToRecommended = false;
+
+    FActorVariation PackageDelay_Interval;
+    PackageDelay_Interval.Id = TEXT("PackageDelay_Interval");
+    PackageDelay_Interval.Type = EActorAttributeType::Float;
+    PackageDelay_Interval.RecommendedValues = { TEXT("0") };
+    PackageDelay_Interval.bRestrictToRecommended = false;
+
+    FActorVariation PackageDelay_DegradationSize;
+    PackageDelay_DegradationSize.Id = TEXT("PackageDelay_DegradationSize");
+    PackageDelay_DegradationSize.Type = EActorAttributeType::Int;
+    PackageDelay_DegradationSize.RecommendedValues = { TEXT("0") };
+    PackageDelay_DegradationSize.bRestrictToRecommended = false;
+
+    FActorVariation PackageDelay_DelaySize;
+    PackageDelay_DelaySize.Id = TEXT("PackageDelay_DelaySize");
+    PackageDelay_DelaySize.Type = EActorAttributeType::Int;
+    PackageDelay_DelaySize.RecommendedValues = { TEXT("0") };
+    PackageDelay_DelaySize.bRestrictToRecommended = false;
+
+    FActorVariation PackageDelay_RingBufferMaxUseSize;
+    PackageDelay_RingBufferMaxUseSize.Id = TEXT("PackageDelay_RingBufferMaxUseSize");
+    PackageDelay_RingBufferMaxUseSize.Type = EActorAttributeType::Int;
+    PackageDelay_RingBufferMaxUseSize.RecommendedValues = { TEXT("0") };
+    PackageDelay_RingBufferMaxUseSize.bRestrictToRecommended = false;
+
     Definition.Variations.Append({
       HorizontalFOV,
       VerticalFOV,
@@ -1083,10 +1119,11 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
       PointsPerSecond,
       NoiseSeed,
         Scenario,
-        LooseContact_Interval,
-        LooseContact_Duration,
-        LooseContact_Start,
-        LooseContact_ProgressionRate,
+        PackageLoss_Interval,
+        PackageLoss_Duration,
+        PackageLoss_Start,
+        PackageLoss_IntervallDegradation,
+        PackageLoss_DurationDegradation,
         ConstantShift_Rotation,
         ConstantShift_Interval,
         ConstantShift_Start,
@@ -1104,7 +1141,12 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
         RadarSpoof_CutOff,
         RadarBlockage_Start,
         RadarBlockage_Interval,
-        RadarBlockage_HexagonAmmount
+        RadarBlockage_HexagonAmmount,
+        PackageDelay_Start,
+        PackageDelay_Interval,
+        PackageDelay_DegradationSize,
+        PackageDelay_DelaySize,
+        PackageDelay_RingBufferMaxUseSize
         });
 
     Success = CheckActorDefinition(Definition);
@@ -1325,29 +1367,29 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
     Scenario.RecommendedValues = { TEXT("0") };
     Scenario.bRestrictToRecommended = false;
 
-    FActorVariation LooseContact_Interval;
-    LooseContact_Interval.Id = TEXT("LooseContact_Interval");
-    LooseContact_Interval.Type = EActorAttributeType::Float;
-    LooseContact_Interval.RecommendedValues = { TEXT("0") };
-    LooseContact_Interval.bRestrictToRecommended = false;
+    FActorVariation PackageLoss_Interval;
+    PackageLoss_Interval.Id = TEXT("PackageLoss_Interval");
+    PackageLoss_Interval.Type = EActorAttributeType::Float;
+    PackageLoss_Interval.RecommendedValues = { TEXT("0") };
+    PackageLoss_Interval.bRestrictToRecommended = false;
 
-    FActorVariation LooseContact_Duration;
-    LooseContact_Duration.Id = TEXT("LooseContact_Duration");
-    LooseContact_Duration.Type = EActorAttributeType::Float;
-    LooseContact_Duration.RecommendedValues = { TEXT("0") };
-    LooseContact_Duration.bRestrictToRecommended = false;
+    FActorVariation PackageLoss_Duration;
+    PackageLoss_Duration.Id = TEXT("PackageLoss_Duration");
+    PackageLoss_Duration.Type = EActorAttributeType::Float;
+    PackageLoss_Duration.RecommendedValues = { TEXT("0") };
+    PackageLoss_Duration.bRestrictToRecommended = false;
 
-    FActorVariation LooseContact_Start;
-    LooseContact_Start.Id = TEXT("LooseContact_Start");
-    LooseContact_Start.Type = EActorAttributeType::Float;
-    LooseContact_Start.RecommendedValues = { TEXT("0") };
-    LooseContact_Start.bRestrictToRecommended = false;
+    FActorVariation PackageLoss_Start;
+    PackageLoss_Start.Id = TEXT("PackageLoss_Start");
+    PackageLoss_Start.Type = EActorAttributeType::Float;
+    PackageLoss_Start.RecommendedValues = { TEXT("0") };
+    PackageLoss_Start.bRestrictToRecommended = false;
 
-    FActorVariation LooseContact_ProgressionRate;
-    LooseContact_ProgressionRate.Id = TEXT("LooseContact_ProgressionRate");
-    LooseContact_ProgressionRate.Type = EActorAttributeType::Float;
-    LooseContact_ProgressionRate.RecommendedValues = { TEXT("0") };
-    LooseContact_ProgressionRate.bRestrictToRecommended = false;
+    FActorVariation PackageLoss_IntervallDegradation;
+    PackageLoss_IntervallDegradation.Id = TEXT("PackageLoss_IntervallDegradation");
+    PackageLoss_IntervallDegradation.Type = EActorAttributeType::Float;
+    PackageLoss_IntervallDegradation.RecommendedValues = { TEXT("0") };
+    PackageLoss_IntervallDegradation.bRestrictToRecommended = false;
 
     FActorVariation ConstantShift_Rotation;
     ConstantShift_Rotation.Id = TEXT("ConstantShift_Rotation");
@@ -1402,10 +1444,10 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
           StdDevLidar,
           HorizontalFOV,
             Scenario,
-            LooseContact_Interval,
-            LooseContact_Duration,
-            LooseContact_Start,
-            LooseContact_ProgressionRate,
+            PackageLoss_Interval,
+            PackageLoss_Duration,
+            PackageLoss_Start,
+            PackageLoss_IntervallDegradation,
             ConstantShift_Rotation,
             ConstantShift_Interval,
             ConstantShift_Start,
@@ -1423,10 +1465,10 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
           LowerFOV,
           HorizontalFOV,
             Scenario,
-            LooseContact_Interval,
-            LooseContact_Duration,
-            LooseContact_Start,
-            LooseContact_ProgressionRate,
+            PackageLoss_Interval,
+            PackageLoss_Duration,
+            PackageLoss_Start,
+            PackageLoss_IntervallDegradation,
             ConstantShift_Rotation,
             ConstantShift_Interval,
             ConstantShift_Start,
@@ -2110,10 +2152,10 @@ void UActorBlueprintFunctionLibrary::SetFaultyLidar(const FActorDescription& Des
     FaultyLidar.AddScenario(RetrieveActorAttributeToInt("scenario", Description.Variations, 0));
 
 #pragma region Loose Contanct
-    FaultyLidar.LooseContact_Interval = RetrieveActorAttributeToFloat("LooseContact_Interval", Description.Variations, 0.0f);
-    FaultyLidar.LooseContact_Duration = RetrieveActorAttributeToFloat("LooseContact_Duration", Description.Variations, 0.0f);
-    FaultyLidar.LooseContact_ProgressionRate = RetrieveActorAttributeToFloat("LooseContact_ProgressionRate", Description.Variations, 0.0f);
-    FaultyLidar.LooseContact_StartOffset = RetrieveActorAttributeToFloat("LooseContact_Start", Description.Variations, 0.0f);
+    FaultyLidar.PackageLoss_Interval = RetrieveActorAttributeToFloat("PackageLoss_Interval", Description.Variations, 0.0f);
+    FaultyLidar.PackageLoss_Duration = RetrieveActorAttributeToFloat("PackageLoss_Duration", Description.Variations, 0.0f);
+    FaultyLidar.PackageLoss_IntervallDegradation = RetrieveActorAttributeToFloat("PackageLoss_IntervallDegradation", Description.Variations, 0.0f);
+    FaultyLidar.PackageLoss_StartOffset = RetrieveActorAttributeToFloat("PackageLoss_Start", Description.Variations, 0.0f);
 #pragma endregion
 
 
@@ -2226,12 +2268,20 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
         Radar->AddScenario(RetrieveActorAttributeToInt("scenario", Description.Variations, 0));
 
 #pragma region Loose Contanct
-    IQZ_SENSOR_SET_MACRO(Radar, AddLooseContactInterval, "LooseContact_Interval", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, AddLooseContactDuration, "LooseContact_Duration", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetProgressionRate, "LooseContact_ProgressionRate", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, AddLooseContactStart, "LooseContact_Start", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, AddPackageLossInterval, "PackageLoss_Interval", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, AddPackageLossDuration, "PackageLoss_Duration", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetProgressionRate, "PackageLoss_IntervallDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetDurationDegradation, "PackageLoss_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, AddPackageLossStart, "PackageLoss_Start", RetrieveActorAttributeToFloat, 0.0f);
 #pragma endregion
 
+#pragma region Package Delay
+    IQZ_SENSOR_SET_MACRO(Radar, SetPackageDelay_Start, "PackageDelay_Start", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetPackageDelay_Interval, "PackageDelay_Interval", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetPackageDelay_DegradationSize, "PackageDelay_DegradationSize", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO(Radar, SetPackageDelay_DelaySize, "PackageDelay_DelaySize", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO(Radar, SetPackageDelay_RingBufferMaxUseSize, "PackageDelay_RingBufferMaxUseSize", RetrieveActorAttributeToInt, 0);
+#pragma endregion
 
 #pragma region Constant Shift
     IQZ_SENSOR_SET_MACRO(Radar, SetConstantShiftRotation, "ConstantShift_Rotation", RetrieveActorAttributeToString, "0;0;0");

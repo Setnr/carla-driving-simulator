@@ -38,7 +38,7 @@ from enum import Enum
 class Scenario(Enum):
 
     RadarBlocked = 1
-    RadarLooseContact = 2
+    RadarPackageLoss = 2
     RadarConstantShift = 4
     RadarVibration = 8
     RadarDisturbance = 16
@@ -46,6 +46,7 @@ class Scenario(Enum):
     RadarCollosionShift = 64
     RadarSpoofing = 128
     RadarBlockage = 256
+    RadarPackageDelay = 512
 
 class VehicleEnvironment:
     vehicle_list = []

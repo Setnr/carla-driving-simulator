@@ -94,4 +94,17 @@ protected:
 
   virtual void WriteLineTraces();
   
+  void WriteLineTraces(std::vector<RayData> RayList){
+    for (auto& ray : RayList) {
+    if (ray.Hitted) {
+      RadarData.WriteDetection({
+        ray.RelativeVelocity,
+        ray.AzimuthAndElevation.X,
+        ray.AzimuthAndElevation.Y,
+        ray.Distance,
+        ray.label
+      });
+    }
+  }
+  }
 };
