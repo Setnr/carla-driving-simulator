@@ -969,118 +969,10 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     PackageLoss_IntervallDegradation.bRestrictToRecommended = false;
 
     FActorVariation PackageLoss_DurationDegradation;
-    PackageLoss_DurationDegradation.Id = TEXT("PackageLoPackageLoss_DurationDegradationss_IntervallDegradation");
+    PackageLoss_DurationDegradation.Id = TEXT("PackageLoss_DurationDegradation");
     PackageLoss_DurationDegradation.Type = EActorAttributeType::Float;
     PackageLoss_DurationDegradation.RecommendedValues = { TEXT("0") };
     PackageLoss_DurationDegradation.bRestrictToRecommended = false;
-
-    FActorVariation ConstantShift_Rotation;
-    ConstantShift_Rotation.Id = TEXT("ConstantShift_Rotation");
-    ConstantShift_Rotation.Type = EActorAttributeType::String;
-    ConstantShift_Rotation.RecommendedValues = { TEXT("0") };
-    ConstantShift_Rotation.bRestrictToRecommended = false;
-
-
-    FActorVariation ConstantShift_Interval;
-    ConstantShift_Interval.Id = TEXT("ConstantShift_Interval");
-    ConstantShift_Interval.Type = EActorAttributeType::Float;
-    ConstantShift_Interval.RecommendedValues = { TEXT("0") };
-    ConstantShift_Interval.bRestrictToRecommended = false;
-
-    FActorVariation ConstantShift_Start;
-    ConstantShift_Start.Id = TEXT("ConstantShift_Start");
-    ConstantShift_Start.Type = EActorAttributeType::Float;
-    ConstantShift_Start.RecommendedValues = { TEXT("0") };
-    ConstantShift_Start.bRestrictToRecommended = false;
-
-
-    FActorVariation RandomShift_Start;
-    RandomShift_Start.Id = TEXT("RandomShift_Start");
-    RandomShift_Start.Type = EActorAttributeType::Float;
-    RandomShift_Start.RecommendedValues = { TEXT("0") };
-    RandomShift_Start.bRestrictToRecommended = false;
-    FActorVariation RandomShift_End;
-    RandomShift_End.Id = TEXT("RandomShift_End");
-    RandomShift_End.Type = EActorAttributeType::Float;
-    RandomShift_End.RecommendedValues = { TEXT("0") };
-    RandomShift_End.bRestrictToRecommended = false;
-    FActorVariation RandomShif_StartOffset;
-    RandomShif_StartOffset.Id = TEXT("RandomShif_StartOffset");
-    RandomShif_StartOffset.Type = EActorAttributeType::Float;
-    RandomShif_StartOffset.RecommendedValues = { TEXT("0") };
-    RandomShif_StartOffset.bRestrictToRecommended = false;
-
-    FActorVariation RadarDisturbance_Interval;
-    RadarDisturbance_Interval.Id = TEXT("RadarDisturbance_Interval");
-    RadarDisturbance_Interval.Type = EActorAttributeType::Float;
-    RadarDisturbance_Interval.RecommendedValues = { TEXT("0") };
-    RadarDisturbance_Interval.bRestrictToRecommended = false;
-
-    FActorVariation RadarDisturbance_Duration;
-    RadarDisturbance_Duration.Id = TEXT("RadarDisturbance_Duration");
-    RadarDisturbance_Duration.Type = EActorAttributeType::Float;
-    RadarDisturbance_Duration.RecommendedValues = { TEXT("0") };
-    RadarDisturbance_Duration.bRestrictToRecommended = false;
-
-    FActorVariation RadarDisturbance_StartOffset;
-    RadarDisturbance_StartOffset.Id = TEXT("RadarDisturbance_StartOffset");
-    RadarDisturbance_StartOffset.Type = EActorAttributeType::Float;
-    RadarDisturbance_StartOffset.RecommendedValues = { TEXT("0") };
-    RadarDisturbance_StartOffset.bRestrictToRecommended = false;
-
-    FActorVariation RadarDisturbance_ProgressionRate;
-    RadarDisturbance_ProgressionRate.Id = TEXT("RadarDisturbance_ProgressionRate");
-    RadarDisturbance_ProgressionRate.Type = EActorAttributeType::Float;
-    RadarDisturbance_ProgressionRate.RecommendedValues = { TEXT("0") };
-    RadarDisturbance_ProgressionRate.bRestrictToRecommended = false;
-
-    FActorVariation RadarSpoof_Interval;
-    RadarSpoof_Interval.Id = TEXT("RadarSpoof_Interval");
-    RadarSpoof_Interval.Type = EActorAttributeType::Float;
-    RadarSpoof_Interval.RecommendedValues = { TEXT("0") };
-    RadarSpoof_Interval.bRestrictToRecommended = false;
-
-    FActorVariation RadarSpoof_Duration;
-    RadarSpoof_Duration.Id = TEXT("RadarSpoof_Duration");
-    RadarSpoof_Duration.Type = EActorAttributeType::Float;
-    RadarSpoof_Duration.RecommendedValues = { TEXT("0") };
-    RadarSpoof_Duration.bRestrictToRecommended = false;
-
-    FActorVariation RadarSpoof_StartOffset;
-    RadarSpoof_StartOffset.Id = TEXT("RadarSpoof_StartOffset");
-    RadarSpoof_StartOffset.Type = EActorAttributeType::Float;
-    RadarSpoof_StartOffset.RecommendedValues = { TEXT("0") };
-    RadarSpoof_StartOffset.bRestrictToRecommended = false;
-
-    FActorVariation RadarSpoof_ProgressionRate;
-    RadarSpoof_ProgressionRate.Id = TEXT("RadarSpoof_ProgressionRate");
-    RadarSpoof_ProgressionRate.Type = EActorAttributeType::Float;
-    RadarSpoof_ProgressionRate.RecommendedValues = { TEXT("0") };
-    RadarSpoof_ProgressionRate.bRestrictToRecommended = false;
-
-    FActorVariation RadarSpoof_CutOff;
-    RadarSpoof_CutOff.Id = TEXT("RadarSpoof_CutOff");
-    RadarSpoof_CutOff.Type = EActorAttributeType::Float;
-    RadarSpoof_CutOff.RecommendedValues = { TEXT("0") };
-    RadarSpoof_CutOff.bRestrictToRecommended = false;
-
-    FActorVariation RadarBlockage_Start;
-    RadarBlockage_Start.Id = TEXT("Blockage_Start");
-    RadarBlockage_Start.Type = EActorAttributeType::Float;
-    RadarBlockage_Start.RecommendedValues = { TEXT("0") };
-    RadarBlockage_Start.bRestrictToRecommended = false;
-
-    FActorVariation RadarBlockage_Interval;
-    RadarBlockage_Interval.Id = TEXT("Blockage_Interval");
-    RadarBlockage_Interval.Type = EActorAttributeType::Float;
-    RadarBlockage_Interval.RecommendedValues = { TEXT("0") };
-    RadarBlockage_Interval.bRestrictToRecommended = false;
-
-    FActorVariation RadarBlockage_HexagonAmmount;
-    RadarBlockage_HexagonAmmount.Id = TEXT("Blockage_HexagonAmmount");
-    RadarBlockage_HexagonAmmount.Type = EActorAttributeType::Int;
-    RadarBlockage_HexagonAmmount.RecommendedValues = { TEXT("0") };
-    RadarBlockage_HexagonAmmount.bRestrictToRecommended = false;
 
     FActorVariation PackageDelay_Start;
     PackageDelay_Start.Id = TEXT("PackageDelay_Start");
@@ -1112,6 +1004,105 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     PackageDelay_RingBufferMaxUseSize.RecommendedValues = { TEXT("0") };
     PackageDelay_RingBufferMaxUseSize.bRestrictToRecommended = false;
 
+
+    FActorVariation DetectionPointShift_Start;
+    DetectionPointShift_Start.Id = TEXT("DetectionPointShift_Start");
+    DetectionPointShift_Start.Type = EActorAttributeType::Float;
+    DetectionPointShift_Start.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_Start.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPointShift_Intervall;
+    DetectionPointShift_Intervall.Id = TEXT("DetectionPointShift_Intervall");
+    DetectionPointShift_Intervall.Type = EActorAttributeType::Float;
+    DetectionPointShift_Intervall.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_Intervall.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPointShift_Duration;
+    DetectionPointShift_Duration.Id = TEXT("DetectionPointShift_Duration");
+    DetectionPointShift_Duration.Type = EActorAttributeType::Float;
+    DetectionPointShift_Duration.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_Duration.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPointShift_IntervallDegradation;
+    DetectionPointShift_IntervallDegradation.Id = TEXT("DetectionPointShift_IntervallDegradation");
+    DetectionPointShift_IntervallDegradation.Type = EActorAttributeType::Float;
+    DetectionPointShift_IntervallDegradation.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_IntervallDegradation.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPointShift_DurationDegradation;
+    DetectionPointShift_DurationDegradation.Id = TEXT("DetectionPointShift_DurationDegradation");
+    DetectionPointShift_DurationDegradation.Type = EActorAttributeType::Float;
+    DetectionPointShift_DurationDegradation.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_DurationDegradation.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPoint_MaxDepthDisturbance;
+    DetectionPoint_MaxDepthDisturbance.Id = TEXT("DetectionPoint_MaxDepthDisturbance");
+    DetectionPoint_MaxDepthDisturbance.Type = EActorAttributeType::Float;
+    DetectionPoint_MaxDepthDisturbance.RecommendedValues = { TEXT("0") };
+    DetectionPoint_MaxDepthDisturbance.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPoint_MaxAzimuthDisturbance;
+    DetectionPoint_MaxAzimuthDisturbance.Id = TEXT("DetectionPoint_MaxAzimuthDisturbance");
+    DetectionPoint_MaxAzimuthDisturbance.Type = EActorAttributeType::Float;
+    DetectionPoint_MaxAzimuthDisturbance.RecommendedValues = { TEXT("0") };
+    DetectionPoint_MaxAzimuthDisturbance.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPoint_MaxAltitudeDisturbance;
+    DetectionPoint_MaxAltitudeDisturbance.Id = TEXT("DetectionPoint_MaxAltitudeDisturbance");
+    DetectionPoint_MaxAltitudeDisturbance.Type = EActorAttributeType::Float;
+    DetectionPoint_MaxAltitudeDisturbance.RecommendedValues = { TEXT("0") };
+    DetectionPoint_MaxAltitudeDisturbance.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPoint_Distribution;
+    DetectionPoint_Distribution.Id = TEXT("DetectionPoint_Distribution");
+    DetectionPoint_Distribution.Type = EActorAttributeType::Int;
+    DetectionPoint_Distribution.RecommendedValues = { TEXT("0") };
+    DetectionPoint_Distribution.bRestrictToRecommended = false;
+
+
+
+    FActorVariation VelocityShift_Start;
+    VelocityShift_Start.Id = TEXT("VelocityShift_Start");
+    VelocityShift_Start.Type = EActorAttributeType::Float;
+    VelocityShift_Start.RecommendedValues = { TEXT("0") };
+    VelocityShift_Start.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_Intervall;
+    VelocityShift_Intervall.Id = TEXT("VelocityShift_Intervall");
+    VelocityShift_Intervall.Type = EActorAttributeType::Float;
+    VelocityShift_Intervall.RecommendedValues = { TEXT("0") };
+    VelocityShift_Intervall.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_Duration;
+    VelocityShift_Duration.Id = TEXT("VelocityShift_Duration");
+    VelocityShift_Duration.Type = EActorAttributeType::Float;
+    VelocityShift_Duration.RecommendedValues = { TEXT("0") };
+    VelocityShift_Duration.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_IntervallDegradation;
+    VelocityShift_IntervallDegradation.Id = TEXT("VelocityShift_IntervallDegradation");
+    VelocityShift_IntervallDegradation.Type = EActorAttributeType::Float;
+    VelocityShift_IntervallDegradation.RecommendedValues = { TEXT("0") };
+    VelocityShift_IntervallDegradation.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_DurationDegradation;
+    VelocityShift_DurationDegradation.Id = TEXT("VelocityShift_DurationDegradation");
+    VelocityShift_DurationDegradation.Type = EActorAttributeType::Float;
+    VelocityShift_DurationDegradation.RecommendedValues = { TEXT("0") };
+    VelocityShift_DurationDegradation.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_MaxVelocityDisturbance;
+    VelocityShift_MaxVelocityDisturbance.Id = TEXT("VelocityShift_MaxVelocityDisturbance");
+    VelocityShift_MaxVelocityDisturbance.Type = EActorAttributeType::Float;
+    VelocityShift_MaxVelocityDisturbance.RecommendedValues = { TEXT("0") };
+    VelocityShift_MaxVelocityDisturbance.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_Distribution;
+    VelocityShift_Distribution.Id = TEXT("VelocityShift_Distribution");
+    VelocityShift_Distribution.Type = EActorAttributeType::Int;
+    VelocityShift_Distribution.RecommendedValues = { TEXT("0") };
+    VelocityShift_Distribution.bRestrictToRecommended = false;
+
     Definition.Variations.Append({
       HorizontalFOV,
       VerticalFOV,
@@ -1124,29 +1115,27 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
         PackageLoss_Start,
         PackageLoss_IntervallDegradation,
         PackageLoss_DurationDegradation,
-        ConstantShift_Rotation,
-        ConstantShift_Interval,
-        ConstantShift_Start,
-        RandomShift_Start,
-        RandomShift_End,
-        RandomShif_StartOffset,
-        RadarDisturbance_Interval,
-        RadarDisturbance_Duration,
-        RadarDisturbance_StartOffset,
-        RadarDisturbance_ProgressionRate,
-        RadarSpoof_Interval,
-        RadarSpoof_Duration,
-        RadarSpoof_StartOffset,
-        RadarSpoof_ProgressionRate,
-        RadarSpoof_CutOff,
-        RadarBlockage_Start,
-        RadarBlockage_Interval,
-        RadarBlockage_HexagonAmmount,
         PackageDelay_Start,
         PackageDelay_Interval,
         PackageDelay_DegradationSize,
         PackageDelay_DelaySize,
-        PackageDelay_RingBufferMaxUseSize
+        PackageDelay_RingBufferMaxUseSize,
+        DetectionPointShift_Start,
+        DetectionPointShift_Intervall,
+        DetectionPointShift_Duration,
+        DetectionPointShift_IntervallDegradation,
+        DetectionPointShift_DurationDegradation,
+        DetectionPoint_MaxDepthDisturbance,
+        DetectionPoint_MaxAzimuthDisturbance,
+        DetectionPoint_MaxAltitudeDisturbance,
+        DetectionPoint_Distribution,
+        VelocityShift_Start,
+        VelocityShift_Intervall,
+        VelocityShift_Duration,
+        VelocityShift_IntervallDegradation,
+        VelocityShift_DurationDegradation,
+        VelocityShift_MaxVelocityDisturbance,
+        VelocityShift_Distribution
         });
 
     Success = CheckActorDefinition(Definition);
@@ -1985,6 +1974,24 @@ FColor UActorBlueprintFunctionLibrary::RetrieveActorAttributeToColor(
          Default;
 }
 
+std::vector<float> ConvertRotationString(const FString &string)
+{
+    std::vector<float> vec;
+    TArray<FString> Tokens;
+    const TCHAR* Delims = TEXT(";");
+    string.ParseIntoArray(Tokens, Delims, false);
+    if (Tokens.Num() != 3) 
+    {
+        //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("ConstantShiftArray is broken, couldn�t read 3 values there!"));
+        UE_LOG(LogTemp, Error, TEXT("RotationString is broken, couldnot read 3 values there!"));
+        return vec;
+    }
+    for(int i = 0; i < 3; i++)
+      vec.push_back(FCString::Atof(*Tokens[i]));
+    return vec;
+}
+
+
 /// ============================================================================
 /// -- Helpers to set Actors ---------------------------------------------------
 /// ============================================================================
@@ -2267,7 +2274,7 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
     if (Description.Variations.Contains("scenario"))
         Radar->AddScenario(RetrieveActorAttributeToInt("scenario", Description.Variations, 0));
 
-#pragma region Loose Contanct
+#pragma region PackageLoss
     IQZ_SENSOR_SET_MACRO(Radar, AddPackageLossInterval, "PackageLoss_Interval", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, AddPackageLossDuration, "PackageLoss_Duration", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetProgressionRate, "PackageLoss_IntervallDegradation", RetrieveActorAttributeToFloat, 0.0f);
@@ -2275,7 +2282,7 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
     IQZ_SENSOR_SET_MACRO(Radar, AddPackageLossStart, "PackageLoss_Start", RetrieveActorAttributeToFloat, 0.0f);
 #pragma endregion
 
-#pragma region Package Delay
+#pragma region PackageDelay
     IQZ_SENSOR_SET_MACRO(Radar, SetPackageDelay_Start, "PackageDelay_Start", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetPackageDelay_Interval, "PackageDelay_Interval", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetPackageDelay_DegradationSize, "PackageDelay_DegradationSize", RetrieveActorAttributeToInt, 0);
@@ -2283,37 +2290,26 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
     IQZ_SENSOR_SET_MACRO(Radar, SetPackageDelay_RingBufferMaxUseSize, "PackageDelay_RingBufferMaxUseSize", RetrieveActorAttributeToInt, 0);
 #pragma endregion
 
-#pragma region Constant Shift
-    IQZ_SENSOR_SET_MACRO(Radar, SetConstantShiftRotation, "ConstantShift_Rotation", RetrieveActorAttributeToString, "0;0;0");
-    IQZ_SENSOR_SET_MACRO(Radar, SetConstantShiftInterval, "ConstantShift_Interval", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetConstantShiftStart, "ConstantShift_Start", RetrieveActorAttributeToFloat, 0.0f);
-#pragma endregion
-#pragma region Random Shift
-    IQZ_SENSOR_SET_MACRO(Radar, SetRandomShiftStart, "RandomShift_Start", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetRandomShiftEnd, "RandomShift_End", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetRandomShiftStartOffset, "RandomShif_StartOffset", RetrieveActorAttributeToFloat, 0.0f);
-#pragma endregion
-#pragma region Radar Disturbance
-    IQZ_SENSOR_SET_MACRO(Radar, SetRadarDisturbance_Interval, "RadarDisturbance_Interval", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetRadarDisturbance_Duration, "RadarDisturbance_Duration", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetRadarDisturbance_StartOffset, "RadarDisturbance_StartOffset", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetRadarDisturbance_ProgressionRate, "RadarDisturbance_ProgressionRate", RetrieveActorAttributeToFloat, 0.0f);
-#pragma endregion
-#pragma region Radar Spoofing
-    IQZ_SENSOR_SET_MACRO(Radar, SetRadarSpoof_Interval, "RadarSpoof_Interval", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetRadarSpoof_Duration, "RadarSpoof_Duration", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetRadarSpoof_StartOffset, "RadarSpoof_StartOffset", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetRadarSpoof_ProgressionRate, "RadarSpoof_ProgressionRate", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetRadarSpoof_CutOff, "RadarSpoof_CutOff", RetrieveActorAttributeToFloat, 0.0f);
+#pragma region DetectionPointShift
+  IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPointShift_Start, "DetectionPointShift_Start", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPointShift_Intervall, "DetectionPointShift_Intervall", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPointShift_Duration, "DetectionPointShift_Duration", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPointShift_IntervallDegradation, "DetectionPointShift_IntervallDegradation", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPointShift_DurationDegradation, "DetectionPointShift_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPoint_MaxDepthDisturbance, "DetectionPoint_MaxDepthDisturbance", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPoint_MaxAzimuthDisturbance, "DetectionPoint_MaxAzimuthDisturbance", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPoint_MaxAltitudeDisturbance, "DetectionPoint_MaxAltitudeDisturbance", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPoint_Distribution, "DetectionPoint_Distribution", RetrieveActorAttributeToInt, 0);
 #pragma endregion
 
-
-#pragma region Blockage
-    IQZ_SENSOR_SET_MACRO(Radar, SetBlockageStart, "Blockage_Start", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetBlockageInterval, "Blockage_Interval", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetBlockageHexagonAmmounts, "Blockage_HexagonAmmount", RetrieveActorAttributeToInt, 0);
-    //if (Description.Variations.Contains("Blockage_HexagonAmmount"))
-    //    Radar->SetBlockageHexagonAmmounts(RetrieveActorAttributeToInt("Blockage_HexagonAmmount", Description.Variations, 0));
+#pragma region DetectionPointShift
+  IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_Start, "VelocityShift_Start", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_Intervall, "VelocityShift_Intervall", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_Duration, "VelocityShift_Duration", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_IntervallDegradation, "VelocityShift_IntervallDegradation", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_DurationDegradation, "VelocityShift_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_MaxVelocityDisturbance, "VelocityShift_MaxVelocityDisturbance", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_Distribution, "VelocityShift_Distribution", RetrieveActorAttributeToInt, 0);
 #pragma endregion
 
 }

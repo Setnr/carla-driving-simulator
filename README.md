@@ -22,6 +22,16 @@ class Scenario(Enum):
     RadarPackageDelay = 512
 
 ```
+
+For Distributed Failures following Distributions can be used
+```c++
+	enum Distribution : int
+	{
+		None = 0x0,
+		Weibull = 0x1,
+		Linear = 0x2
+	};
+```
 At the Current state the Radar supports the following Failure modes, while the LiDAR only supports the first 3 Models.
 * __Package Loss__ (Data transfer error/loss)
 	* PackageLoss_Interval (interval the failure (re)appears)
@@ -29,38 +39,31 @@ At the Current state the Radar supports the following Failure modes, while the L
 	* PackageLoss_IntervallDegradation (the amount the interval gets decreased to increase the failure rate during the simulation)
 	* PackageLoss_DurationDegradation (the amount the Duration gets increased to increase the failure duration during the simulation)
 	* PackageLoss_Start (time as amount of seconds after the sensor's creation the failure will appear for the first time)
-* __Constant Shift__ (Constantly shifting FOV of the sensor e.g. due to a flawed mounting)
-	* ConstantShift_Rotation (the yaw, pitch and roll describing how the Radar will shift every time "Yaw;Pitch;Roll")
-	* ConstantShift_Interval (the interval the Radar will get shifted)
-	* ConstantShift_StartOffset (time as amount of seconds after the sensor's creation the failure will appear for the first time)
-* __Random Shift__ (Failure will appear at a random time between start and end and will rotate a random amount)
-	* RandomShift_Start (minimal duration the failure can appear the next time)
-	* RandomShift_End (max duration the failure will appear)
-	* RandomShif_StartOffset (time as amount of seconds after the sensor's creation the failure will appear for the first time)
-* __Collision Shift__ (FOV shift after a collision has been detected)
-	* No parameters used at the current state of development
-* __Disturbance__ (Signal based disturbances due to interference, leading to distance/velocity falsification)
-	* RadarDisturbance_Interval (interval the failure (re)appears)
-	* RadarDisturbance_Duration (duration of the failure)
-	* RadarDisturbance_StartOffset (time as amount of seconds after the sensor's creation the failure will appear for the first time)
-	* RadarDisturbance_ProgressionRate (the amount the interval gets decreased to increase the failure rate during the simulation)
-* __Spoofing__ (A spoofing attack is a type of disturbance that leads to a decrease of its covered distance)
-	* RadarSpoof_Interval (interval the attack (re)appears)
-	* RadarSpoof_Duration (duration of the attack)
-	* RadarSpoof_StartOffset (time as amount of seconds after the sensor's creation the attack will occur for the first time)
-	* RadarSpoof_ProgressionRate (the amount the interval gets decreased to increase the attack rate during the simulation)
-	* RadarSpoof_CutOff (range the sensor gets reduced to during the spoofing attack)
-* __Blockage__ (Obscuration due to mud/foliage/ice etc. Will generate actual objects in front of the sensor (as hexagons))
-	* Blockage_Start (time as amount of seconds after the sensor's creation the failure will appear for the first time)
-	* Blockage_Interval (interval in that new hexagons are added)
-	* Blockage_HexagonAmmount (the amount of hexagons which will be spawned within the FOV of the sensor (per tick))
 *__Package Delay__
 	* PackageDelay_Start (time when the first delay will occure)
 	* PackageDelay_Interval (interval when the next dely will occure)
 	* PackageDelay_DelaySize (how many packages will be delayed at the first failure)
 	* PackageDelay_DegradationSize (how many packages will be delayed at following failures, can be adjusted during the simulation)
 	* PackageDelay_RingBufferMaxUseSize (Defines the size of the PackageRingBuffer (max 100), this will influence the time when packages will be lost and how many packages will be lost during the simulation)
+*__Detection Point Shift__
+	* DetectionPointShift_Start (time when the first shifts will occure)
+	* DetectionPointShift_Intervall (Intervall when the next shift failure will occure)
+	* DetectionPointShift_Duration (Duration how long points will be shifted)
+	* DetectionPointShift_IntervallDegradation (How the Intervall will change between failures)
+	* DetectionPointShift_DurationDegradation (How the Duration will change between failures)
+	* DetectionPoint_MaxDepthDisturbance (Whats the Max DepthDistrubance that can appear)
+	* DetectionPoint_MaxAzimuthDisturbance (Whats the Max AzimuthDistrubance that can appear , vertical of the point)
+	* DetectionPoint_MaxAltitudeDisturbance (Whats the Max AltitudeDistrubance that can appear, horizontal of the point)
+	* DetectionPoint_Distribution (Distribution of the Disturbance)
 
+*__Velocity__ Point Shift__
+	* VelocityShift_Start (time when the first shifts will occure)
+	* VelocityShift_Intervall (Intervall when the next shift failure will occure)
+	* VelocityShift_Duration (Duration how long points will be shifted)
+	* VelocityShift_IntervallDegradation (How the Intervall will change between failures)
+	* VelocityShift_DurationDegradation (How the Duration will change between failures)
+	* VelocityShift_MaxVelocityDisturbance (Whats the Max Velocity Distrubance that can appear)
+	* VelocityShift_Distribution (Distribution of the Disturbance)
 ## Usage
 
 Declaration and initialization of the faulty Radar and Lidar model:

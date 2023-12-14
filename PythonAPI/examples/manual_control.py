@@ -96,17 +96,14 @@ import weakref
 
 from enum import Enum
 class Scenario(Enum):
-
-    RadarBlocked = 1
-    RadarPackageLoss = 2
-    RadarConstantShift = 4
-    RadarVibration = 8
-    RadarDisturbance = 16
-    RadarRandomShift = 32
-    RadarCollosionShift = 64
-    RadarSpoofing = 128
-    RadarBlockage = 256
-    RadarPackageDelay = 512
+    PackageLoss = 1
+    PackageDelay = 2
+    DetectionPointShift = 4
+    VelocityShift = 8
+    RangeReduction = 16
+    DetectionNonExistingPoints = 32
+    SensorShift = 64
+    SensorBlockage = 128
 
 try:
     import pygame

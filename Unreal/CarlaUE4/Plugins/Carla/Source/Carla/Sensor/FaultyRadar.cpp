@@ -11,6 +11,7 @@
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Carla/Actor/ActorBlueprintFunctionLibrary.h"
 
+
 FActorDefinition AFaultyRadar::GetSensorDefinition()
 {
   return UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition();
@@ -22,32 +23,45 @@ AFaultyRadar::AFaultyRadar(const FObjectInitializer& ObjectInitializer)
     this->SetVerticalFOV(20);
     this->SetHorizontalFOV(35);
 
+    gen_weibull.seed(RandomEngineSeed);
+    gen_uniform.seed(RandomEngineSeed);
+    gen_gamma.seed(RandomEngineSeed);
+    gen_correction.seed(RandomEngineSeed);
+
     this->PackageLoss_Interval = 15.0f;
     this->PackageLoss_Duration = 2.5f;
-    this->PackageLoss_StartOffset = 15.0f;
     this->PackageLoss_Start = FLT_MAX;
     this->PackageLoss_IntervallDegradation = 0.0f;
     this->PackageLoss_DurationDegradation = 0.0f;
 
     this->PackageDelay_Start = FLT_MAX;
+    this->PackageDelay_DegradationZeit = 0.0f;
+    this->PackageDelay_Interval = 0.0f;
+    this->PackageDelay_DegradationSize = 0;
     this->PackageDelay_DelaySize = 0;
+    this->PackageDelay_WaitCounter = 0;
     this->PackageDelay_WriteRingBufferPtr = 0;
     this->PackageDelay_ReadRingBufferPtr = 0;
     this->PackageDelay_RingBufferMaxUseSize = 100;
-}
 
+    this->DetectionPointShift_Start = FLT_MAX;
+	this->DetectionPointShift_Intervall = 0.0f;
+	this->DetectionPointShift_Duration= 0.0f;
+	this->DetectionPointShift_IntervallDegradation= 0.0f;
+	this->DetectionPointShift_DurationDegradation= 0.0f;
+	this->DetectionPoint_MaxDepthDisturbance= 0.0f;
+	this->DetectionPoint_MaxAzimuthDisturbance= 0.0f;
+	this->DetectionPoint_MaxAltitudeDisturbance= 0.0f;
+	this->DetectionPoint_Distribution = Distribution::None;
 
-void AFaultyRadar::AddPackageLossInterval(float Interval)
-{
-    this->PackageLoss_Interval = Interval;
-}
-void AFaultyRadar::AddPackageLossDuration(float Duration)
-{
-    this->PackageLoss_Duration = Duration;
-}
-void AFaultyRadar::AddPackageLossStart(float StartTime)
-{
-    this->PackageLoss_StartOffset = StartTime;
+    this->VelocityShift_Start = FLT_MAX;
+	this->VelocityShift_Intervall = 0.0f;
+	this->VelocityShift_Duration = 0.0f;
+	this->VelocityShift_IntervallDegradation = 0.0f;
+	this->VelocityShift_DurationDegradation = 0.0f;
+	this->VelocityShift_MaxVelocityDisturbance = 0.0f;
+	this->VelocityShift_Distribution = Distribution::None;
+
 }
 
 void AFaultyRadar::AddScenario(int ScenarioID)
@@ -57,27 +71,6 @@ void AFaultyRadar::AddScenario(int ScenarioID)
 
 }
 
-void AFaultyRadar::SetProgressionRate(float Rate)
-{
-    this->PackageLoss_IntervallDegradation = Rate;
-}
-
-void AFaultyRadar::SetConstantShiftRotation(FString string) 
-{
-    TArray<FString> Tokens;
-    const TCHAR* Delims = TEXT(";");
-    string.ParseIntoArray(Tokens, Delims, false);
-    if (Tokens.Num() != 3) 
-    {
-        //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("ConstantShiftArray is broken, couldn�t read 3 values there!"));
-        //UE_LOG(LogTemp, Error, TEXT("ConstantShiftArray is broken, couldn�t read 3 values there!"));
-        return;
-    }
-    ConstantShift_Rotation.Yaw = FCString::Atof(*Tokens[0]);
-    ConstantShift_Rotation.Pitch = FCString::Atof(*Tokens[1]);
-    ConstantShift_Rotation.Roll = FCString::Atof(*Tokens[2]);
-
-}
 void AFaultyRadar::Set(const FActorDescription &ActorDescription)
 {
   Super::Set(ActorDescription);
@@ -86,7 +79,7 @@ void AFaultyRadar::Set(const FActorDescription &ActorDescription)
 
 void AFaultyRadar::MoveRadar()
 {
-    if(this->Scenario & ScenarioID::RadarCollosionShift)
+    //if(this->Scenario & ScenarioID::RadarCollosionShift)
     {
         auto rot = this->GetActorRotation();
         rot.Yaw += 20;
@@ -103,14 +96,9 @@ void AFaultyRadar::MoveRadar(FRotator rot)
 void AFaultyRadar::BeginPlay()
 {
     Super::BeginPlay();
-    PackageLoss_Start = PackageLoss_StartOffset + GetWorld()->GetTimeSeconds();
-    ConstantShift_Start = ConstantShift_StartOffset + GetWorld()->GetTimeSeconds();
-    RadarDisturbance_Start = RadarDisturbance_StartOffset + GetWorld()->GetTimeSeconds();
-    RadarSpoof_Start = RadarSpoof_StartOffset + GetWorld()->GetTimeSeconds();
     PrevLocation = GetActorLocation();
     return;
 }
- 
 
 void AFaultyRadar::OnConstruction(const FTransform& Transform)
 {
@@ -169,11 +157,10 @@ void AFaultyRadar::Destroyed()
 
     Super::Destroyed();
 }
-
-void AFaultyRadar::WriteLineTraces()
-{
+bool AFaultyRadar::HasToLooseCurrentPackage()
+{    
     float time = GetWorld()->GetTimeSeconds();
-    if (this->Scenario & ScenarioID::RadarPackageLoss)
+    if (this->Scenario & ScenarioID::PackageLoss)
     {
         if (time >= this->PackageLoss_Start)
         {
@@ -183,122 +170,140 @@ void AFaultyRadar::WriteLineTraces()
                 this->PackageLoss_Interval -= PackageLoss_IntervallDegradation;
                 this->PackageLoss_Duration += PackageLoss_DurationDegradation;
             }
-            return;
+            return true;
         }
     }
-
-    if (this->Scenario & ScenarioID::RadarDisturbance)
+    return false;
+}
+float AFaultyRadar::CreateRandomNumber(Distribution DistType)
+{
+    float ret = 0.0f;
+    switch(DistType)
     {
-        if (time >= this->RadarDisturbance_Start)
+        case Distribution::Weibull:
         {
-            if (time >= this->RadarDisturbance_Start + RadarDisturbance_Duration) 
+            std::weibull_distribution<> w;
+            ret = w(gen_weibull);
+        }
+        break;
+        case Distribution::Linear:
+            ret = gen_uniform();
+        break;
+    }
+    
+    if(gen_correction() > 0.5f)
+        ret = ret * -1;
+
+    return ret;
+}
+void AFaultyRadar::ShiftDetectionPoints()
+{
+    float time = GetWorld()->GetTimeSeconds();
+    if(this->Scenario & ScenarioID::DetectionPointShift)
+    {
+        if(time >= this->DetectionPointShift_Start)
+        {
+            if (time >= this->DetectionPointShift_Start + this->DetectionPointShift_Duration)
             {
-                RadarDisturbance_Start += RadarDisturbance_Interval;
-                RadarDisturbance_Interval -= RadarDisturbance_ProgressionRate;
+                this->DetectionPointShift_Start += this->DetectionPointShift_Intervall;
+                this->DetectionPointShift_Intervall -= DetectionPointShift_IntervallDegradation;
+                this->DetectionPointShift_Duration += DetectionPointShift_DurationDegradation;
             }
-            DisturbeRadar();
-        }
-    }
-    if (this->Scenario & ScenarioID::RadarInterference)
-    {
-        if (time >= this->RadarSpoof_Start)
-        {
-            if (time >= this->RadarSpoof_Start + RadarSpoof_Duration)
+
+            for (auto& ray : Rays)
             {
-                RadarSpoof_Start += RadarSpoof_Interval;
-                RadarSpoof_Interval -= RadarSpoof_ProgressionRate;
+                if (ray.Hitted)
+                {
+                    float rand = CreateRandomNumber(DetectionPoint_Distribution);
+                    ray.Distance += DetectionPoint_MaxDepthDisturbance * rand;
+
+                    rand = CreateRandomNumber(DetectionPoint_Distribution);
+                    ray.AzimuthAndElevation.X  += DetectionPoint_MaxAzimuthDisturbance * rand;
+
+                    rand = CreateRandomNumber(DetectionPoint_Distribution);
+                    ray.AzimuthAndElevation.Y += DetectionPoint_MaxAltitudeDisturbance * rand;
+                }
             }
-            SpoofRadar();
-        }
-    }
-    if(this->ScenarioID & ScenarioID::RadarPackageDelay && time >= this->PackageDelay_Start)
-    {
-        if(PackageDelay_RingBufferMaxUseSize > RadarDelay_RingBufferSize)
-        {
-            UE_LOG(LogTemp, Error, TEXT("RingBufferMaxUseSize too Big! Please adjust and rerun the simulation!"));
-            return;
-        }
 
-        if(time >= PackageDelay_DegradationZeit)
-        {
-            PackageDelay_DelaySize += PackageDelay_DegradationSize;
-            PackageDelay_DegradationZeit += PackageDelay_Interval;
-        }
-        
-        PackageDelay_RingBuffer[PackageDelay_WriteRingBufferPtr] = Rays;
-        PackageDelay_WriteRingBufferPtr++;
-        if(PackageDelay_WriteRingBufferPtr >= PackageDelay_RingBufferMaxUseSize)
-            PackageDelay_WriteRingBufferPtr = 0;
-
-        if(!(PackageDelay_WaitCounter < PackageDelay_DelaySize))
-        {
-            auto RayList = PackageDelay_RingBuffer[PackageDelay_ReadRingBufferPtr];
-            WriteLineTraces(RayList);
-            PackageDelay_ReadRingBufferPtr++;
-            if(PackageDelay_ReadRingBufferPtr  >= PackageDelay_RingBufferMaxUseSize)
-                PackageDelay_ReadRingBufferPtr = 0;
-        }
-        else
-        {
-            PackageDelay_WaitCounter++;
-        }
-    }
-    else
-    {
-        WriteLineTraces(Rays);
-    }
-
-
-    //We shift the Radar after all stuff with the Data has finsied
-    //So we can use the shifted Radar in the next WorldTick
-    if (this->Scenario & ScenarioID::RadarConstantShift)
-    {
-        if (time >= this->ConstantShift_Start)
-        {
-            this->ConstantShift_Start += this->ConstantShift_Interval;
-            //MoveRadar(this->ConstantShift_Rotation);
-        }
-    }
-    if (this->Scenario & ScenarioID::RadarBlockage) 
-    {
-        if (time >= this->Blockage_Start)
-        {
-            this->Blockage_Start += this->Blockage_Interval;
-            GenerateHexagon(this->Blockage_HexagonAmmounts);
-        }
-    }
-
-    if (this->Scenario & ScenarioID::RadarRandomShift)
-    {
-        if (RandomShift_Time == 0.0f) 
-        {
-            RandomShift_Time = FMath::RandRange(this->RandomShift_Start, this->RandomShift_End);
-        }
-        if (time >= this->RandomShif_StartOffset + RandomShift_Time)
-        {
-            this->RandomShif_StartOffset = time;
-            FRotator rotator( 0.0f, FMath::FRandRange(-1.5f, 1.5f), 0.0f); //We assume that we will always shift horizontaly
-            if (FMath::FRand() < 0.1f) //We give the radar chance to shift verticaly aswell
-                rotator.Pitch = FMath::FRandRange(-1.5f, 1.5f);
-            MoveRadar(rotator);
-            RandomShift_Time = FMath::RandRange(this->RandomShift_Start, this->RandomShift_End);
         }
     }
 }
 
-void AFaultyRadar::DisturbeRadar() 
+void AFaultyRadar::ShiftVelocitys()
 {
-    //ToDo:
-    // How to Disturbe exactly?
-    for (auto& ray : Rays) 
+float time = GetWorld()->GetTimeSeconds();
+    if(this->Scenario & ScenarioID::VelocityShift)
     {
-        if (ray.Hitted) 
+        if(time >= this->VelocityShift_Start)
         {
-            if (FMath::FRand() < 0.1f)
+            if (time >= this->VelocityShift_Start + this->VelocityShift_Duration)
             {
-                ray.RelativeVelocity = ray.RelativeVelocity * -1; //Just Disturbe Velocity at current State
+                this->VelocityShift_Start += this->VelocityShift_Intervall;
+                this->VelocityShift_Intervall -= VelocityShift_IntervallDegradation;
+                this->VelocityShift_Duration += VelocityShift_DurationDegradation;
+            }
+
+            for (auto& ray : Rays)
+            {
+                if (ray.Hitted)
+                {
+                    float rand = CreateRandomNumber(VelocityShift_Distribution);
+                    ray.RelativeVelocity += VelocityShift_MaxVelocityDisturbance * rand;
+                }
+            }
+
+        }
+    }
+}
+
+void AFaultyRadar::WriteLineTraces()
+{
+    if(HasToLooseCurrentPackage())
+        return;
+
+    float time = GetWorld()->GetTimeSeconds();
+
+    ShiftDetectionPoints();
+    ShiftVelocitys();
+
+    if(this->Scenario & ScenarioID::PackageDelay)
+    {
+        if(time >= this->PackageDelay_Start)
+        {
+            if(PackageDelay_RingBufferMaxUseSize > RadarDelay_RingBufferSize)
+            {
+                UE_LOG(LogTemp, Error, TEXT("RingBufferMaxUseSize too Big! Please adjust and rerun the simulation!"));
+                return;
+            }
+
+            if(time >= PackageDelay_DegradationZeit)
+            {
+                PackageDelay_DelaySize += PackageDelay_DegradationSize;
+                PackageDelay_DegradationZeit += PackageDelay_Interval;
+            }
+
+            PackageDelay_RingBuffer[PackageDelay_WriteRingBufferPtr] = Rays;
+            PackageDelay_WriteRingBufferPtr++;
+            if(PackageDelay_WriteRingBufferPtr >= PackageDelay_RingBufferMaxUseSize)
+                PackageDelay_WriteRingBufferPtr = 0;
+
+            if(!(PackageDelay_WaitCounter < PackageDelay_DelaySize))
+            {
+                auto RayList = PackageDelay_RingBuffer[PackageDelay_ReadRingBufferPtr];
+                ARadar::WriteLineTraces(RayList);
+                PackageDelay_ReadRingBufferPtr++;
+                if(PackageDelay_ReadRingBufferPtr  >= PackageDelay_RingBufferMaxUseSize)
+                    PackageDelay_ReadRingBufferPtr = 0;
+            }
+            else
+            {
+                PackageDelay_WaitCounter++;
             }
         }
+    }
+    else
+    {
+        ARadar::WriteLineTraces(Rays);
     }
 }
 
@@ -310,7 +315,7 @@ void AFaultyRadar::SpoofRadar()
     {
         if (ray.Hitted)
         {
-            if (ray.Distance > RadarSpoof_CutOff) 
+            if (ray.Distance > 0) 
             {
                 ray.Hitted = false;
             }

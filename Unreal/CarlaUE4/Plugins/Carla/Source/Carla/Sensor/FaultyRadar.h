@@ -6,13 +6,17 @@
 
 #pragma once
 
+#include <random>
+
 #include "CoreMinimal.h"
 #include "ProceduralMeshComponent.h"
 
 #include "Carla/Sensor/Radar.h"
 #include "FaultyRadar.generated.h"
 
+
 #define RadarDelay_RingBufferSize 100
+#define RandomEngineSeed 9857
 
 UCLASS()
 class CARLA_API AFaultyRadar : public ARadar
@@ -27,65 +31,95 @@ public:
   void Set(const FActorDescription &Description) override;
 
   void AddScenario(int SzenarioID);
-  void AddPackageLossInterval(float Interval);
-  void AddPackageLossDuration(float Duration);
-  void AddPackageLossStart(float StartTime);
-  void SetProgressionRate(float Rate);
-  void SetConstantShiftRotation(FString string);
-  void SetConstantShiftInterval(float Interval) {
-	  this->ConstantShift_Interval = Interval;
-  }
-  void SetConstantShiftStart(float Start) {
-	  this->ConstantShift_StartOffset = Start;
-  }
-  void SetRandomShiftStart(float Start) {
-	  this->RandomShift_Start = Start;
-  }
-  void SetRandomShiftEnd(float End) {
-	  this->RandomShift_End = End;
-  }
-  void SetRandomShiftStartOffset(float Start) {
-	  RandomShif_StartOffset = Start;
-  }
+  float CalculateStartTime(float StartTime){
+	return StartTime + GetWorld()->GetTimeSeconds();
+	}
+	enum Distribution : int
+	{
+		None = 0x0,
+		Weibull = 0x1,
+		Linear = 0x2
+	};
+#pragma region PackageLoss_Function
+  void AddPackageLossInterval(float Interval){
+	this->PackageLoss_Interval = Interval;}
+  void AddPackageLossDuration(float Duration){
+	this->PackageLoss_Duration = Duration;}
+  void AddPackageLossStart(float StartTime){
+	this->PackageLoss_Start = CalculateStartTime(StartTime);}
+  void SetProgressionRate(float Rate){
+	this->PackageLoss_IntervallDegradation = Rate;}
+#pragma endregion
 
-  void SetRadarDisturbance_Interval(float Interval) {
-	  this->RadarDisturbance_Interval = Interval;
-  }
-  void SetRadarDisturbance_Duration(float Duration) {
-	  this->RadarDisturbance_Duration = Duration;
-  }
-  void SetRadarDisturbance_StartOffset(float Offset) {
-	  this->RadarDisturbance_StartOffset = Offset;
-  }
-  void SetRadarDisturbance_ProgressionRate(float ProgressionRate) {
-	  this->RadarDisturbance_ProgressionRate = ProgressionRate;
-  }
+#pragma region PackageDelay_Function
+	void SetPackageDelay_Start(float Start){
+		PackageDelay_Start = CalculateStartTime(Start);;}
+	void SetPackageDelay_Interval(float Interval){
+		PackageDelay_Interval = Interval;
+		PackageDelay_DegradationZeit = PackageDelay_Start + Interval;}
+	void SetPackageDelay_DegradationSize(int Size){
+		PackageDelay_DegradationSize = Size;}
+	void SetPackageDelay_DelaySize(int Size){
+		PackageDelay_DelaySize = Size;}
+	void SetPackageDelay_RingBufferMaxUseSize(int Size){
+		PackageDelay_RingBufferMaxUseSize = Size;}
+#pragma endregion
+  
+#pragma region DetectionPointShift_Function
+	void SetDetectionPointShift_Start(float StartTime){
+		this->DetectionPointShift_Start = CalculateStartTime(StartTime);
+	}
+	void SetDetectionPointShift_Intervall(float Intervall){
+		this->DetectionPointShift_Intervall = Intervall;
+	}
+	void SetDetectionPointShift_Duration(float Duration){
+		this->DetectionPointShift_Duration = Duration;
+	}
+	void SetDetectionPointShift_IntervallDegradation(float IntDegre){
+		this->DetectionPointShift_IntervallDegradation = IntDegre;
+	}
+	void SetDetectionPointShift_DurationDegradation(float DuraDegre){
+		this->DetectionPointShift_DurationDegradation = DuraDegre;
+	}
+	void SetDetectionPoint_MaxDepthDisturbance(float MaxDepth){
+		this->DetectionPoint_MaxDepthDisturbance = MaxDepth;
+	}
+	void SetDetectionPoint_MaxAzimuthDisturbance(float MaxAzi){
+		this->DetectionPoint_MaxAzimuthDisturbance = MaxAzi;
+	}
+	void SetDetectionPoint_MaxAltitudeDisturbance(float MaxAlti){
+		this->DetectionPoint_MaxAltitudeDisturbance = MaxAlti;
+	}
+	void SetDetectionPoint_Distribution(int Dist)
+	{	
+		this->DetectionPoint_Distribution = (Distribution)Dist;
+	}
+#pragma endregion
+  
+#pragma region VelocityShift_Function
+	void SetVelocityShift_Start(float StartTime){
+		this->VelocityShift_Start = CalculateStartTime(StartTime);
+	}
+	void SetVelocityShift_Intervall(float Intervall){
+		this->VelocityShift_Intervall=Intervall;
+	}
+	void SetVelocityShift_Duration(float Duration){
+		this->VelocityShift_Duration = Duration;
+	}
+	void SetVelocityShift_IntervallDegradation(float InterDegre){
+		this->VelocityShift_IntervallDegradation = InterDegre;
+	}
+	void SetVelocityShift_DurationDegradation(float DuraDegre){
+		this->VelocityShift_DurationDegradation = DuraDegre;
+	}
+	void SetVelocityShift_MaxVelocityDisturbance(float MaxVel){
+		this->VelocityShift_MaxVelocityDisturbance = MaxVel;
+	}
+	void SetVelocityShift_Distribution(int Dist){
+		this->VelocityShift_Distribution = (Distribution) Dist;
+	}
+#pragma endregion
 
-  void SetRadarSpoof_Interval(float Interval) {
-	  this->RadarSpoof_Interval = Interval;
-  }
-  void SetRadarSpoof_Duration(float Duration) {
-	  this->RadarSpoof_Duration = Duration;
-  }
-  void SetRadarSpoof_StartOffset(float Offset) {
-	  this->RadarSpoof_StartOffset = Offset;
-  }
-  void SetRadarSpoof_ProgressionRate(float ProgressionRate) {
-	  this->RadarSpoof_ProgressionRate = ProgressionRate;
-  }
-  void SetRadarSpoof_CutOff(float CutOff) {
-	  this->RadarSpoof_CutOff = CutOff;
-  }
-
-  void SetBlockageStart(float Start) {
-	  this->Blockage_Start = Start;
-  }
-  void SetBlockageInterval(float Interval) {
-	  this->Blockage_Interval = Interval;
-  }
-  void SetBlockageHexagonAmmounts(int Ammount) {
-	  this->Blockage_HexagonAmmounts = Ammount;
-  }
   void MoveRadar(FRotator rot);
   void MoveRadar(); // Moves the Radar -> Used For RadarCollosionShift
   void SetDurationDegradation(float DurationDegradation)
@@ -94,31 +128,27 @@ public:
   }
 private:
 	bool isBlocked;
-	enum ScenarioID 
+	enum ScenarioID : int
 	{
-		None = 0x0,
-		RadarBlocked = 0x1,
-		RadarPackageLoss = 0x2,
-		RadarConstantShift = 0x4,
-		RadarVibration = 0x8,
-		RadarDisturbance = 0x10,
-		RadarRandomShift = 0x20,
-		RadarCollosionShift = 0x40,
-		RadarInterference = 0x80,
-		RadarBlockage = 0x100,
-		RadarPackageDelay = 0x200
+		PackageLoss = 0x1,
+		PackageDelay = 0x2,
+		DetectionPointShift = 0x4,
+		VelocityShift = 0x8,
+
+		RangeReduction = 0x10,
+		DetectionNonExistingPoints = 0x20,
+		SensorShift = 0x40,
+		SensorBlockage = 0x80
 	};
 
 	int Scenario;
 	
 	float PackageLoss_Interval;
 	float PackageLoss_Duration;
-	float PackageLoss_StartOffset;
 	float PackageLoss_Start;
-
 	float PackageLoss_IntervallDegradation;
 	float PackageLoss_DurationDegradation;
-
+	bool HasToLooseCurrentPackage();
 
 	float PackageDelay_Start; // Wann tritt der Fehler zuerst auf
 	float PackageDelay_DegradationZeit; //Hilfsvariable um die Intervalle zu tracken
@@ -128,65 +158,38 @@ private:
 								// Kann initial gesetzt werden um zu sagen wie viele Packete beim ersten Auftreten versetzt werden sollen.
 	int PackageDelay_WaitCounter; // Wie viele Packete sind zu dem Zeitpunkt schon versetzt
 
-	std::vector<RayData>[RadarDelay_RingBufferSize] PackageDelay_RingBuffer
+	std::vector<RayData> PackageDelay_RingBuffer[RadarDelay_RingBufferSize] ;
 	int PackageDelay_WriteRingBufferPtr;
-	int PackageDelay_ReadRingBufferPtr
+	int PackageDelay_ReadRingBufferPtr;
 	int PackageDelay_RingBufferMaxUseSize;
 
+	float DetectionPointShift_Start;
+	float DetectionPointShift_Intervall;
+	float DetectionPointShift_Duration;
+	float DetectionPointShift_IntervallDegradation;
+	float DetectionPointShift_DurationDegradation;
+	float DetectionPoint_MaxDepthDisturbance;
+	float DetectionPoint_MaxAzimuthDisturbance;
+	float DetectionPoint_MaxAltitudeDisturbance;
+	Distribution DetectionPoint_Distribution;
 
-	void SetPackageDelay_Start(float Start)
-	{
-		PackageDelay_Start = Start;
-	}
-	void SetPackageDelay_Interval(float Interval)
-	{
-		PackageDelay_Interval = Interval;
-		PackageDelay_DegradationZeit = PackageDelay_Start + Interval;
-	}
-	void SetPackageDelay_DegradationSize(int Size){
-		PackageDelay_DegradationSize = Size;
-	}
-	void SetPackageDelay_DelaySize(int Size){
-		PackageDelay_DelaySize = Size;
-	}
-	void SetPackageDelay_RingBufferMaxUseSize(int Size){
-		PackageDelay_RingBufferMaxUseSize = Size;
-	}
+	float VelocityShift_Start;
+	float VelocityShift_Intervall;
+	float VelocityShift_Duration;
+	float VelocityShift_IntervallDegradation;
+	float VelocityShift_DurationDegradation;
+	float VelocityShift_MaxVelocityDisturbance;
+	Distribution VelocityShift_Distribution;
 
-	FRotator ConstantShift_Rotation;
-	float ConstantShift_Interval;
-	float ConstantShift_Start;
-	float ConstantShift_StartOffset;
+	void ShiftDetectionPoints();
+	void ShiftVelocitys();
 
-	float RandomShift_Start;
-	float RandomShift_End;
-	float RandomShift_Time = 0.0f;
-	float RandomShif_StartOffset;
-
-	float RadarDisturbance_Interval;
-	float RadarDisturbance_Duration;
-	float RadarDisturbance_StartOffset;
-	float RadarDisturbance_Start;
-	float RadarDisturbance_ProgressionRate;
-
-	float RadarSpoof_Interval;
-	float RadarSpoof_Duration;
-	float RadarSpoof_StartOffset;
-	float RadarSpoof_Start;
-	float RadarSpoof_ProgressionRate;
-	float RadarSpoof_CutOff;
-
-	float Blockage_Start;
-	float Blockage_Interval;
-	int Blockage_HexagonAmmounts;
-
-	void GenerateHexagon(int Ammount);
+  void GenerateHexagon(int Ammount);
 
 
   virtual void WriteLineTraces();
   void BeginPlay() override;
   
-  void DisturbeRadar();
   void SpoofRadar();
 
 
@@ -196,4 +199,10 @@ private:
   TArray<AActor*> BlockObjects;
 
   bool MoveOnce = true;
+
+	std::mt19937 gen_weibull;
+	std::mt19937 gen_uniform;
+	std::mt19937 gen_gamma;
+	std::mt19937 gen_correction;
+	float CreateRandomNumber(Distribution DistType);
 };
