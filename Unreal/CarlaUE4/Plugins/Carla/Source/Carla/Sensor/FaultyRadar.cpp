@@ -62,8 +62,21 @@ AFaultyRadar::AFaultyRadar(const FObjectInitializer& ObjectInitializer)
 	this->VelocityShift_MaxVelocityDisturbance = 0.0f;
 	this->VelocityShift_Distribution = Distribution::None;
 
-}
+    this->RangeReduction_Start = FLT_MAX;
+	this->RangeReduction_Intervall = 0.0f;
+	this->RangeReduction_Duration = 0.0f;
+	this->RangeReduction_IntervallDegradation = 0.0f;
+	this->RangeReduction_DurationDegradation = 0.0f;
+	this->RangeReduction_RangeReductionValue = 0.0f;
+	this->RangeReduction_OldRangeValue = 0.0f;
+	this->RangeReduction_Active = false;;
 
+}
+void AFaultyRadar::PostPhysTick(UWorld *World, ELevelTick TickType, float DeltaTime) 
+{
+    CheckRangeReduction();
+    ARadar::PostPhysTick(World,TickType,DeltaTime);
+}
 void AFaultyRadar::AddScenario(int ScenarioID)
 {
     if (!(this->Scenario & ScenarioID))
@@ -231,7 +244,7 @@ void AFaultyRadar::ShiftDetectionPoints()
 
 void AFaultyRadar::ShiftVelocitys()
 {
-float time = GetWorld()->GetTimeSeconds();
+    float time = GetWorld()->GetTimeSeconds();
     if(this->Scenario & ScenarioID::VelocityShift)
     {
         if(time >= this->VelocityShift_Start)
@@ -255,7 +268,31 @@ float time = GetWorld()->GetTimeSeconds();
         }
     }
 }
-
+void AFaultyRadar::CheckRangeReduction()
+{
+    float time = GetWorld()->GetTimeSeconds();
+    if(this->Scenario & ScenarioID::RangeReduction)
+    {
+        if(time >= this->RangeReduction_Start)
+        {
+            if (time >= this->RangeReduction_Start + this->RangeReduction_Duration)
+            {
+                this->RangeReduction_Start += this->RangeReduction_Intervall;
+                this->RangeReduction_Intervall -= RangeReduction_IntervallDegradation;
+                this->RangeReduction_Duration += RangeReduction_DurationDegradation;    
+                this->RangeReduction_Active = false;
+                this->Range = this->RangeReduction_OldRangeValue;
+                return;
+            }
+            if(!this->RangeReduction_Active)
+            {
+                this->RangeReduction_OldRangeValue = this->Range;
+                this->Range -= this->RangeReduction_RangeReductionValue;
+                this->RangeReduction_Active = true;
+            }
+        }
+    }
+}
 void AFaultyRadar::WriteLineTraces()
 {
     if(HasToLooseCurrentPackage())

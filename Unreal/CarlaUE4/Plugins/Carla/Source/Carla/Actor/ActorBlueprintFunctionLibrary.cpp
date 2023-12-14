@@ -1103,6 +1103,50 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     VelocityShift_Distribution.RecommendedValues = { TEXT("0") };
     VelocityShift_Distribution.bRestrictToRecommended = false;
 
+    
+
+    FActorVariation RangeReduction_Start;
+    RangeReduction_Start.Id = TEXT("RangeReduction_Start");
+    RangeReduction_Start.Type = EActorAttributeType::Float;
+    RangeReduction_Start.RecommendedValues = { TEXT("0") };
+    RangeReduction_Start.bRestrictToRecommended = false;
+
+
+    FActorVariation RangeReduction_Intervall;
+    RangeReduction_Intervall.Id = TEXT("RangeReduction_Intervall");
+    RangeReduction_Intervall.Type = EActorAttributeType::Float;
+    RangeReduction_Intervall.RecommendedValues = { TEXT("0") };
+    RangeReduction_Intervall.bRestrictToRecommended = false;
+
+
+    FActorVariation RangeReduction_Duration;
+    RangeReduction_Duration.Id = TEXT("RangeReduction_Duration");
+    RangeReduction_Duration.Type = EActorAttributeType::Float;
+    RangeReduction_Duration.RecommendedValues = { TEXT("0") };
+    RangeReduction_Duration.bRestrictToRecommended = false;
+
+
+    FActorVariation RangeReduction_IntervallDegradation;
+    RangeReduction_IntervallDegradation.Id = TEXT("RangeReduction_IntervallDegradation");
+    RangeReduction_IntervallDegradation.Type = EActorAttributeType::Float;
+    RangeReduction_IntervallDegradation.RecommendedValues = { TEXT("0") };
+    RangeReduction_IntervallDegradation.bRestrictToRecommended = false;
+
+
+    FActorVariation RangeReduction_DurationDegradation;
+    RangeReduction_DurationDegradation.Id = TEXT("RangeReduction_DurationDegradation");
+    RangeReduction_DurationDegradation.Type = EActorAttributeType::Float;
+    RangeReduction_DurationDegradation.RecommendedValues = { TEXT("0") };
+    RangeReduction_DurationDegradation.bRestrictToRecommended = false;
+
+
+    FActorVariation RangeReduction_RangeReductionValue;
+    RangeReduction_RangeReductionValue.Id = TEXT("RangeReduction_RangeReductionValue");
+    RangeReduction_RangeReductionValue.Type = EActorAttributeType::Float;
+    RangeReduction_RangeReductionValue.RecommendedValues = { TEXT("0") };
+    RangeReduction_RangeReductionValue.bRestrictToRecommended = false;
+
+
     Definition.Variations.Append({
       HorizontalFOV,
       VerticalFOV,
@@ -1135,7 +1179,13 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
         VelocityShift_IntervallDegradation,
         VelocityShift_DurationDegradation,
         VelocityShift_MaxVelocityDisturbance,
-        VelocityShift_Distribution
+        VelocityShift_Distribution,
+        RangeReduction_Start,
+        RangeReduction_Intervall,
+        RangeReduction_Duration,
+        RangeReduction_IntervallDegradation,
+        RangeReduction_DurationDegradation,
+        RangeReduction_RangeReductionValue
         });
 
     Success = CheckActorDefinition(Definition);
@@ -2312,5 +2362,13 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
   IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_Distribution, "VelocityShift_Distribution", RetrieveActorAttributeToInt, 0);
 #pragma endregion
 
+#pragma region RangeReduction
+    IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_Start, "RangeReduction_Start", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_Intervall, "RangeReduction_Intervall", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_Duration, "RangeReduction_Duration", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_IntervallDegradation, "RangeReduction_IntervallDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_DurationDegradation, "RangeReduction_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_RangeReductionValue, "RangeReduction_RangeReductionValue", RetrieveActorAttributeToFloat, 0.0f);
+#pragma endregion
 }
 #undef CARLA_ABFL_CHECK_ACTOR

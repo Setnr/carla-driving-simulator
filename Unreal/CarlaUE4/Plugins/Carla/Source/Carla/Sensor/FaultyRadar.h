@@ -120,22 +120,46 @@ public:
 	}
 #pragma endregion
 
+#pragma region RangeReduction_Function
+	void SetRangeReduction_Start(float StartTime){
+		this->RangeReduction_Start = CalculateStartTime(StartTime);
+	}
+	void SetRangeReduction_Intervall(float Intervall){
+		this->RangeReduction_Intervall = Intervall;
+	}
+	void SetRangeReduction_Duration(float Duration){
+		this->RangeReduction_Duration = Duration;
+	}
+	void SetRangeReduction_IntervallDegradation(float IntDeg){
+		this->RangeReduction_IntervallDegradation = IntDeg;
+	}
+	void SetRangeReduction_DurationDegradation(float DurDeg){
+		this->RangeReduction_DurationDegradation = DurDeg;
+	}
+	void SetRangeReduction_RangeReductionValue(float RangeRed){
+		this->RangeReduction_RangeReductionValue = RangeRed;
+	}
+#pragma endregion
+  
   void MoveRadar(FRotator rot);
   void MoveRadar(); // Moves the Radar -> Used For RadarCollosionShift
   void SetDurationDegradation(float DurationDegradation)
   {
 	this->PackageLoss_DurationDegradation = DurationDegradation;
   }
+protected:
+	virtual void PostPhysTick(UWorld *World, ELevelTick TickType, float DeltaTime)override;
+
 private:
-	bool isBlocked;
+	
 	enum ScenarioID : int
 	{
 		PackageLoss = 0x1,
 		PackageDelay = 0x2,
 		DetectionPointShift = 0x4,
 		VelocityShift = 0x8,
-
 		RangeReduction = 0x10,
+
 		DetectionNonExistingPoints = 0x20,
 		SensorShift = 0x40,
 		SensorBlockage = 0x80
@@ -181,8 +205,18 @@ private:
 	float VelocityShift_MaxVelocityDisturbance;
 	Distribution VelocityShift_Distribution;
 
+	float RangeReduction_Start;
+	float RangeReduction_Intervall;
+	float RangeReduction_Duration;
+	float RangeReduction_IntervallDegradation;
+	float RangeReduction_DurationDegradation;
+	float RangeReduction_RangeReductionValue;
+	float RangeReduction_OldRangeValue;
+	bool RangeReduction_Active;
+
 	void ShiftDetectionPoints();
 	void ShiftVelocitys();
+	void CheckRangeReduction();
 
   void GenerateHexagon(int Ammount);
 

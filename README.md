@@ -64,6 +64,16 @@ At the Current state the Radar supports the following Failure modes, while the L
 	* VelocityShift_DurationDegradation (How the Duration will change between failures)
 	* VelocityShift_MaxVelocityDisturbance (Whats the Max Velocity Distrubance that can appear)
 	* VelocityShift_Distribution (Distribution of the Disturbance)
+
+*__Range Reduction__
+	* RangeReduction_Start (time when the first reduction will occure)
+	* RangeReduction_Intervall (Intervall when the next reduction failure will occure)
+	* RangeReduction_Duration (Duration how long the range will be reduced)
+	* RangeReduction_IntervallDegradation (How the Intervall will change between failures)
+	* RangeReduction_DurationDegradation (How the Duration will change between failures)
+	* RangeReduction_RangeReductionValue (The Ammount the RadarRange gets decresed (in Meter))
+
+
 ## Usage
 
 Declaration and initialization of the faulty Radar and Lidar model:
