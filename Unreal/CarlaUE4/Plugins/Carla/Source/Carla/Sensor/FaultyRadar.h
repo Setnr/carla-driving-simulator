@@ -196,6 +196,7 @@ private:
 	float DetectionPoint_MaxAzimuthDisturbance;
 	float DetectionPoint_MaxAltitudeDisturbance;
 	Distribution DetectionPoint_Distribution;
+	void ShiftDetectionPoints();
 
 	float VelocityShift_Start;
 	float VelocityShift_Intervall;
@@ -204,6 +205,7 @@ private:
 	float VelocityShift_DurationDegradation;
 	float VelocityShift_MaxVelocityDisturbance;
 	Distribution VelocityShift_Distribution;
+	void ShiftVelocitys();
 
 	float RangeReduction_Start;
 	float RangeReduction_Intervall;
@@ -213,9 +215,6 @@ private:
 	float RangeReduction_RangeReductionValue;
 	float RangeReduction_OldRangeValue;
 	bool RangeReduction_Active;
-
-	void ShiftDetectionPoints();
-	void ShiftVelocitys();
 	void CheckRangeReduction();
 
   void GenerateHexagon(int Ammount);

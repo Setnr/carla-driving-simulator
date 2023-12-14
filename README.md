@@ -39,13 +39,13 @@ At the Current state the Radar supports the following Failure modes, while the L
 	* PackageLoss_IntervallDegradation (the amount the interval gets decreased to increase the failure rate during the simulation)
 	* PackageLoss_DurationDegradation (the amount the Duration gets increased to increase the failure duration during the simulation)
 	* PackageLoss_Start (time as amount of seconds after the sensor's creation the failure will appear for the first time)
-*__Package Delay__
+* __Package Delay__
 	* PackageDelay_Start (time when the first delay will occure)
 	* PackageDelay_Interval (interval when the next dely will occure)
 	* PackageDelay_DelaySize (how many packages will be delayed at the first failure)
 	* PackageDelay_DegradationSize (how many packages will be delayed at following failures, can be adjusted during the simulation)
 	* PackageDelay_RingBufferMaxUseSize (Defines the size of the PackageRingBuffer (max 100), this will influence the time when packages will be lost and how many packages will be lost during the simulation)
-*__Detection Point Shift__
+* __Detection Point Shift__
 	* DetectionPointShift_Start (time when the first shifts will occure)
 	* DetectionPointShift_Intervall (Intervall when the next shift failure will occure)
 	* DetectionPointShift_Duration (Duration how long points will be shifted)
@@ -56,7 +56,7 @@ At the Current state the Radar supports the following Failure modes, while the L
 	* DetectionPoint_MaxAltitudeDisturbance (Whats the Max AltitudeDistrubance that can appear, horizontal of the point)
 	* DetectionPoint_Distribution (Distribution of the Disturbance)
 
-*__Velocity__ Point Shift__
+* __Velocity__ Point Shift__
 	* VelocityShift_Start (time when the first shifts will occure)
 	* VelocityShift_Intervall (Intervall when the next shift failure will occure)
 	* VelocityShift_Duration (Duration how long points will be shifted)
@@ -65,7 +65,7 @@ At the Current state the Radar supports the following Failure modes, while the L
 	* VelocityShift_MaxVelocityDisturbance (Whats the Max Velocity Distrubance that can appear)
 	* VelocityShift_Distribution (Distribution of the Disturbance)
 
-*__Range Reduction__
+* __Range Reduction__
 	* RangeReduction_Start (time when the first reduction will occure)
 	* RangeReduction_Intervall (Intervall when the next reduction failure will occure)
 	* RangeReduction_Duration (Duration how long the range will be reduced)
