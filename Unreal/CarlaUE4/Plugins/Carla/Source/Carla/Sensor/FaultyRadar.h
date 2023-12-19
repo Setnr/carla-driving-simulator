@@ -177,6 +177,48 @@ public:
 	}
 #pragma endregion
 
+#pragma region SensorShift_Function
+	void SetSensorShift_Start(float StartTime) {
+		this->SensorShift_Start = CalculateStartTime(StartTime);
+	}
+	void SetSensorShift_Intervall(float Intervall) {
+		this->SensorShift_Intervall = Intervall;
+	}
+	void SetSensorShift_Duration(float Duration) {
+		this->SensorShift_Duration = Duration;
+	}
+	void SetSensorShift_IntervallDegradation(float InterDegre) {
+		this->SensorShift_IntervallDegradation = InterDegre;
+	}
+	void SetSensorShift_DurationDegradation(float DuraDegre) {
+		this->SensorShift_DurationDegradation = DuraDegre;
+	}
+	void SetSensorShift_Yaw(float Yaw) {
+		this->SensorShift_Yaw = Yaw;
+	}
+	void SetSensorShift_Pitch(float Pitch) {
+		this->SensorShift_Pitch = Pitch;
+	}
+	void SetSensorShift_Roll(float Roll) {
+		this->SensorShift_Roll = Roll;
+	}
+	 
+	void SetSensorShiftFlag(int Flag) {
+		if (Flag >= 0 && Flag <= 1)
+			this->SensorShiftFlag = (SensorShift_Flag)Flag;
+		else
+			this->SensorShiftFlag = SensorShift_Flag::ConstantShift;
+	}
+	void SetSensorShiftTriggerFlag(int Flag) 
+	{
+		if (Flag >= 0 && Flag <= 1)
+			this->SensorShiftTriggerFlag = (SensorShift_TriggerFlag)Flag;
+		else
+			this->SensorShiftTriggerFlag = SensorShift_TriggerFlag::Timed;
+	}
+#pragma endregion
+
+  void EventShift();
   void MoveRadar(FRotator rot);
   void MoveRadar(); // Moves the Radar -> Used For RadarCollosionShift
   void SetDurationDegradation(float DurationDegradation)
@@ -195,8 +237,8 @@ private:
 		DetectionPointShift = 0x4,
 		VelocityShift = 0x8,
 		RangeReduction = 0x10,
-
 		DetectNonExistingPoints = 0x20,
+
 		SensorShift = 0x40,
 		SensorBlockage = 0x80
 	};
@@ -279,7 +321,29 @@ private:
 	void TestEndPoints();
 	FVector CalculateEndLocation();
 
-	
+	enum SensorShift_Flag : int 
+	{
+		ConstantShift = 0,
+		JumpingShift = 1
+	};
+	enum SensorShift_TriggerFlag : int 
+	{
+		Timed = 0,
+		Collision = 1
+	};
+
+	float SensorShift_Start;
+	float SensorShift_Intervall;
+	float SensorShift_Duration;
+	float SensorShift_IntervallDegradation;
+	float SensorShift_DurationDegradation;
+	float SensorShift_Yaw;
+	float SensorShift_Pitch;
+	float SensorShift_Roll;
+	SensorShift_Flag SensorShiftFlag;
+	SensorShift_TriggerFlag SensorShiftTriggerFlag;
+
+	void ShiftSensor();
 
   void GenerateHexagon(int Ammount);
 

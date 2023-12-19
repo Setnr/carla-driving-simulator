@@ -1195,6 +1195,67 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     DetectNonExistingPoints_VertFOVFlag.RecommendedValues = { TEXT("0") };
     DetectNonExistingPoints_VertFOVFlag.bRestrictToRecommended = false;
 
+    FActorVariation SensorShift_Start;
+    SensorShift_Start.Id = TEXT("SensorShift_Start");
+    SensorShift_Start.Type = EActorAttributeType::Float;
+    SensorShift_Start.RecommendedValues = { TEXT("0") };
+    SensorShift_Start.bRestrictToRecommended = false;
+
+    FActorVariation SensorShift_Intervall;
+    SensorShift_Intervall.Id = TEXT("SensorShift_Intervall");
+    SensorShift_Intervall.Type = EActorAttributeType::Float;
+    SensorShift_Intervall.RecommendedValues = { TEXT("0") };
+    SensorShift_Intervall.bRestrictToRecommended = false;
+
+    FActorVariation SensorShift_Duration;
+    SensorShift_Duration.Id = TEXT("SensorShift_Duration");
+    SensorShift_Duration.Type = EActorAttributeType::Float;
+    SensorShift_Duration.RecommendedValues = { TEXT("0") };
+    SensorShift_Duration.bRestrictToRecommended = false;
+
+    FActorVariation SensorShift_IntervallDegradation;
+    SensorShift_IntervallDegradation.Id = TEXT("SensorShift_IntervallDegradation");
+    SensorShift_IntervallDegradation.Type = EActorAttributeType::Float;
+    SensorShift_IntervallDegradation.RecommendedValues = { TEXT("0") };
+    SensorShift_IntervallDegradation.bRestrictToRecommended = false;
+
+    FActorVariation SensorShift_DurationDegradation;
+    SensorShift_DurationDegradation.Id = TEXT("SensorShift_DurationDegradation");
+    SensorShift_DurationDegradation.Type = EActorAttributeType::Float;
+    SensorShift_DurationDegradation.RecommendedValues = { TEXT("0") };
+    SensorShift_DurationDegradation.bRestrictToRecommended = false;
+
+    FActorVariation SensorShift_Yaw;
+    SensorShift_Yaw.Id = TEXT("SensorShift_Yaw");
+    SensorShift_Yaw.Type = EActorAttributeType::Float;
+    SensorShift_Yaw.RecommendedValues = { TEXT("0") };
+    SensorShift_Yaw.bRestrictToRecommended = false;
+
+    FActorVariation SensorShift_Pitch;
+    SensorShift_Pitch.Id = TEXT("SensorShift_Pitch");
+    SensorShift_Pitch.Type = EActorAttributeType::Float;
+    SensorShift_Pitch.RecommendedValues = { TEXT("0") };
+    SensorShift_Pitch.bRestrictToRecommended = false;
+
+    FActorVariation SensorShift_Roll;
+    SensorShift_Roll.Id = TEXT("SensorShift_Roll");
+    SensorShift_Roll.Type = EActorAttributeType::Float;
+    SensorShift_Roll.RecommendedValues = { TEXT("0") };
+    SensorShift_Roll.bRestrictToRecommended = false;
+
+    FActorVariation SensorShiftFlag;
+    SensorShiftFlag.Id = TEXT("SensorShiftFlag");
+    SensorShiftFlag.Type = EActorAttributeType::Int;
+    SensorShiftFlag.RecommendedValues = { TEXT("0") };
+    SensorShiftFlag.bRestrictToRecommended = false;
+
+    FActorVariation SensorShiftTriggerFlag;
+    SensorShiftTriggerFlag.Id = TEXT("SensorShift_Pitch");
+    SensorShiftTriggerFlag.Type = EActorAttributeType::Int;
+    SensorShiftTriggerFlag.RecommendedValues = { TEXT("0") };
+    SensorShiftTriggerFlag.bRestrictToRecommended = false;
+
+
     Definition.Variations.Append({
       HorizontalFOV,
       VerticalFOV,
@@ -1241,7 +1302,17 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
         DetectNonExistingPoints_DurationDegradation,
         DetectNonExistingPoints_AmmountDetections,
         DetectNonExistingPoints_HorFOVFlag,
-        DetectNonExistingPoints_VertFOVFlag
+        DetectNonExistingPoints_VertFOVFlag,
+        SensorShift_Start,
+        SensorShift_Intervall,
+        SensorShift_Duration,
+        SensorShift_IntervallDegradation,
+        SensorShift_DurationDegradation,
+        SensorShift_Yaw,
+        SensorShift_Pitch,
+        SensorShift_Roll,
+        SensorShiftFlag,
+        SensorShiftTriggerFlag
         });
 
     Success = CheckActorDefinition(Definition);
@@ -2439,5 +2510,21 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
     IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_VertFOVFlag, "DetectNonExistingPoints_VertFOVFlag", RetrieveActorAttributeToInt, 0);
 
 #pragma endregion
+
+#pragma region SensorShift
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_Start, "SensorShift_Start", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_Intervall, "SensorShift_Intervall", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_Duration, "SensorShift_Duration", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_IntervallDegradation, "SensorShift_IntervallDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_DurationDegradation, "SensorShift_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_Yaw, "SensorShift_Yaw", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_Pitch, "SensorShift_Pitch", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_Roll, "SensorShift_Roll", RetrieveActorAttributeToFloat, 0.0f);
+
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorShiftFlag, "SensorShiftFlag", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorShiftTriggerFlag, "SensorShiftTriggerFlag", RetrieveActorAttributeToInt, 0);
+
+#pragma endregion
 }
+
 #undef CARLA_ABFL_CHECK_ACTOR

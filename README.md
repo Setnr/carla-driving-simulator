@@ -52,6 +52,20 @@ For Vertical-Flags
 	};
 ```
 
+Shifting Sensor Flags
+```c++
+	enum SensorShift_Flag : int 
+	{
+		ConstantShift = 0,
+		JumpingShift = 1
+	};
+	enum SensorShift_TriggerFlag : int 
+	{
+		Timed = 0,
+		Collision = 1
+	};
+```
+
 At the Current state the Radar supports the following Failure modes, while the LiDAR only supports the first 3 Models.
 * __Package Loss__ (Data transfer error/loss)
 	* PackageLoss_Interval (interval the failure (re)appears)
@@ -76,7 +90,7 @@ At the Current state the Radar supports the following Failure modes, while the L
 	* DetectionPoint_MaxAltitudeDisturbance (Whats the Max AltitudeDistrubance that can appear, horizontal of the point)
 	* DetectionPoint_Distribution (Distribution of the Disturbance)
 
-* __Velocity__ Point Shift__
+* __Velocity Point Shift__
 	* VelocityShift_Start (time when the first shifts will occure)
 	* VelocityShift_Intervall (Intervall when the next shift failure will occure)
 	* VelocityShift_Duration (Duration how long points will be shifted)
@@ -92,6 +106,7 @@ At the Current state the Radar supports the following Failure modes, while the L
 	* RangeReduction_IntervallDegradation (How the Intervall will change between failures)
 	* RangeReduction_DurationDegradation (How the Duration will change between failures)
 	* RangeReduction_RangeReductionValue (The Ammount the RadarRange gets decresed (in Meter))
+	
 * __Detect Nonexisting Points__
 	* DetectNonExistingPoints_Start (time when the first appearence of non exsisting Points will happen)
 	* DetectNonExistingPoints_Intervall (Intervall when those failures will appear)
@@ -101,6 +116,19 @@ At the Current state the Radar supports the following Failure modes, while the L
 	* DetectNonExistingPoints_AmmountDetections (How many False Detections will be added)
 	* DetectNonExistingPoints_HorFOVFlag (Flag to specify where Points will appear Horizontally)
 	* DetectNonExistingPoints_VertFOVFlag (Flag to specify where Points will appear Vertically)
+
+* __Shifting Sensor__
+	* SensorShift_Start (When the Shift will appear)
+	* SensorShift_Intervall (Intervall when shifts will appear)
+	* SensorShift_Duration (For Constant Shifts: How long a shift will last (each world tick shifts the Sensor), Not Used for Jumping Shifts)
+	* SensorShift_IntervallDegradation (How the Intervall will change between failures)
+	* SensorShift_DurationDegradation (How the Duration will change between failures)
+	* SensorShift_Yaw (Yaw Rotation added to the Sensor each Shift Scenario)
+	* SensorShift_Pitch (Pitch Rotation added to the Sensor each Shift Scenario)
+	* SensorShift_Roll (Roll Rotation added to the Sensor each Shift Scenario)
+	* SensorShiftFlag (Flag to determine if it is a Constant-Shift or a one time jumping shift)
+	* SensorShiftTriggerFlag (Flag to determine if the Shift will occure because of a event or timebased)
+
 
 ## Usage
 

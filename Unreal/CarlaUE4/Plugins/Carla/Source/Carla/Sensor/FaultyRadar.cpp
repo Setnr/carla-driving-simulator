@@ -203,14 +203,38 @@ void AFaultyRadar::Set(const FActorDescription &ActorDescription)
   UActorBlueprintFunctionLibrary::SetFaultyRadar(ActorDescription, this);
 }
 
+void AFaultyRadar::EventShift() 
+{
+    if (this->Scenario & ScenarioID::SensorShift && this->SensorShiftTriggerFlag == SensorShift_TriggerFlag::Collision)
+    {
+        ShiftSensor();
+    }
+}
 void AFaultyRadar::MoveRadar()
 {
-    //if(this->Scenario & ScenarioID::RadarCollosionShift)
+    float time = GetWorld()->GetTimeSeconds();
+    if (this->Scenario & ScenarioID::SensorShift && this->SensorShiftTriggerFlag == SensorShift_TriggerFlag::Timed)
     {
-        auto rot = this->GetActorRotation();
-        //rot.Yaw += 20;
-        this->SetActorRotation(rot);
+        if (time >= this->SensorShift_Start)
+        {
+            if (time >= this->SensorShift_Start + this->SensorShift_Duration || this->SensorShiftFlag == SensorShift_Flag::JumpingShift)
+            {
+                this->SensorShift_Start += this->SensorShift_Intervall;
+                this->SensorShift_Intervall -= SensorShift_IntervallDegradation;
+                this->SensorShift_Duration += SensorShift_DurationDegradation;
+            }
+
+            ShiftSensor();
+        }
     }
+}
+
+void AFaultyRadar::ShiftSensor()
+{
+    auto RadarRot = this->GetActorRotation();
+    FRotator rot(this->SensorShift_Pitch, this->SensorShift_Yaw, this->SensorShift_Roll);
+    RadarRot += rot;
+    this->SetActorRotation(RadarRot);
 }
 void AFaultyRadar::MoveRadar(FRotator rot) 
 {
