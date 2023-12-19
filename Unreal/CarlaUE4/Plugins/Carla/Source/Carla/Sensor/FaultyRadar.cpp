@@ -12,6 +12,7 @@
 #include "Carla/Actor/ActorBlueprintFunctionLibrary.h"
 
 
+
 FActorDefinition AFaultyRadar::GetSensorDefinition()
 {
   return UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition();
@@ -22,11 +23,10 @@ AFaultyRadar::AFaultyRadar(const FObjectInitializer& ObjectInitializer)
 {
     this->SetVerticalFOV(20);
     this->SetHorizontalFOV(35);
-
     gen_weibull.seed(RandomEngineSeed);
     gen_uniform.seed(RandomEngineSeed);
-    gen_gamma.seed(RandomEngineSeed);
-    gen_correction.seed(RandomEngineSeed);
+    weibull = std::weibull_distribution<float>(0.0, 1.0);
+    uniform = std::uniform_real_distribution<float>(0.0, 1.0);
 
     this->PackageLoss_Interval = 15.0f;
     this->PackageLoss_Duration = 2.5f;
@@ -71,6 +71,119 @@ AFaultyRadar::AFaultyRadar(const FObjectInitializer& ObjectInitializer)
 	this->RangeReduction_OldRangeValue = 0.0f;
 	this->RangeReduction_Active = false;;
 
+    //TestEndPoints();
+
+}
+void AFaultyRadar::TestEndPoints()
+{
+    this->SetVerticalFOV(20);
+    this->SetHorizontalFOV(35);
+    this->Range = 100;
+    FVector RadarLocation = GetActorLocation();
+    FVector loc;
+    FVector helper;
+    float MaxRx = FMath::Tan(FMath::DegreesToRadians(HorizontalFOV * 0.5f)) * Range;
+    float MaxRy = FMath::Tan(FMath::DegreesToRadians(VerticalFOV * 0.5f)) * Range;
+
+    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::Left;
+    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::WholeVerFOV;
+    int LeftCheck = 0;
+    for(int i = 0; i < 150; i++)
+    {
+        loc = CalculateEndLocation();
+        helper = loc - RadarLocation;
+        if(helper.X <= RadarLocation.X)
+            LeftCheck++;
+        
+    }
+
+    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::Right;
+    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::WholeVerFOV;
+    int RightCheck = 0;
+    for(int i = 0; i < 150; i++)
+    {
+        loc = CalculateEndLocation();
+        if(loc.X >= RadarLocation.X)
+            RightCheck++;
+    }
+
+    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::WholeHorFOV;
+    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::Up;
+    int UpCheck = 0;
+    for(int i = 0; i < 150; i++)
+    {
+        loc = CalculateEndLocation();
+        if(loc.Y >= RadarLocation.Y)
+            UpCheck++;
+    }
+
+    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::WholeHorFOV;
+    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::Down;
+    int DownCheck = 0;
+    for(int i = 0; i < 150; i++)
+    {
+        loc = CalculateEndLocation();
+        if(loc.Y <= RadarLocation.Y)
+            DownCheck++;
+    }
+
+    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::Right;
+    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::Up;
+    int UpRightCheck = 0;
+    for(int i = 0; i < 150; i++)
+    {
+        loc = CalculateEndLocation();
+        if(loc.Y >= RadarLocation.Y && loc.X >= RadarLocation.X)
+            UpRightCheck++;
+    }
+
+    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::Left;
+    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::Up;
+    int UpLeftCheck = 0;
+    for(int i = 0; i < 150; i++)
+    {
+        loc = CalculateEndLocation();
+        if(loc.Y >= RadarLocation.Y && loc.X <= RadarLocation.X)
+            UpLeftCheck++;
+    }
+
+    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::Right;
+    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::Down;
+    int DownRightCheck = 0;
+    for(int i = 0; i < 150; i++)
+    {
+        loc = CalculateEndLocation();
+        if(loc.Y <= RadarLocation.Y && loc.X >= RadarLocation.X)
+            DownRightCheck++;
+    }
+
+    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::Left;
+    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::Down;
+    int DownLeftCheck = 0;
+    for(int i = 0; i < 150; i++)
+    {
+        loc = CalculateEndLocation();
+        if(loc.Y <= RadarLocation.Y && loc.X <= RadarLocation.X)
+            DownLeftCheck++;
+    }
+
+    if(LeftCheck == 150)
+        UE_LOG(LogTemp, Warning, TEXT("LeftCheck passed"));
+    if(RightCheck == 150)
+        UE_LOG(LogTemp, Warning, TEXT("RightCheck passed"));
+    if(UpCheck == 150)
+        UE_LOG(LogTemp, Warning, TEXT("UpCheck passed"));
+    if(DownCheck == 150)
+        UE_LOG(LogTemp, Warning, TEXT("DownCheck passed"));
+
+    if(UpRightCheck == 150)
+        UE_LOG(LogTemp, Warning, TEXT("UpRightCheck passed"));
+    if(UpLeftCheck == 150)
+        UE_LOG(LogTemp, Warning, TEXT("UpLeftCheck passed"));
+    if(DownRightCheck == 150)
+        UE_LOG(LogTemp, Warning, TEXT("DownRightCheck passed"));
+    if(DownLeftCheck == 150)
+        UE_LOG(LogTemp, Warning, TEXT("DownLeftCheck passed"));
 }
 void AFaultyRadar::PostPhysTick(UWorld *World, ELevelTick TickType, float DeltaTime) 
 {
@@ -95,7 +208,7 @@ void AFaultyRadar::MoveRadar()
     //if(this->Scenario & ScenarioID::RadarCollosionShift)
     {
         auto rot = this->GetActorRotation();
-        rot.Yaw += 20;
+        //rot.Yaw += 20;
         this->SetActorRotation(rot);
     }
 }
@@ -120,7 +233,7 @@ void AFaultyRadar::OnConstruction(const FTransform& Transform)
 }
 void AFaultyRadar::GenerateHexagon(int Ammount)
 {
-    float Range = 1;
+    float Range = 1.0f;
     float CalculateHFOV = HorizontalFOV + 4.f;
     float CalculateVFOV = VerticalFOV + 4.f;
 
@@ -195,18 +308,15 @@ float AFaultyRadar::CreateRandomNumber(Distribution DistType)
     {
         case Distribution::Weibull:
         {
-            std::weibull_distribution<> w;
-            ret = w(gen_weibull);
+            ret = weibull(gen_weibull);
         }
         break;
         case Distribution::Linear:
-            ret = gen_uniform();
+            ret = uniform(gen_uniform);
+
         break;
     }
     
-    if(gen_correction() > 0.5f)
-        ret = ret * -1;
-
     return ret;
 }
 void AFaultyRadar::ShiftDetectionPoints()
@@ -228,12 +338,18 @@ void AFaultyRadar::ShiftDetectionPoints()
                 if (ray.Hitted)
                 {
                     float rand = CreateRandomNumber(DetectionPoint_Distribution);
+                    if (CreateRandomNumber(DetectionPoint_Distribution))
+                        rand *= -1;
                     ray.Distance += DetectionPoint_MaxDepthDisturbance * rand;
 
                     rand = CreateRandomNumber(DetectionPoint_Distribution);
+                    if (CreateRandomNumber(DetectionPoint_Distribution))
+                        rand *= -1;
                     ray.AzimuthAndElevation.X  += DetectionPoint_MaxAzimuthDisturbance * rand;
 
                     rand = CreateRandomNumber(DetectionPoint_Distribution);
+                    if (CreateRandomNumber(DetectionPoint_Distribution))
+                        rand *= -1;
                     ray.AzimuthAndElevation.Y += DetectionPoint_MaxAltitudeDisturbance * rand;
                 }
             }
@@ -261,6 +377,8 @@ void AFaultyRadar::ShiftVelocitys()
                 if (ray.Hitted)
                 {
                     float rand = CreateRandomNumber(VelocityShift_Distribution);
+                    if (CreateRandomNumber(DetectionPoint_Distribution))
+                        rand *= -1;
                     ray.RelativeVelocity += VelocityShift_MaxVelocityDisturbance * rand;
                 }
             }
@@ -293,6 +411,130 @@ void AFaultyRadar::CheckRangeReduction()
         }
     }
 }
+
+void AFaultyRadar::DrawRadarBorder() 
+{
+    const float MaxRx = FMath::Tan(FMath::DegreesToRadians(HorizontalFOV * 0.5f)) * Range;
+    const float MaxRy = FMath::Tan(FMath::DegreesToRadians(VerticalFOV * 0.5f)) * Range;
+    const FVector& RadarLocation = GetActorLocation();
+    const FTransform& ActorTransform = GetActorTransform();
+    const FRotator& TransformRotator = ActorTransform.Rotator();
+
+    const FVector TransformXAxis = ActorTransform.GetUnitAxis(EAxis::X);
+    const FVector TransformYAxis = ActorTransform.GetUnitAxis(EAxis::Y);
+    const FVector TransformZAxis = ActorTransform.GetUnitAxis(EAxis::Z);
+    for (float XBorder = -1.0f; XBorder <= 1.0f; XBorder += 0.1f) 
+    {
+        FVector TopHelper = {
+           Range,
+           MaxRx * XBorder,
+           MaxRy
+        };
+        FVector TopEndLocation = RadarLocation + TransformRotator.RotateVector(TopHelper);
+        FVector BotHelper = {
+           Range,
+           MaxRx * XBorder,
+           MaxRy * -1
+        };
+        FVector BotEndLocation = RadarLocation + TransformRotator.RotateVector(BotHelper);
+        RayData data;
+        data.Hitted = true;
+        //Create a Fake positiv or negativ Velocity
+        data.RelativeVelocity = -1.0f;
+        //Create a Random Distance within the current Range of the Radar
+        data.Distance = Range;
+        //Calculated Azimuth and Altitude for the Fake Point 
+        data.AzimuthAndElevation = FMath::GetAzimuthAndElevation(
+            (TopEndLocation - RadarLocation).GetSafeNormal() * Range,
+            TransformXAxis,
+            TransformYAxis,
+            TransformZAxis
+        );
+        Rays.push_back(data);
+
+        data.AzimuthAndElevation = FMath::GetAzimuthAndElevation(
+            (BotEndLocation - RadarLocation).GetSafeNormal() * Range,
+            TransformXAxis,
+            TransformYAxis,
+            TransformZAxis
+        );
+        Rays.push_back(data);
+    }
+
+    for (float YBorder = -1.0f; YBorder <= 1.0f; YBorder += 0.1f)
+    {
+        FVector TopHelper = {
+           Range,
+           MaxRx,
+           MaxRy * YBorder
+        };
+        FVector TopEndLocation = RadarLocation + TransformRotator.RotateVector(TopHelper);
+        FVector BotHelper = {
+           Range,
+           MaxRx * -1,
+           MaxRy * YBorder
+        };
+        FVector BotEndLocation = RadarLocation + TransformRotator.RotateVector(BotHelper);
+        RayData data;
+        data.Hitted = true;
+        //Create a Fake positiv or negativ Velocity
+        data.RelativeVelocity = CreateRandomNumber(Distribution::Linear);
+        if (CreateRandomNumber(Distribution::Linear) <= 0.5f)
+            data.RelativeVelocity *= -1;
+        //Create a Random Distance within the current Range of the Radar
+        data.Distance = Range;
+        //Calculated Azimuth and Altitude for the Fake Point 
+        data.AzimuthAndElevation = FMath::GetAzimuthAndElevation(
+            (TopEndLocation - RadarLocation).GetSafeNormal() * Range,
+            TransformXAxis,
+            TransformYAxis,
+            TransformZAxis
+        );
+        Rays.push_back(data);
+
+        data.AzimuthAndElevation = FMath::GetAzimuthAndElevation(
+            (BotEndLocation - RadarLocation).GetSafeNormal() * Range,
+            TransformXAxis,
+            TransformYAxis,
+            TransformZAxis
+        );
+        Rays.push_back(data);
+    }
+    
+}
+
+void AFaultyRadar::DetectNonExisitingPoints()
+{
+#ifdef DEBUG_NONEXISITING_POINTS
+    Rays.clear();
+    this->Scenario = ScenarioID::DetectNonExistingPoints;
+    DrawRadarBorder();
+    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::WholeHorFOV;
+    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::WholeVerFOV;
+    DetectNonExistingPoints_AmmountDetections = 5000;
+    DetectNonExistingPoints_Duration = MAX_FLT;
+    this->Range = 12.0f;
+#endif
+
+    float time = GetWorld()->GetTimeSeconds();
+    if(this->Scenario & ScenarioID::DetectNonExistingPoints)
+    {
+        if(time >= this->DetectNonExistingPoints_Start)
+        {
+            if (time >= this->DetectNonExistingPoints_Start + this->DetectNonExistingPoints_Duration)
+            {
+                this->DetectNonExistingPoints_Start += this->DetectNonExistingPoints_Intervall;
+                this->DetectNonExistingPoints_Intervall -= DetectNonExistingPoints_IntervallDegradation;
+                this->DetectNonExistingPoints_Duration += DetectNonExistingPoints_DurationDegradation; 
+                return;
+            }
+
+            CreatePoints();
+        }
+    }
+}
+
+
 void AFaultyRadar::WriteLineTraces()
 {
     if(HasToLooseCurrentPackage())
@@ -300,6 +542,7 @@ void AFaultyRadar::WriteLineTraces()
 
     float time = GetWorld()->GetTimeSeconds();
 
+    DetectNonExisitingPoints();
     ShiftDetectionPoints();
     ShiftVelocitys();
 
@@ -344,18 +587,72 @@ void AFaultyRadar::WriteLineTraces()
     }
 }
 
-void AFaultyRadar::SpoofRadar()
+FVector AFaultyRadar::CalculateEndLocation()
 {
-    //ToDo:
-    // How to Disturbe exactly?
-    for (auto& ray : Rays)
-    {
-        if (ray.Hitted)
-        {
-            if (ray.Distance > 0) 
-            {
-                ray.Hitted = false;
-            }
-        }
+    // Create Random Angle and get Cos & Sin for that Angle
+    const float MaxRx = FMath::Tan(FMath::DegreesToRadians(HorizontalFOV * 0.5f)) * Range;
+    const float MaxRy = FMath::Tan(FMath::DegreesToRadians(VerticalFOV * 0.5f)) * Range;
+    float Angle = carla::geom::Math::Pi2<float>() * CreateRandomNumber(Distribution::Linear);
+    float Sin, Cos;
+    FMath::SinCos(&Sin, &Cos, Angle);
+
+    //Create a EndPoint within the FOV based on the Random Angle
+    if (DetectNonExistingPoints_VertFOVFlag == VerticalFOV_Type::Down && Sin >= 0.0f )
+        Sin = Sin * -1;
+    if (DetectNonExistingPoints_VertFOVFlag == VerticalFOV_Type::Up && Sin <= 0.0f)
+        Sin = Sin* -1;
+
+    if (DetectNonExistingPoints_HorFOVFlag == HorizontalFOV_Type::Left && Cos >= 0.0f)
+        Cos = Cos * -1;
+    if (DetectNonExistingPoints_HorFOVFlag == HorizontalFOV_Type::Right && Cos <= 0.0f)
+        Cos = Cos * -1;
+
+    const FVector& RadarLocation = GetActorLocation();
+    const FTransform& ActorTransform = GetActorTransform();
+    const FRotator& TransformRotator = ActorTransform.Rotator();
+    FVector Helper = {
+       Range,
+       MaxRx * Cos,
+       MaxRy * Sin
+    };
+    FVector EndLocation = RadarLocation + TransformRotator.RotateVector(Helper);
+
+
+    return EndLocation;
+    
+}
+
+void AFaultyRadar::CreatePoints()
+{
+    //Init some Basic Values needed for Following Calculations;
+    int AddPoints = this->DetectNonExistingPoints_AmmountDetections; // * ((int)gen_uniform());
+    const FVector& RadarLocation = GetActorLocation();
+    const FTransform& ActorTransform = GetActorTransform();
+    const FRotator& TransformRotator = ActorTransform.Rotator();
+    const FVector TransformXAxis = ActorTransform.GetUnitAxis(EAxis::X);
+    const FVector TransformYAxis = ActorTransform.GetUnitAxis(EAxis::Y);
+    const FVector TransformZAxis = ActorTransform.GetUnitAxis(EAxis::Z);
+    RayData data;
+
+    for (int i = 0; i < AddPoints; i++)
+    {   
+        auto EndLocation = CalculateEndLocation();
+        data.Hitted = true;
+        //Create a Fake positiv or negativ Velocity
+        data.RelativeVelocity = CreateRandomNumber(Distribution::Linear);
+        if(CreateRandomNumber(Distribution::Linear) <= 0.5f)
+            data.RelativeVelocity *= -1;
+        float LocalRange = Range * CreateRandomNumber(Distribution::Linear);
+        //Calculated Azimuth and Altitude for the Fake Point 
+        data.AzimuthAndElevation = FMath::GetAzimuthAndElevation(
+                    (EndLocation - RadarLocation).GetSafeNormal() * LocalRange,
+                    TransformXAxis,
+                    TransformYAxis,
+                    TransformZAxis
+                );
+        //Create a Random Distance within the current Range of the Radar
+        data.Distance = LocalRange;
+
+        Rays.push_back(data);
     }
 }

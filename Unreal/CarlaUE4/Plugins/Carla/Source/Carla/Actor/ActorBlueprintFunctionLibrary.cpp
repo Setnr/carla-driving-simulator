@@ -1147,6 +1147,54 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     RangeReduction_RangeReductionValue.bRestrictToRecommended = false;
 
 
+    FActorVariation DetectNonExistingPoints_Start;
+    DetectNonExistingPoints_Start.Id = TEXT("DetectNonExistingPoints_Start");
+    DetectNonExistingPoints_Start.Type = EActorAttributeType::Float;
+    DetectNonExistingPoints_Start.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_Start.bRestrictToRecommended = false;
+
+    FActorVariation DetectNonExistingPoints_Intervall;
+    DetectNonExistingPoints_Intervall.Id = TEXT("DetectNonExistingPoints_Intervall");
+    DetectNonExistingPoints_Intervall.Type = EActorAttributeType::Float;
+    DetectNonExistingPoints_Intervall.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_Intervall.bRestrictToRecommended = false;
+
+    FActorVariation DetectNonExistingPoints_Duration;
+    DetectNonExistingPoints_Duration.Id = TEXT("DetectNonExistingPoints_Duration");
+    DetectNonExistingPoints_Duration.Type = EActorAttributeType::Float;
+    DetectNonExistingPoints_Duration.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_Duration.bRestrictToRecommended = false;
+
+    FActorVariation DetectNonExistingPoints_IntervallDegradation;
+    DetectNonExistingPoints_IntervallDegradation.Id = TEXT("DetectNonExistingPoints_IntervallDegradation");
+    DetectNonExistingPoints_IntervallDegradation.Type = EActorAttributeType::Float;
+    DetectNonExistingPoints_IntervallDegradation.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_IntervallDegradation.bRestrictToRecommended = false;
+
+    FActorVariation DetectNonExistingPoints_DurationDegradation;
+    DetectNonExistingPoints_DurationDegradation.Id = TEXT("DetectNonExistingPoints_DurationDegradation");
+    DetectNonExistingPoints_DurationDegradation.Type = EActorAttributeType::Float;
+    DetectNonExistingPoints_DurationDegradation.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_DurationDegradation.bRestrictToRecommended = false;
+
+    FActorVariation DetectNonExistingPoints_AmmountDetections;
+    DetectNonExistingPoints_AmmountDetections.Id = TEXT("DetectNonExistingPoints_AmmountDetections");
+    DetectNonExistingPoints_AmmountDetections.Type = EActorAttributeType::Int;
+    DetectNonExistingPoints_AmmountDetections.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_AmmountDetections.bRestrictToRecommended = false;
+
+    FActorVariation DetectNonExistingPoints_HorFOVFlag;
+    DetectNonExistingPoints_HorFOVFlag.Id = TEXT("DetectNonExistingPoints_HorFOVFlag");
+    DetectNonExistingPoints_HorFOVFlag.Type = EActorAttributeType::Int;
+    DetectNonExistingPoints_HorFOVFlag.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_HorFOVFlag.bRestrictToRecommended = false;
+
+    FActorVariation DetectNonExistingPoints_VertFOVFlag;
+    DetectNonExistingPoints_VertFOVFlag.Id = TEXT("DetectNonExistingPoints_VertFOVFlag");
+    DetectNonExistingPoints_VertFOVFlag.Type = EActorAttributeType::Int;
+    DetectNonExistingPoints_VertFOVFlag.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_VertFOVFlag.bRestrictToRecommended = false;
+
     Definition.Variations.Append({
       HorizontalFOV,
       VerticalFOV,
@@ -1185,7 +1233,15 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
         RangeReduction_Duration,
         RangeReduction_IntervallDegradation,
         RangeReduction_DurationDegradation,
-        RangeReduction_RangeReductionValue
+        RangeReduction_RangeReductionValue,
+        DetectNonExistingPoints_Start,
+        DetectNonExistingPoints_Intervall,
+        DetectNonExistingPoints_Duration,
+        DetectNonExistingPoints_IntervallDegradation,
+        DetectNonExistingPoints_DurationDegradation,
+        DetectNonExistingPoints_AmmountDetections,
+        DetectNonExistingPoints_HorFOVFlag,
+        DetectNonExistingPoints_VertFOVFlag
         });
 
     Success = CheckActorDefinition(Definition);
@@ -2369,6 +2425,19 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
     IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_IntervallDegradation, "RangeReduction_IntervallDegradation", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_DurationDegradation, "RangeReduction_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_RangeReductionValue, "RangeReduction_RangeReductionValue", RetrieveActorAttributeToFloat, 0.0f);
+#pragma endregion
+
+#pragma region DetectNonExistingPoints
+    IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_Start, "DetectNonExistingPoints_Start", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_Intervall, "DetectNonExistingPoints_Intervall", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_Duration, "DetectNonExistingPoints_Duration", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_IntervallDegradation, "DetectNonExistingPoints_IntervallDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_DurationDegradation, "DetectNonExistingPoints_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
+
+    IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_AmmountDetections, "DetectNonExistingPoints_AmmountDetections", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_HorFOVFlag, "DetectNonExistingPoints_HorFOVFlag", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_VertFOVFlag, "DetectNonExistingPoints_VertFOVFlag", RetrieveActorAttributeToInt, 0);
+
 #pragma endregion
 }
 #undef CARLA_ABFL_CHECK_ACTOR

@@ -1035,11 +1035,12 @@ class RadarSensor(object):
         world = self._parent.get_world()
         self.debug = world.debug
         bp = world.get_blueprint_library().find('sensor.other.faulty_radar')
-        bp.set_attribute('scenario', str(Scenario.RadarCollosionShift.value))
+        #bp.set_attribute('scenario', str(Scenario.RadarCollosionShift.value))
 
         bp.set_attribute('horizontal_fov', str(80))
         bp.set_attribute('vertical_fov', str(35))
-        bp.set_attribute('range', str(70))
+        bp.set_attribute('range', str(12))
+        bp.set_attribute('points_per_second', str(10000))
 
 
 

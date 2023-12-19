@@ -17,6 +17,7 @@
 
 #define RadarDelay_RingBufferSize 100
 #define RandomEngineSeed 9857
+//#define DEBUG_NONEXISITING_POINTS //DEFINE FOR SPOOFINGTEST
 
 UCLASS()
 class CARLA_API AFaultyRadar : public ARadar
@@ -141,6 +142,41 @@ public:
 	}
 #pragma endregion
   
+#pragma region DetectNonExistingPoints_Function
+
+	void SetDetectNonExistingPoints_Start(float StartTime) {
+		this->DetectNonExistingPoints_Start = CalculateStartTime(StartTime);
+	}
+	void SetDetectNonExistingPoints_Intervall(float Intervall) {
+		this->DetectNonExistingPoints_Intervall = Intervall;
+	}
+	void SetDetectNonExistingPoints_Duration(float Duration) {
+		this->DetectNonExistingPoints_Duration = Duration;
+	}
+	void SetDetectNonExistingPoints_IntervallDegradation(float InterDeg) {
+		this->DetectNonExistingPoints_IntervallDegradation = InterDeg;
+	}
+	void SetDetectNonExistingPoints_DurationDegradation(float DuraDeg) {
+		this->DetectNonExistingPoints_DurationDegradation = DuraDeg;
+	}
+	void SetDetectNonExistingPoints_AmmountDetections(int MaxAmmount) {
+		this->DetectNonExistingPoints_AmmountDetections = MaxAmmount;
+	}
+	 
+	void SetDetectNonExistingPoints_HorFOVFlag(int HorFov) {
+		if (HorFov <= 2 && HorFov >= 0)
+			this->DetectNonExistingPoints_HorFOVFlag = (HorizontalFOV_Type)HorFov;
+		else
+			this->DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::WholeHorFOV;
+	}
+	void SetDetectNonExistingPoints_VertFOVFlag(int VertFov) {
+		if (VertFov <= 2 && VertFov >= 0)
+			this->DetectNonExistingPoints_VertFOVFlag = (VerticalFOV_Type)VertFov;
+		else
+			this->DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::WholeVerFOV;
+	}
+#pragma endregion
+
   void MoveRadar(FRotator rot);
   void MoveRadar(); // Moves the Radar -> Used For RadarCollosionShift
   void SetDurationDegradation(float DurationDegradation)
@@ -160,7 +196,7 @@ private:
 		VelocityShift = 0x8,
 		RangeReduction = 0x10,
 
-		DetectionNonExistingPoints = 0x20,
+		DetectNonExistingPoints = 0x20,
 		SensorShift = 0x40,
 		SensorBlockage = 0x80
 	};
@@ -217,13 +253,40 @@ private:
 	bool RangeReduction_Active;
 	void CheckRangeReduction();
 
+	enum HorizontalFOV_Type : int
+	{
+		Left = 0,
+		WholeHorFOV = 1,
+		Right = 2
+	};
+	enum VerticalFOV_Type : int
+	{
+		Down = 0,
+		WholeVerFOV = 1,
+		Up = 2
+	};
+	float DetectNonExistingPoints_Start;
+	float DetectNonExistingPoints_Intervall;
+	float DetectNonExistingPoints_Duration;
+	float DetectNonExistingPoints_IntervallDegradation;
+	float DetectNonExistingPoints_DurationDegradation;
+	int DetectNonExistingPoints_AmmountDetections;
+	HorizontalFOV_Type DetectNonExistingPoints_HorFOVFlag;
+	VerticalFOV_Type DetectNonExistingPoints_VertFOVFlag;
+
+	void DetectNonExisitingPoints();
+  	void CreatePoints();
+	void TestEndPoints();
+	FVector CalculateEndLocation();
+
+	
+
   void GenerateHexagon(int Ammount);
 
 
   virtual void WriteLineTraces();
   void BeginPlay() override;
-  
-  void SpoofRadar();
+  void DrawRadarBorder();
 
 
   bool once = true;
@@ -232,10 +295,10 @@ private:
   TArray<AActor*> BlockObjects;
 
   bool MoveOnce = true;
-
+	
 	std::mt19937 gen_weibull;
+	std::weibull_distribution<float> weibull;
 	std::mt19937 gen_uniform;
-	std::mt19937 gen_gamma;
-	std::mt19937 gen_correction;
+	std::uniform_real_distribution<float> uniform;
 	float CreateRandomNumber(Distribution DistType);
 };

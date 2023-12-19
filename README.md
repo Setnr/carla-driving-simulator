@@ -32,6 +32,26 @@ For Distributed Failures following Distributions can be used
 		Linear = 0x2
 	};
 ```
+
+For Horizontal-Flags
+```c++
+	enum HorizontalFOV_Type : int
+	{
+		Left = 0,
+		WholeHorFOV = 1,
+		Right = 2
+	};
+```
+For Vertical-Flags
+```c++
+	enum VerticalFOV_Type : int
+	{
+		Down = 0,
+		WholeVerFOV = 1,
+		Up = 2
+	};
+```
+
 At the Current state the Radar supports the following Failure modes, while the LiDAR only supports the first 3 Models.
 * __Package Loss__ (Data transfer error/loss)
 	* PackageLoss_Interval (interval the failure (re)appears)
@@ -72,7 +92,15 @@ At the Current state the Radar supports the following Failure modes, while the L
 	* RangeReduction_IntervallDegradation (How the Intervall will change between failures)
 	* RangeReduction_DurationDegradation (How the Duration will change between failures)
 	* RangeReduction_RangeReductionValue (The Ammount the RadarRange gets decresed (in Meter))
-
+* __Detect Nonexisting Points__
+	* DetectNonExistingPoints_Start (time when the first appearence of non exsisting Points will happen)
+	* DetectNonExistingPoints_Intervall (Intervall when those failures will appear)
+	* DetectNonExistingPoints_Duration (Duration how long non existing points will appear)
+	* DetectNonExistingPoints_IntervallDegradation (How the Intervall will change between failures)
+	* DetectNonExistingPoints_DurationDegradation (How the Duration will change between failures)
+	* DetectNonExistingPoints_AmmountDetections (How many False Detections will be added)
+	* DetectNonExistingPoints_HorFOVFlag (Flag to specify where Points will appear Horizontally)
+	* DetectNonExistingPoints_VertFOVFlag (Flag to specify where Points will appear Vertically)
 
 ## Usage
 
