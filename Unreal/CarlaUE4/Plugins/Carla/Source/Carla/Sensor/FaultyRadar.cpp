@@ -4,6 +4,7 @@
 // This work is licensed under the terms of the MIT license.
 // For a copy, see <https://opensource.org/licenses/MIT>.
 
+#include <PxScene.h>
 #include "DrawDebugHelpers.h"
 
 #include "Carla/Sensor/FaultyRadar.h"
@@ -31,7 +32,7 @@ AFaultyRadar::AFaultyRadar(const FObjectInitializer& ObjectInitializer)
     this->PackageLoss_Interval = 15.0f;
     this->PackageLoss_Duration = 2.5f;
     this->PackageLoss_Start = FLT_MAX;
-    this->PackageLoss_IntervallDegradation = 0.0f;
+    this->PackageLoss_IntervalDegradation = 0.0f;
     this->PackageLoss_DurationDegradation = 0.0f;
 
     this->PackageDelay_Start = FLT_MAX;
@@ -45,9 +46,9 @@ AFaultyRadar::AFaultyRadar(const FObjectInitializer& ObjectInitializer)
     this->PackageDelay_RingBufferMaxUseSize = 100;
 
     this->DetectionPointShift_Start = FLT_MAX;
-	this->DetectionPointShift_Intervall = 0.0f;
+	this->DetectionPointShift_Interval = 0.0f;
 	this->DetectionPointShift_Duration= 0.0f;
-	this->DetectionPointShift_IntervallDegradation= 0.0f;
+	this->DetectionPointShift_IntervalDegradation= 0.0f;
 	this->DetectionPointShift_DurationDegradation= 0.0f;
 	this->DetectionPoint_MaxDepthDisturbance= 0.0f;
 	this->DetectionPoint_MaxAzimuthDisturbance= 0.0f;
@@ -55,22 +56,36 @@ AFaultyRadar::AFaultyRadar(const FObjectInitializer& ObjectInitializer)
 	this->DetectionPoint_Distribution = Distribution::None;
 
     this->VelocityShift_Start = FLT_MAX;
-	this->VelocityShift_Intervall = 0.0f;
+	this->VelocityShift_Interval = 0.0f;
 	this->VelocityShift_Duration = 0.0f;
-	this->VelocityShift_IntervallDegradation = 0.0f;
+	this->VelocityShift_IntervalDegradation = 0.0f;
 	this->VelocityShift_DurationDegradation = 0.0f;
 	this->VelocityShift_MaxVelocityDisturbance = 0.0f;
 	this->VelocityShift_Distribution = Distribution::None;
 
     this->RangeReduction_Start = FLT_MAX;
-	this->RangeReduction_Intervall = 0.0f;
+	this->RangeReduction_Interval = 0.0f;
 	this->RangeReduction_Duration = 0.0f;
-	this->RangeReduction_IntervallDegradation = 0.0f;
+	this->RangeReduction_IntervalDegradation = 0.0f;
 	this->RangeReduction_DurationDegradation = 0.0f;
 	this->RangeReduction_RangeReductionValue = 0.0f;
 	this->RangeReduction_OldRangeValue = 0.0f;
 	this->RangeReduction_Active = false;;
 
+    this->SensorBlockage_Start = FLT_MAX;
+    this->SensorBlockage_Interval = 0.0f;
+    this->SensorBlockage_IntervalDegradation = 0.0f;
+
+    this->SensorBlockage_AmountOfBlockingObjects = 0;
+    this->SensorBlockage_Type = SensorBlockage_BlockageType::CloseRange;
+
+    this->SensorBlockage_LifeTime = SensorBlockage_ObjectLifeTime::Static;
+    this->SensorBlockage_BlockingObjectLifeTime = -1.0f;
+    this->SensorBlockage_MaxBlockingObjectLifeTime = 0.0f;
+
+    this->SensorBlockage_BlockageDropSpeed = 0.0f;
+    this->SensorBlockage_HorFOVFlag = HorizontalFOV_Type::WholeHorFOV;
+    this->SensorBlockage_VertFOVFlag = VerticalFOV_Type::WholeVerFOV;
     //TestEndPoints();
 
 }
@@ -85,84 +100,68 @@ void AFaultyRadar::TestEndPoints()
     float MaxRx = FMath::Tan(FMath::DegreesToRadians(HorizontalFOV * 0.5f)) * Range;
     float MaxRy = FMath::Tan(FMath::DegreesToRadians(VerticalFOV * 0.5f)) * Range;
 
-    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::Left;
-    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::WholeVerFOV;
     int LeftCheck = 0;
     for(int i = 0; i < 150; i++)
     {
-        loc = CalculateEndLocation();
+        loc = CalculateEndLocation(false, VerticalFOV_Type::WholeVerFOV, HorizontalFOV_Type::Left);
         helper = loc - RadarLocation;
         if(helper.X <= RadarLocation.X)
             LeftCheck++;
         
     }
 
-    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::Right;
-    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::WholeVerFOV;
     int RightCheck = 0;
     for(int i = 0; i < 150; i++)
     {
-        loc = CalculateEndLocation();
+        loc = CalculateEndLocation(false, VerticalFOV_Type::WholeVerFOV, HorizontalFOV_Type::Right);
         if(loc.X >= RadarLocation.X)
             RightCheck++;
     }
 
-    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::WholeHorFOV;
-    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::Up;
     int UpCheck = 0;
     for(int i = 0; i < 150; i++)
     {
-        loc = CalculateEndLocation();
+        loc = CalculateEndLocation(false, VerticalFOV_Type::Up, HorizontalFOV_Type::WholeHorFOV);
         if(loc.Y >= RadarLocation.Y)
             UpCheck++;
     }
 
-    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::WholeHorFOV;
-    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::Down;
     int DownCheck = 0;
     for(int i = 0; i < 150; i++)
     {
-        loc = CalculateEndLocation();
+        loc = CalculateEndLocation(false, VerticalFOV_Type::Down, HorizontalFOV_Type::WholeHorFOV);
         if(loc.Y <= RadarLocation.Y)
             DownCheck++;
     }
 
-    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::Right;
-    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::Up;
     int UpRightCheck = 0;
     for(int i = 0; i < 150; i++)
     {
-        loc = CalculateEndLocation();
+        loc = CalculateEndLocation(false, VerticalFOV_Type::Up, HorizontalFOV_Type::Right);
         if(loc.Y >= RadarLocation.Y && loc.X >= RadarLocation.X)
             UpRightCheck++;
     }
 
-    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::Left;
-    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::Up;
     int UpLeftCheck = 0;
     for(int i = 0; i < 150; i++)
     {
-        loc = CalculateEndLocation();
+        loc = CalculateEndLocation(false, VerticalFOV_Type::Up, HorizontalFOV_Type::Left);
         if(loc.Y >= RadarLocation.Y && loc.X <= RadarLocation.X)
             UpLeftCheck++;
     }
 
-    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::Right;
-    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::Down;
     int DownRightCheck = 0;
     for(int i = 0; i < 150; i++)
     {
-        loc = CalculateEndLocation();
+        loc = CalculateEndLocation(false, VerticalFOV_Type::Down, HorizontalFOV_Type::Right);
         if(loc.Y <= RadarLocation.Y && loc.X >= RadarLocation.X)
             DownRightCheck++;
     }
 
-    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::Left;
-    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::Down;
     int DownLeftCheck = 0;
     for(int i = 0; i < 150; i++)
     {
-        loc = CalculateEndLocation();
+        loc = CalculateEndLocation(false, VerticalFOV_Type::Down, HorizontalFOV_Type::Left);
         if(loc.Y <= RadarLocation.Y && loc.X <= RadarLocation.X)
             DownLeftCheck++;
     }
@@ -217,10 +216,11 @@ void AFaultyRadar::MoveRadar()
     {
         if (time >= this->SensorShift_Start)
         {
-            if (time >= this->SensorShift_Start + this->SensorShift_Duration || this->SensorShiftFlag == SensorShift_Flag::JumpingShift)
+            if (time >= this->SensorShift_Start + this->SensorShift_Duration || 
+                    this->SensorShiftFlag == SensorShift_Flag::JumpingShift)
             {
-                this->SensorShift_Start += this->SensorShift_Intervall;
-                this->SensorShift_Intervall -= SensorShift_IntervallDegradation;
+                this->SensorShift_Start += this->SensorShift_Interval;
+                this->SensorShift_Interval -= SensorShift_IntervalDegradation;
                 this->SensorShift_Duration += SensorShift_DurationDegradation;
             }
 
@@ -255,40 +255,41 @@ void AFaultyRadar::OnConstruction(const FTransform& Transform)
     Super::OnConstruction(Transform);
 
 }
-void AFaultyRadar::GenerateHexagon(int Ammount)
+void AFaultyRadar::GenerateHexagons()
 {
-    float Range = 1.0f;
-    float CalculateHFOV = HorizontalFOV + 4.f;
-    float CalculateVFOV = VerticalFOV + 4.f;
-
-
-    const float MaxRx = FMath::Tan(FMath::DegreesToRadians(CalculateHFOV * 0.5f)) * Range;
-    const float MaxRy = FMath::Tan(FMath::DegreesToRadians(CalculateVFOV * 0.5f)) * Range;
-    const FTransform& ActorTransform = GetActorTransform();
-    const FRotator& TransformRotator = ActorTransform.Rotator();
-    const FVector& RadarLocation = GetActorLocation();
-    float Sin, Cos;
-
-    for (int32 i = 0; i < Ammount; i++)
+    for (int32 i = 0; i < SensorBlockage_AmountOfBlockingObjects; i++)
     {
-        const float Radius =RandomEngine->GetUniformFloat();
-        const float Angle = RandomEngine->GetUniformFloatInRange(0.0f, carla::geom::Math::Pi2<float>());
-        FMath::SinCos(&Sin, &Cos, Angle);
-        const FVector EndLocation = RadarLocation + TransformRotator.RotateVector({
-              Range,
-              MaxRx * Radius * Cos,
-              MaxRy * Radius * Sin
-            });
+        const FVector EndLocation = CalculateEndLocation(SensorBlockage_Type == SensorBlockage_BlockageType::CloseRange,
+            this->SensorBlockage_VertFOVFlag,this->SensorBlockage_HorFOVFlag);
 
         AHexagonActor* Hexagon = GetWorld()->SpawnActor<AHexagonActor>(EndLocation, FRotator(0.f, 0.f, 0.f));
         if (Hexagon != nullptr)
         {
             float Radius = FMath::FRandRange(.001f, .050f);//.0001f, .0050f);
             Hexagon->CreateHexagonMesh(Radius);
-            Hexagon->AttachToActor(this,FAttachmentTransformRules(EAttachmentRule::KeepWorld,true));
+
+            FVector TargetLocation = GetActorLocation();
+
+            // Calculate the direction vector from your actor to the target location
+            FVector Direction = (TargetLocation - Hexagon->GetActorLocation()).GetSafeNormal();
+
+            // Calculate the new rotation for your actor
+            FRotator NewRotation = Direction.Rotation() + FRotator(-90.f, 0.f, 0.f);
+
+            // Apply the new rotation to your actor
+            Hexagon->SetActorRotation(NewRotation);
+
+            //Hexagon->SetActorRotation(this->GetActorRotation() + FRotator(90.f, 0.f, 0.f));
+            Hexagon->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
             Hexagon->SetOwner(this);
-            Hexagon->SetActorRotation(this->GetActorRotation() + FRotator(90.f, 0.f, 0.f));
-            BlockObjects.Add(Hexagon);
+            float LifeTime = 0.1f;
+            if (SensorBlockage_LifeTime == SensorBlockage_ObjectLifeTime::Random)
+                LifeTime = CreateRandomNumber(Distribution::Linear) * SensorBlockage_MaxBlockingObjectLifeTime;
+            else
+                LifeTime = SensorBlockage_BlockingObjectLifeTime;
+            Hexagon->SetBlockageParamter(LifeTime, SensorBlockage_BlockageDropSpeed);
+            if(LifeTime < 0.0f)
+                BlockObjects.Add(Hexagon);
         }else
             UE_LOG(LogTemp, Error, TEXT("Hexagon == nullptr!"));
     }
@@ -297,6 +298,7 @@ void AFaultyRadar::GenerateHexagon(int Ammount)
 void AFaultyRadar::Destroyed()
 {
     // Notify ObjectBs that this object is destroyed
+    
     for (AActor* ObjectB : BlockObjects)
     {
         if (ObjectB != nullptr)
@@ -304,6 +306,7 @@ void AFaultyRadar::Destroyed()
             ObjectB->Destroy();
         }
     }
+    
 
     Super::Destroyed();
 }
@@ -317,7 +320,7 @@ bool AFaultyRadar::HasToLooseCurrentPackage()
             if (time >= this->PackageLoss_Start + this->PackageLoss_Duration)
             {
                 this->PackageLoss_Start += this->PackageLoss_Interval;
-                this->PackageLoss_Interval -= PackageLoss_IntervallDegradation;
+                this->PackageLoss_Interval -= PackageLoss_IntervalDegradation;
                 this->PackageLoss_Duration += PackageLoss_DurationDegradation;
             }
             return true;
@@ -352,8 +355,8 @@ void AFaultyRadar::ShiftDetectionPoints()
         {
             if (time >= this->DetectionPointShift_Start + this->DetectionPointShift_Duration)
             {
-                this->DetectionPointShift_Start += this->DetectionPointShift_Intervall;
-                this->DetectionPointShift_Intervall -= DetectionPointShift_IntervallDegradation;
+                this->DetectionPointShift_Start += this->DetectionPointShift_Interval;
+                this->DetectionPointShift_Interval -= DetectionPointShift_IntervalDegradation;
                 this->DetectionPointShift_Duration += DetectionPointShift_DurationDegradation;
             }
 
@@ -391,8 +394,8 @@ void AFaultyRadar::ShiftVelocitys()
         {
             if (time >= this->VelocityShift_Start + this->VelocityShift_Duration)
             {
-                this->VelocityShift_Start += this->VelocityShift_Intervall;
-                this->VelocityShift_Intervall -= VelocityShift_IntervallDegradation;
+                this->VelocityShift_Start += this->VelocityShift_Interval;
+                this->VelocityShift_Interval -= VelocityShift_IntervalDegradation;
                 this->VelocityShift_Duration += VelocityShift_DurationDegradation;
             }
 
@@ -419,8 +422,8 @@ void AFaultyRadar::CheckRangeReduction()
         {
             if (time >= this->RangeReduction_Start + this->RangeReduction_Duration)
             {
-                this->RangeReduction_Start += this->RangeReduction_Intervall;
-                this->RangeReduction_Intervall -= RangeReduction_IntervallDegradation;
+                this->RangeReduction_Start += this->RangeReduction_Interval;
+                this->RangeReduction_Interval -= RangeReduction_IntervalDegradation;
                 this->RangeReduction_Duration += RangeReduction_DurationDegradation;    
                 this->RangeReduction_Active = false;
                 this->Range = this->RangeReduction_OldRangeValue;
@@ -535,7 +538,7 @@ void AFaultyRadar::DetectNonExisitingPoints()
     DrawRadarBorder();
     DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::WholeHorFOV;
     DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::WholeVerFOV;
-    DetectNonExistingPoints_AmmountDetections = 5000;
+    DetectNonExistingPoints_AmountDetections = 5000;
     DetectNonExistingPoints_Duration = MAX_FLT;
     this->Range = 12.0f;
 #endif
@@ -547,13 +550,28 @@ void AFaultyRadar::DetectNonExisitingPoints()
         {
             if (time >= this->DetectNonExistingPoints_Start + this->DetectNonExistingPoints_Duration)
             {
-                this->DetectNonExistingPoints_Start += this->DetectNonExistingPoints_Intervall;
-                this->DetectNonExistingPoints_Intervall -= DetectNonExistingPoints_IntervallDegradation;
+                this->DetectNonExistingPoints_Start += this->DetectNonExistingPoints_Interval;
+                this->DetectNonExistingPoints_Interval -= DetectNonExistingPoints_IntervalDegradation;
                 this->DetectNonExistingPoints_Duration += DetectNonExistingPoints_DurationDegradation; 
                 return;
             }
 
             CreatePoints();
+        }
+    }
+}
+
+void AFaultyRadar::CreateBlockage() 
+{
+    float time = GetWorld()->GetTimeSeconds();
+    if (this->Scenario & ScenarioID::SensorBlockage)
+    {
+        if (time >= this->SensorBlockage_Start)
+        {
+            this->SensorBlockage_Start += this->SensorBlockage_Interval;
+            this->SensorBlockage_Interval -= SensorBlockage_IntervalDegradation;
+
+            GenerateHexagons();
         }
     }
 }
@@ -569,6 +587,8 @@ void AFaultyRadar::WriteLineTraces()
     DetectNonExisitingPoints();
     ShiftDetectionPoints();
     ShiftVelocitys();
+
+    CreateBlockage();
 
     if(this->Scenario & ScenarioID::PackageDelay)
     {
@@ -603,39 +623,42 @@ void AFaultyRadar::WriteLineTraces()
             {
                 PackageDelay_WaitCounter++;
             }
+            return;
         }
     }
-    else
-    {
-        ARadar::WriteLineTraces(Rays);
-    }
+    ARadar::WriteLineTraces(Rays);
+    
 }
 
-FVector AFaultyRadar::CalculateEndLocation()
+FVector AFaultyRadar::CalculateEndLocation(bool CloseRange, VerticalFOV_Type VertFOV, HorizontalFOV_Type HorzFOV)
 {
     // Create Random Angle and get Cos & Sin for that Angle
-    const float MaxRx = FMath::Tan(FMath::DegreesToRadians(HorizontalFOV * 0.5f)) * Range;
-    const float MaxRy = FMath::Tan(FMath::DegreesToRadians(VerticalFOV * 0.5f)) * Range;
+    float SpawnRange = CreateRandomNumber(Distribution::Linear) * this->Range;
+    if (CloseRange)
+        SpawnRange = 1.0f;
+        
+    const float MaxRx = FMath::Tan(FMath::DegreesToRadians(HorizontalFOV * 0.5f)) * SpawnRange;
+    const float MaxRy = FMath::Tan(FMath::DegreesToRadians(VerticalFOV * 0.5f)) * SpawnRange;
     float Angle = carla::geom::Math::Pi2<float>() * CreateRandomNumber(Distribution::Linear);
     float Sin, Cos;
     FMath::SinCos(&Sin, &Cos, Angle);
 
     //Create a EndPoint within the FOV based on the Random Angle
-    if (DetectNonExistingPoints_VertFOVFlag == VerticalFOV_Type::Down && Sin >= 0.0f )
+    if (VertFOV == VerticalFOV_Type::Down && Sin >= 0.0f )
         Sin = Sin * -1;
-    if (DetectNonExistingPoints_VertFOVFlag == VerticalFOV_Type::Up && Sin <= 0.0f)
+    if (VertFOV == VerticalFOV_Type::Up && Sin <= 0.0f)
         Sin = Sin* -1;
 
-    if (DetectNonExistingPoints_HorFOVFlag == HorizontalFOV_Type::Left && Cos >= 0.0f)
+    if (HorzFOV == HorizontalFOV_Type::Left && Cos >= 0.0f)
         Cos = Cos * -1;
-    if (DetectNonExistingPoints_HorFOVFlag == HorizontalFOV_Type::Right && Cos <= 0.0f)
+    if (HorzFOV == HorizontalFOV_Type::Right && Cos <= 0.0f)
         Cos = Cos * -1;
 
     const FVector& RadarLocation = GetActorLocation();
     const FTransform& ActorTransform = GetActorTransform();
     const FRotator& TransformRotator = ActorTransform.Rotator();
     FVector Helper = {
-       Range,
+       SpawnRange,
        MaxRx * Cos,
        MaxRy * Sin
     };
@@ -649,7 +672,7 @@ FVector AFaultyRadar::CalculateEndLocation()
 void AFaultyRadar::CreatePoints()
 {
     //Init some Basic Values needed for Following Calculations;
-    int AddPoints = this->DetectNonExistingPoints_AmmountDetections; // * ((int)gen_uniform());
+    int AddPoints = this->DetectNonExistingPoints_AmountDetections; // * ((int)gen_uniform());
     const FVector& RadarLocation = GetActorLocation();
     const FTransform& ActorTransform = GetActorTransform();
     const FRotator& TransformRotator = ActorTransform.Rotator();
@@ -660,7 +683,7 @@ void AFaultyRadar::CreatePoints()
 
     for (int i = 0; i < AddPoints; i++)
     {   
-        auto EndLocation = CalculateEndLocation();
+        auto EndLocation = CalculateEndLocation(false, DetectNonExistingPoints_VertFOVFlag, DetectNonExistingPoints_HorFOVFlag);
         data.Hitted = true;
         //Create a Fake positiv or negativ Velocity
         data.RelativeVelocity = CreateRandomNumber(Distribution::Linear);

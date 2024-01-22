@@ -29,7 +29,7 @@ struct FFaultyLidarDescription
   float PackageLoss_StartOffset;
   float PackageLoss_Start;
 
-  float PackageLoss_IntervallDegradation;
+  float PackageLoss_IntervalDegradation;
 
   FRotator ConstantShift_Rotation;
   float ConstantShift_Interval;

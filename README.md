@@ -66,13 +66,28 @@ Shifting Sensor Flags
 	};
 ```
 
+Blockage Flags
+```c++
+	enum SensorBlockage_BlockageType : int 
+	{
+		CloseRange = 0, //Blockages like Mud/Snow/Ice
+		FullRange = 1 //EveryObject is at a Random point within the FOV for e.g Rain
+	};
+	enum SensorBlockage_ObjectLifeTime : int
+	{
+		Static = 0, //Object has a Fixed LifeTime Negative LifeTime => Permanent LifeTime
+		Random = 1  //Object has a random lifeTime (for e.g melting Ice)
+	};
+```
+
 At the Current state the Radar supports the following Failure modes, while the LiDAR only supports the first 3 Models.
 * __Package Loss__ (Data transfer error/loss)
+	* PackageLoss_Start (time as amount of seconds after the sensor's creation the failure will appear for the first time)
 	* PackageLoss_Interval (interval the failure (re)appears)
 	* PackageLoss_Duration (duration of the failure)
-	* PackageLoss_IntervallDegradation (the amount the interval gets decreased to increase the failure rate during the simulation)
+	* PackageLoss_IntervalDegradation (the amount the interval gets decreased to increase the failure rate during the simulation)
 	* PackageLoss_DurationDegradation (the amount the Duration gets increased to increase the failure duration during the simulation)
-	* PackageLoss_Start (time as amount of seconds after the sensor's creation the failure will appear for the first time)
+	
 * __Package Delay__
 	* PackageDelay_Start (time when the first delay will occure)
 	* PackageDelay_Interval (interval when the next dely will occure)
@@ -81,9 +96,9 @@ At the Current state the Radar supports the following Failure modes, while the L
 	* PackageDelay_RingBufferMaxUseSize (Defines the size of the PackageRingBuffer (max 100), this will influence the time when packages will be lost and how many packages will be lost during the simulation)
 * __Detection Point Shift__
 	* DetectionPointShift_Start (time when the first shifts will occure)
-	* DetectionPointShift_Intervall (Intervall when the next shift failure will occure)
+	* DetectionPointShift_Interval (Interval when the next shift failure will occure)
 	* DetectionPointShift_Duration (Duration how long points will be shifted)
-	* DetectionPointShift_IntervallDegradation (How the Intervall will change between failures)
+	* DetectionPointShift_IntervalDegradation (How the Interval will change between failures)
 	* DetectionPointShift_DurationDegradation (How the Duration will change between failures)
 	* DetectionPoint_MaxDepthDisturbance (Whats the Max DepthDistrubance that can appear)
 	* DetectionPoint_MaxAzimuthDisturbance (Whats the Max AzimuthDistrubance that can appear , vertical of the point)
@@ -92,42 +107,54 @@ At the Current state the Radar supports the following Failure modes, while the L
 
 * __Velocity Point Shift__
 	* VelocityShift_Start (time when the first shifts will occure)
-	* VelocityShift_Intervall (Intervall when the next shift failure will occure)
+	* VelocityShift_Interval (Interval when the next shift failure will occure)
 	* VelocityShift_Duration (Duration how long points will be shifted)
-	* VelocityShift_IntervallDegradation (How the Intervall will change between failures)
+	* VelocityShift_IntervalDegradation (How the Interval will change between failures)
 	* VelocityShift_DurationDegradation (How the Duration will change between failures)
 	* VelocityShift_MaxVelocityDisturbance (Whats the Max Velocity Distrubance that can appear)
 	* VelocityShift_Distribution (Distribution of the Disturbance)
 
 * __Range Reduction__
 	* RangeReduction_Start (time when the first reduction will occure)
-	* RangeReduction_Intervall (Intervall when the next reduction failure will occure)
+	* RangeReduction_Interval (Interval when the next reduction failure will occure)
 	* RangeReduction_Duration (Duration how long the range will be reduced)
-	* RangeReduction_IntervallDegradation (How the Intervall will change between failures)
+	* RangeReduction_IntervalDegradation (How the Interval will change between failures)
 	* RangeReduction_DurationDegradation (How the Duration will change between failures)
-	* RangeReduction_RangeReductionValue (The Ammount the RadarRange gets decresed (in Meter))
+	* RangeReduction_RangeReductionValue (The Amount the RadarRange gets decresed (in Centimeter))
 	
 * __Detect Nonexisting Points__
 	* DetectNonExistingPoints_Start (time when the first appearence of non exsisting Points will happen)
-	* DetectNonExistingPoints_Intervall (Intervall when those failures will appear)
+	* DetectNonExistingPoints_Interval (Interval when those failures will appear)
 	* DetectNonExistingPoints_Duration (Duration how long non existing points will appear)
-	* DetectNonExistingPoints_IntervallDegradation (How the Intervall will change between failures)
+	* DetectNonExistingPoints_IntervalDegradation (How the Interval will change between failures)
 	* DetectNonExistingPoints_DurationDegradation (How the Duration will change between failures)
-	* DetectNonExistingPoints_AmmountDetections (How many False Detections will be added)
+	* DetectNonExistingPoints_AmountDetections (How many False Detections will be added)
 	* DetectNonExistingPoints_HorFOVFlag (Flag to specify where Points will appear Horizontally)
 	* DetectNonExistingPoints_VertFOVFlag (Flag to specify where Points will appear Vertically)
 
 * __Shifting Sensor__
 	* SensorShift_Start (When the Shift will appear)
-	* SensorShift_Intervall (Intervall when shifts will appear)
+	* SensorShift_Interval (Interval when shifts will appear)
 	* SensorShift_Duration (For Constant Shifts: How long a shift will last (each world tick shifts the Sensor), Not Used for Jumping Shifts)
-	* SensorShift_IntervallDegradation (How the Intervall will change between failures)
+	* SensorShift_IntervalDegradation (How the Interval will change between failures)
 	* SensorShift_DurationDegradation (How the Duration will change between failures)
 	* SensorShift_Yaw (Yaw Rotation added to the Sensor each Shift Scenario)
 	* SensorShift_Pitch (Pitch Rotation added to the Sensor each Shift Scenario)
 	* SensorShift_Roll (Roll Rotation added to the Sensor each Shift Scenario)
 	* SensorShiftFlag (Flag to determine if it is a Constant-Shift or a one time jumping shift)
 	* SensorShiftTriggerFlag (Flag to determine if the Shift will occure because of a event or timebased)
+* __Sensor Blockage__
+	* SensorBlockage_Start (Time when the first objects to block will spawn)
+	* SensorBlockage_Interval (Time between Blockageobject Spawns)
+	* SensorBlockage_IntervalDegradation (Timereduction between Spawns)
+	* SensorBlockage_AmountOfBlockingObjects (How many Objects will be spawned at each event)
+	* SensorBlockage_Type (Where the Objects will spawn)
+	* SensorBlockage_LifeTime (Flag what Liftime will be used)
+	* SensorBlockage_BlockingObjectLifeTime (Lifetime of the Objects -1 is default and equals to a infinite lifetime)
+	* SensorBlockage_MaxBlockingObjectLifeTime (Maximum Liftetime of an object for random lifetimes)
+	* SensorBlockage_BlockageDropSpeed (How fast a Blockageobject moves downwoards (0 is default))
+	* SensorBlockage_HorFOVFlag (where objetcs will spawn in the FOV of the Sensor)
+	* SensorBlockage_VertFOVFlag (where objetcs will spawn in the FOV of the Sensor)
 
 
 ## Usage

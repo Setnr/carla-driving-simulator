@@ -25,10 +25,12 @@ from carla import ColorConverter as cc
 
 import h5
 
-SIMULATION_TIME = 150 # In Seconds
+SIMULATION_TIME = 30 # In Seconds
 TIMESTAMP = datetime.datetime.timestamp(datetime.datetime.now())
 CHUNNK = 5000
 RENDER_HUD = True
+
+SYNC = True
 
 display = pygame.display.set_mode(
             (1280, 720),
@@ -37,16 +39,14 @@ display = pygame.display.set_mode(
 from enum import Enum
 class Scenario(Enum):
 
-    RadarBlocked = 1
-    RadarPackageLoss = 2
-    RadarConstantShift = 4
-    RadarVibration = 8
-    RadarDisturbance = 16
-    RadarRandomShift = 32
-    RadarCollosionShift = 64
-    RadarSpoofing = 128
-    RadarBlockage = 256
-    RadarPackageDelay = 512
+    PackageLoss = 1
+    PackageDelay = 2
+    DetectionPointShift = 4
+    VelocityShift = 8
+    RangeReduction = 16
+    DetectNonExistingPoints = 32
+    SensorShift = 64
+    SensorBlockage = 128
 
 class VehicleEnvironment:
     vehicle_list = []
@@ -115,7 +115,6 @@ class VehicleEnvironment:
     def process_radar_data(self, data, radar):
         velocity_range = 7.5 # m/s
         current_rot = data.transform.rotation
-
         for detect in data:
             azi = math.degrees(detect.azimuth)
             alt = math.degrees(detect.altitude)
@@ -131,7 +130,7 @@ class VehicleEnvironment:
             g = int(self.clamp(0.0, 1.0, 1.0 - abs(norm_velocity)) * 255.0)
             b = int(abs(self.clamp(- 1.0, 0.0, - 1.0 - norm_velocity)) * 255.0)
             self.world.debug.draw_point(detection_pos, size=0.075, life_time=0.06, 
-                persistent_lines=False, color=carla.Color(255, 255, 255))
+                persistent_lines=False, color=carla.Color(r, g, b))
 
             if self.store_radar_data:
                 self.hdffile.SaveRadarData(detect,radar,data.transform)
@@ -201,7 +200,7 @@ class VehicleEnvironment:
             print("Error spawning ego vehicle")
             exit(1)
         self.vehicle_list.append(self.vehicle)
-        self.vehicle.set_autopilot(False)
+        self.vehicle.set_autopilot(True)
 
         # Add Camera Manager to follow the ego vehicle with a view
         self.camera_manager = CameraManager(self.vehicle, self.hud,2.2)
@@ -210,15 +209,26 @@ class VehicleEnvironment:
 
         # Initialize and Setup front RADAR
         front_radar_model = self.world.get_blueprint_library().find('sensor.other.faulty_radar')
-        front_radar_model.set_attribute('horizontal_fov', str(35))
-        front_radar_model.set_attribute('vertical_fov', str(20))
+        front_radar_model.set_attribute('horizontal_fov', str(30))
+        front_radar_model.set_attribute('vertical_fov', str(45))
         front_radar_model.set_attribute('range', str(80))
-        front_radar_model.set_attribute("scenario",str(Scenario.RadarBlockage.value))
 
-        front_radar_model.set_attribute('Blockage_Start', str(80))
-        front_radar_model.set_attribute('Blockage_Interval', str(8))
-        front_radar_model.set_attribute('Blockage_HexagonAmmount', str(25))
-        #front_radar_model.set_attribute('RadarDisturbance_ProgressionRate', str(0))
+        front_radar_model.set_attribute("scenario",str(Scenario.SensorBlockage.value))
+        front_radar_model.set_attribute('SensorBlockage_Start', str(5))
+        front_radar_model.set_attribute('SensorBlockage_Interval', str(7))
+        front_radar_model.set_attribute('SensorBlockage_AmountOfBlockingObjects', str(40))
+        front_radar_model.set_attribute('SensorBlockage_Type', str(0))
+        front_radar_model.set_attribute('SensorBlockage_HorFOVFlag', str(1))
+        front_radar_model.set_attribute('SensorBlockage_VertFOVFlag', str(1))
+        front_radar_model.set_attribute('SensorBlockage_LifeTime', str(0))
+
+
+        #front_radar_model.set_attribute("scenario",str(Scenario.PackageLoss.value))
+        #front_radar_model.set_attribute('PackageLoss_Interval', str(8))
+        #front_radar_model.set_attribute('PackageLoss_Duration', str(0.5))
+        #front_radar_model.set_attribute('PackageLoss_Start', str(5))
+        #front_radar_model.set_attribute('PackageLoss_IntervalDegradation', str(1))
+        #front_radar_model.set_attribute('PackageLoss_DurationDegradation', str(0.5))
 
         bound_x = 0.5 + self.vehicle.bounding_box.extent.x
         bound_z = 0.5 + self.vehicle.bounding_box.extent.z
@@ -451,13 +461,13 @@ def simulate(recording, store_radar_data):
         time.sleep(5.0)
 
         traffic_manager = client.get_trafficmanager()
-        traffic_manager.set_synchronous_mode(False)            
+        traffic_manager.set_synchronous_mode(SYNC)            
         
         print("Creating Display ...")
         # Get world object that was started by another source (hopefully)
         world = client.get_world()
         settings = world.get_settings()
-        settings.synchronous_mode = False
+        settings.synchronous_mode = SYNC
         settings.fixed_delta_seconds = 0.05
         world.apply_settings(settings)
             
@@ -490,7 +500,7 @@ def simulate(recording, store_radar_data):
 
         if world is not None:
             settings = world.get_settings()
-            settings.synchronous_mode = False
+            settings.synchronous_mode = SYNC
             settings.fixed_delta_seconds = None
             world.apply_settings(settings)
         if env is not None:
@@ -545,7 +555,7 @@ def main():
     if args.playback:
         replay_recording(args.playback)
     else:
-        simulate(args.recording, True)
+        simulate(args.recording, False)
 
 
 

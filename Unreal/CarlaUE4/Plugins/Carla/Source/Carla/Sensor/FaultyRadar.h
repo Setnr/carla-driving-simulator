@@ -49,7 +49,7 @@ public:
   void AddPackageLossStart(float StartTime){
 	this->PackageLoss_Start = CalculateStartTime(StartTime);}
   void SetProgressionRate(float Rate){
-	this->PackageLoss_IntervallDegradation = Rate;}
+	this->PackageLoss_IntervalDegradation = Rate;}
 #pragma endregion
 
 #pragma region PackageDelay_Function
@@ -70,14 +70,14 @@ public:
 	void SetDetectionPointShift_Start(float StartTime){
 		this->DetectionPointShift_Start = CalculateStartTime(StartTime);
 	}
-	void SetDetectionPointShift_Intervall(float Intervall){
-		this->DetectionPointShift_Intervall = Intervall;
+	void SetDetectionPointShift_Interval(float Interval){
+		this->DetectionPointShift_Interval = Interval;
 	}
 	void SetDetectionPointShift_Duration(float Duration){
 		this->DetectionPointShift_Duration = Duration;
 	}
-	void SetDetectionPointShift_IntervallDegradation(float IntDegre){
-		this->DetectionPointShift_IntervallDegradation = IntDegre;
+	void SetDetectionPointShift_IntervalDegradation(float IntDegre){
+		this->DetectionPointShift_IntervalDegradation = IntDegre;
 	}
 	void SetDetectionPointShift_DurationDegradation(float DuraDegre){
 		this->DetectionPointShift_DurationDegradation = DuraDegre;
@@ -101,14 +101,14 @@ public:
 	void SetVelocityShift_Start(float StartTime){
 		this->VelocityShift_Start = CalculateStartTime(StartTime);
 	}
-	void SetVelocityShift_Intervall(float Intervall){
-		this->VelocityShift_Intervall=Intervall;
+	void SetVelocityShift_Interval(float Interval){
+		this->VelocityShift_Interval=Interval;
 	}
 	void SetVelocityShift_Duration(float Duration){
 		this->VelocityShift_Duration = Duration;
 	}
-	void SetVelocityShift_IntervallDegradation(float InterDegre){
-		this->VelocityShift_IntervallDegradation = InterDegre;
+	void SetVelocityShift_IntervalDegradation(float InterDegre){
+		this->VelocityShift_IntervalDegradation = InterDegre;
 	}
 	void SetVelocityShift_DurationDegradation(float DuraDegre){
 		this->VelocityShift_DurationDegradation = DuraDegre;
@@ -125,14 +125,14 @@ public:
 	void SetRangeReduction_Start(float StartTime){
 		this->RangeReduction_Start = CalculateStartTime(StartTime);
 	}
-	void SetRangeReduction_Intervall(float Intervall){
-		this->RangeReduction_Intervall = Intervall;
+	void SetRangeReduction_Interval(float Interval){
+		this->RangeReduction_Interval = Interval;
 	}
 	void SetRangeReduction_Duration(float Duration){
 		this->RangeReduction_Duration = Duration;
 	}
-	void SetRangeReduction_IntervallDegradation(float IntDeg){
-		this->RangeReduction_IntervallDegradation = IntDeg;
+	void SetRangeReduction_IntervalDegradation(float IntDeg){
+		this->RangeReduction_IntervalDegradation = IntDeg;
 	}
 	void SetRangeReduction_DurationDegradation(float DurDeg){
 		this->RangeReduction_DurationDegradation = DurDeg;
@@ -147,20 +147,20 @@ public:
 	void SetDetectNonExistingPoints_Start(float StartTime) {
 		this->DetectNonExistingPoints_Start = CalculateStartTime(StartTime);
 	}
-	void SetDetectNonExistingPoints_Intervall(float Intervall) {
-		this->DetectNonExistingPoints_Intervall = Intervall;
+	void SetDetectNonExistingPoints_Interval(float Interval) {
+		this->DetectNonExistingPoints_Interval = Interval;
 	}
 	void SetDetectNonExistingPoints_Duration(float Duration) {
 		this->DetectNonExistingPoints_Duration = Duration;
 	}
-	void SetDetectNonExistingPoints_IntervallDegradation(float InterDeg) {
-		this->DetectNonExistingPoints_IntervallDegradation = InterDeg;
+	void SetDetectNonExistingPoints_IntervalDegradation(float InterDeg) {
+		this->DetectNonExistingPoints_IntervalDegradation = InterDeg;
 	}
 	void SetDetectNonExistingPoints_DurationDegradation(float DuraDeg) {
 		this->DetectNonExistingPoints_DurationDegradation = DuraDeg;
 	}
-	void SetDetectNonExistingPoints_AmmountDetections(int MaxAmmount) {
-		this->DetectNonExistingPoints_AmmountDetections = MaxAmmount;
+	void SetDetectNonExistingPoints_AmountDetections(int MaxAmount) {
+		this->DetectNonExistingPoints_AmountDetections = MaxAmount;
 	}
 	 
 	void SetDetectNonExistingPoints_HorFOVFlag(int HorFov) {
@@ -181,14 +181,14 @@ public:
 	void SetSensorShift_Start(float StartTime) {
 		this->SensorShift_Start = CalculateStartTime(StartTime);
 	}
-	void SetSensorShift_Intervall(float Intervall) {
-		this->SensorShift_Intervall = Intervall;
+	void SetSensorShift_Interval(float Interval) {
+		this->SensorShift_Interval = Interval;
 	}
 	void SetSensorShift_Duration(float Duration) {
 		this->SensorShift_Duration = Duration;
 	}
-	void SetSensorShift_IntervallDegradation(float InterDegre) {
-		this->SensorShift_IntervallDegradation = InterDegre;
+	void SetSensorShift_IntervalDegradation(float InterDegre) {
+		this->SensorShift_IntervalDegradation = InterDegre;
 	}
 	void SetSensorShift_DurationDegradation(float DuraDegre) {
 		this->SensorShift_DurationDegradation = DuraDegre;
@@ -218,6 +218,64 @@ public:
 	}
 #pragma endregion
 
+#pragma region SensorBlockage_Function
+
+	void SetSensorBlockage_Start(float StartTime) {
+		this->SensorBlockage_Start = CalculateStartTime(StartTime);
+	}
+
+	void SetSensorBlockage_Interval(float Interval) {
+		this->SensorBlockage_Interval = Interval;
+	}
+
+	void SetSensorBlockage_IntervalDegradation(float Degredation) {
+		this->SensorBlockage_IntervalDegradation = Degredation;
+	}
+
+	void SetSensorBlockage_AmountOfBlockingObjects(int Amount) {
+		this->SensorBlockage_AmountOfBlockingObjects = Amount;
+	}
+
+	void SetSensorBlockage_Type(int Flag) {
+		if (Flag < 0 || Flag > 1)
+			this->SensorBlockage_Type = SensorBlockage_BlockageType::CloseRange;
+		else
+			this->SensorBlockage_Type = (SensorBlockage_BlockageType)Flag;
+	}
+
+	void SetSensorBlockage_LifeTime(int Flag) 
+	{
+		if (Flag < 0 || Flag > 1)
+			this->SensorBlockage_LifeTime = SensorBlockage_ObjectLifeTime::Static;
+		else
+			this->SensorBlockage_LifeTime = (SensorBlockage_ObjectLifeTime)Flag;
+	}
+
+	void SetSensorBlockage_BlockingObjectLifeTime(float LifeTime) {
+		this->SensorBlockage_BlockingObjectLifeTime = LifeTime;
+	}
+	void SetSensorBlockage_MaxBlockingObjectLifeTime(float MaxLifeTime) {
+		this->SensorBlockage_MaxBlockingObjectLifeTime = MaxLifeTime;
+	}
+	void SetSensorBlockage_BlockageDropSpeed(float DroppSpeed) {
+		this->SensorBlockage_BlockageDropSpeed = DroppSpeed;
+	}
+	void SetSensorBlockage_HorFOVFlag(int HorFov) {
+		if (HorFov <= 2 && HorFov >= 0)
+			this->SensorBlockage_HorFOVFlag = (HorizontalFOV_Type)HorFov;
+		else
+			this->SensorBlockage_HorFOVFlag = HorizontalFOV_Type::WholeHorFOV;
+	}
+	void SetSensorBlockage_VertFOVFlag(int VertFov) {
+		if (VertFov <= 2 && VertFov >= 0)
+			this->SensorBlockage_VertFOVFlag = (VerticalFOV_Type)VertFov;
+		else
+			this->SensorBlockage_VertFOVFlag = VerticalFOV_Type::WholeVerFOV;
+	}
+
+#pragma endregion
+	
+
   void EventShift();
   void MoveRadar(FRotator rot);
   void MoveRadar(); // Moves the Radar -> Used For RadarCollosionShift
@@ -232,13 +290,12 @@ private:
 	
 	enum ScenarioID : int
 	{
-		PackageLoss = 0x1,
-		PackageDelay = 0x2,
-		DetectionPointShift = 0x4,
-		VelocityShift = 0x8,
-		RangeReduction = 0x10,
-		DetectNonExistingPoints = 0x20,
-
+		PackageLoss = 0x1, //
+		PackageDelay = 0x2, //
+		DetectionPointShift = 0x4, //
+		VelocityShift = 0x8, //
+		RangeReduction = 0x10, //
+		DetectNonExistingPoints = 0x20,//
 		SensorShift = 0x40,
 		SensorBlockage = 0x80
 	};
@@ -248,14 +305,14 @@ private:
 	float PackageLoss_Interval;
 	float PackageLoss_Duration;
 	float PackageLoss_Start;
-	float PackageLoss_IntervallDegradation;
+	float PackageLoss_IntervalDegradation;
 	float PackageLoss_DurationDegradation;
 	bool HasToLooseCurrentPackage();
 
 	float PackageDelay_Start; // Wann tritt der Fehler zuerst auf
-	float PackageDelay_DegradationZeit; //Hilfsvariable um die Intervalle zu tracken
-	float PackageDelay_Interval; //In welchem Zeitintervall verschlechter sich der Fehler
-	int PackageDelay_DegradationSize; // Wie viele Packete werden nach jedem Intervall neu versetzt
+	float PackageDelay_DegradationZeit; //Hilfsvariable um die Intervale zu tracken
+	float PackageDelay_Interval; //In welchem ZeitInterval verschlechter sich der Fehler
+	int PackageDelay_DegradationSize; // Wie viele Packete werden nach jedem Interval neu versetzt
 	int PackageDelay_DelaySize; //Wie viele Packete sind versetzt, zu diesem Zeitpunkt in der Sim.
 								// Kann initial gesetzt werden um zu sagen wie viele Packete beim ersten Auftreten versetzt werden sollen.
 	int PackageDelay_WaitCounter; // Wie viele Packete sind zu dem Zeitpunkt schon versetzt
@@ -266,9 +323,9 @@ private:
 	int PackageDelay_RingBufferMaxUseSize;
 
 	float DetectionPointShift_Start;
-	float DetectionPointShift_Intervall;
+	float DetectionPointShift_Interval;
 	float DetectionPointShift_Duration;
-	float DetectionPointShift_IntervallDegradation;
+	float DetectionPointShift_IntervalDegradation;
 	float DetectionPointShift_DurationDegradation;
 	float DetectionPoint_MaxDepthDisturbance;
 	float DetectionPoint_MaxAzimuthDisturbance;
@@ -277,18 +334,18 @@ private:
 	void ShiftDetectionPoints();
 
 	float VelocityShift_Start;
-	float VelocityShift_Intervall;
+	float VelocityShift_Interval;
 	float VelocityShift_Duration;
-	float VelocityShift_IntervallDegradation;
+	float VelocityShift_IntervalDegradation;
 	float VelocityShift_DurationDegradation;
 	float VelocityShift_MaxVelocityDisturbance;
 	Distribution VelocityShift_Distribution;
 	void ShiftVelocitys();
 
 	float RangeReduction_Start;
-	float RangeReduction_Intervall;
+	float RangeReduction_Interval;
 	float RangeReduction_Duration;
-	float RangeReduction_IntervallDegradation;
+	float RangeReduction_IntervalDegradation;
 	float RangeReduction_DurationDegradation;
 	float RangeReduction_RangeReductionValue;
 	float RangeReduction_OldRangeValue;
@@ -308,18 +365,18 @@ private:
 		Up = 2
 	};
 	float DetectNonExistingPoints_Start;
-	float DetectNonExistingPoints_Intervall;
+	float DetectNonExistingPoints_Interval;
 	float DetectNonExistingPoints_Duration;
-	float DetectNonExistingPoints_IntervallDegradation;
+	float DetectNonExistingPoints_IntervalDegradation;
 	float DetectNonExistingPoints_DurationDegradation;
-	int DetectNonExistingPoints_AmmountDetections;
+	int DetectNonExistingPoints_AmountDetections;
 	HorizontalFOV_Type DetectNonExistingPoints_HorFOVFlag;
 	VerticalFOV_Type DetectNonExistingPoints_VertFOVFlag;
 
 	void DetectNonExisitingPoints();
   	void CreatePoints();
 	void TestEndPoints();
-	FVector CalculateEndLocation();
+	FVector CalculateEndLocation(bool CloseRange, VerticalFOV_Type VertFOV, HorizontalFOV_Type HorzFOV);
 
 	enum SensorShift_Flag : int 
 	{
@@ -333,9 +390,9 @@ private:
 	};
 
 	float SensorShift_Start;
-	float SensorShift_Intervall;
+	float SensorShift_Interval;
 	float SensorShift_Duration;
-	float SensorShift_IntervallDegradation;
+	float SensorShift_IntervalDegradation;
 	float SensorShift_DurationDegradation;
 	float SensorShift_Yaw;
 	float SensorShift_Pitch;
@@ -345,7 +402,34 @@ private:
 
 	void ShiftSensor();
 
-  void GenerateHexagon(int Ammount);
+	enum SensorBlockage_BlockageType : int 
+	{
+		CloseRange = 0, //Blockages like Mud/Snow/Ice
+		FullRange = 1 //EveryObject is at a Random point within the FOV for e.g Rain
+	};
+	enum SensorBlockage_ObjectLifeTime : int
+	{
+		Static = 0, //Object has a Fixed LifeTime Negative LifeTime => Permanent LifeTime
+		Random = 1  //Object has a random lifeTime (for e.g melting Ice)
+	};
+	float SensorBlockage_Start;
+	float SensorBlockage_Interval;
+	float SensorBlockage_IntervalDegradation;
+	
+	int SensorBlockage_AmountOfBlockingObjects;
+	SensorBlockage_BlockageType SensorBlockage_Type;
+
+	SensorBlockage_ObjectLifeTime SensorBlockage_LifeTime;
+	float SensorBlockage_BlockingObjectLifeTime;
+	float SensorBlockage_MaxBlockingObjectLifeTime;
+	
+	float SensorBlockage_BlockageDropSpeed; // Speed the Object moves downwoards (Falling Rain or Mud which moves slowly away)
+
+	HorizontalFOV_Type SensorBlockage_HorFOVFlag;
+	VerticalFOV_Type SensorBlockage_VertFOVFlag;
+
+	void GenerateHexagons();
+	void CreateBlockage();
 
 
   virtual void WriteLineTraces();

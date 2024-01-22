@@ -962,11 +962,11 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     PackageLoss_Start.RecommendedValues = { TEXT("0") };
     PackageLoss_Start.bRestrictToRecommended = false;
 
-    FActorVariation PackageLoss_IntervallDegradation;
-    PackageLoss_IntervallDegradation.Id = TEXT("PackageLoss_IntervallDegradation");
-    PackageLoss_IntervallDegradation.Type = EActorAttributeType::Float;
-    PackageLoss_IntervallDegradation.RecommendedValues = { TEXT("0") };
-    PackageLoss_IntervallDegradation.bRestrictToRecommended = false;
+    FActorVariation PackageLoss_IntervalDegradation;
+    PackageLoss_IntervalDegradation.Id = TEXT("PackageLoss_IntervalDegradation");
+    PackageLoss_IntervalDegradation.Type = EActorAttributeType::Float;
+    PackageLoss_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    PackageLoss_IntervalDegradation.bRestrictToRecommended = false;
 
     FActorVariation PackageLoss_DurationDegradation;
     PackageLoss_DurationDegradation.Id = TEXT("PackageLoss_DurationDegradation");
@@ -1011,11 +1011,11 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     DetectionPointShift_Start.RecommendedValues = { TEXT("0") };
     DetectionPointShift_Start.bRestrictToRecommended = false;
 
-    FActorVariation DetectionPointShift_Intervall;
-    DetectionPointShift_Intervall.Id = TEXT("DetectionPointShift_Intervall");
-    DetectionPointShift_Intervall.Type = EActorAttributeType::Float;
-    DetectionPointShift_Intervall.RecommendedValues = { TEXT("0") };
-    DetectionPointShift_Intervall.bRestrictToRecommended = false;
+    FActorVariation DetectionPointShift_Interval;
+    DetectionPointShift_Interval.Id = TEXT("DetectionPointShift_Interval");
+    DetectionPointShift_Interval.Type = EActorAttributeType::Float;
+    DetectionPointShift_Interval.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_Interval.bRestrictToRecommended = false;
 
     FActorVariation DetectionPointShift_Duration;
     DetectionPointShift_Duration.Id = TEXT("DetectionPointShift_Duration");
@@ -1023,11 +1023,11 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     DetectionPointShift_Duration.RecommendedValues = { TEXT("0") };
     DetectionPointShift_Duration.bRestrictToRecommended = false;
 
-    FActorVariation DetectionPointShift_IntervallDegradation;
-    DetectionPointShift_IntervallDegradation.Id = TEXT("DetectionPointShift_IntervallDegradation");
-    DetectionPointShift_IntervallDegradation.Type = EActorAttributeType::Float;
-    DetectionPointShift_IntervallDegradation.RecommendedValues = { TEXT("0") };
-    DetectionPointShift_IntervallDegradation.bRestrictToRecommended = false;
+    FActorVariation DetectionPointShift_IntervalDegradation;
+    DetectionPointShift_IntervalDegradation.Id = TEXT("DetectionPointShift_IntervalDegradation");
+    DetectionPointShift_IntervalDegradation.Type = EActorAttributeType::Float;
+    DetectionPointShift_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_IntervalDegradation.bRestrictToRecommended = false;
 
     FActorVariation DetectionPointShift_DurationDegradation;
     DetectionPointShift_DurationDegradation.Id = TEXT("DetectionPointShift_DurationDegradation");
@@ -1067,11 +1067,11 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     VelocityShift_Start.RecommendedValues = { TEXT("0") };
     VelocityShift_Start.bRestrictToRecommended = false;
 
-    FActorVariation VelocityShift_Intervall;
-    VelocityShift_Intervall.Id = TEXT("VelocityShift_Intervall");
-    VelocityShift_Intervall.Type = EActorAttributeType::Float;
-    VelocityShift_Intervall.RecommendedValues = { TEXT("0") };
-    VelocityShift_Intervall.bRestrictToRecommended = false;
+    FActorVariation VelocityShift_Interval;
+    VelocityShift_Interval.Id = TEXT("VelocityShift_Interval");
+    VelocityShift_Interval.Type = EActorAttributeType::Float;
+    VelocityShift_Interval.RecommendedValues = { TEXT("0") };
+    VelocityShift_Interval.bRestrictToRecommended = false;
 
     FActorVariation VelocityShift_Duration;
     VelocityShift_Duration.Id = TEXT("VelocityShift_Duration");
@@ -1079,11 +1079,11 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     VelocityShift_Duration.RecommendedValues = { TEXT("0") };
     VelocityShift_Duration.bRestrictToRecommended = false;
 
-    FActorVariation VelocityShift_IntervallDegradation;
-    VelocityShift_IntervallDegradation.Id = TEXT("VelocityShift_IntervallDegradation");
-    VelocityShift_IntervallDegradation.Type = EActorAttributeType::Float;
-    VelocityShift_IntervallDegradation.RecommendedValues = { TEXT("0") };
-    VelocityShift_IntervallDegradation.bRestrictToRecommended = false;
+    FActorVariation VelocityShift_IntervalDegradation;
+    VelocityShift_IntervalDegradation.Id = TEXT("VelocityShift_IntervalDegradation");
+    VelocityShift_IntervalDegradation.Type = EActorAttributeType::Float;
+    VelocityShift_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    VelocityShift_IntervalDegradation.bRestrictToRecommended = false;
 
     FActorVariation VelocityShift_DurationDegradation;
     VelocityShift_DurationDegradation.Id = TEXT("VelocityShift_DurationDegradation");
@@ -1112,11 +1112,11 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     RangeReduction_Start.bRestrictToRecommended = false;
 
 
-    FActorVariation RangeReduction_Intervall;
-    RangeReduction_Intervall.Id = TEXT("RangeReduction_Intervall");
-    RangeReduction_Intervall.Type = EActorAttributeType::Float;
-    RangeReduction_Intervall.RecommendedValues = { TEXT("0") };
-    RangeReduction_Intervall.bRestrictToRecommended = false;
+    FActorVariation RangeReduction_Interval;
+    RangeReduction_Interval.Id = TEXT("RangeReduction_Interval");
+    RangeReduction_Interval.Type = EActorAttributeType::Float;
+    RangeReduction_Interval.RecommendedValues = { TEXT("0") };
+    RangeReduction_Interval.bRestrictToRecommended = false;
 
 
     FActorVariation RangeReduction_Duration;
@@ -1126,11 +1126,11 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     RangeReduction_Duration.bRestrictToRecommended = false;
 
 
-    FActorVariation RangeReduction_IntervallDegradation;
-    RangeReduction_IntervallDegradation.Id = TEXT("RangeReduction_IntervallDegradation");
-    RangeReduction_IntervallDegradation.Type = EActorAttributeType::Float;
-    RangeReduction_IntervallDegradation.RecommendedValues = { TEXT("0") };
-    RangeReduction_IntervallDegradation.bRestrictToRecommended = false;
+    FActorVariation RangeReduction_IntervalDegradation;
+    RangeReduction_IntervalDegradation.Id = TEXT("RangeReduction_IntervalDegradation");
+    RangeReduction_IntervalDegradation.Type = EActorAttributeType::Float;
+    RangeReduction_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    RangeReduction_IntervalDegradation.bRestrictToRecommended = false;
 
 
     FActorVariation RangeReduction_DurationDegradation;
@@ -1153,11 +1153,11 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     DetectNonExistingPoints_Start.RecommendedValues = { TEXT("0") };
     DetectNonExistingPoints_Start.bRestrictToRecommended = false;
 
-    FActorVariation DetectNonExistingPoints_Intervall;
-    DetectNonExistingPoints_Intervall.Id = TEXT("DetectNonExistingPoints_Intervall");
-    DetectNonExistingPoints_Intervall.Type = EActorAttributeType::Float;
-    DetectNonExistingPoints_Intervall.RecommendedValues = { TEXT("0") };
-    DetectNonExistingPoints_Intervall.bRestrictToRecommended = false;
+    FActorVariation DetectNonExistingPoints_Interval;
+    DetectNonExistingPoints_Interval.Id = TEXT("DetectNonExistingPoints_Interval");
+    DetectNonExistingPoints_Interval.Type = EActorAttributeType::Float;
+    DetectNonExistingPoints_Interval.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_Interval.bRestrictToRecommended = false;
 
     FActorVariation DetectNonExistingPoints_Duration;
     DetectNonExistingPoints_Duration.Id = TEXT("DetectNonExistingPoints_Duration");
@@ -1165,11 +1165,11 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     DetectNonExistingPoints_Duration.RecommendedValues = { TEXT("0") };
     DetectNonExistingPoints_Duration.bRestrictToRecommended = false;
 
-    FActorVariation DetectNonExistingPoints_IntervallDegradation;
-    DetectNonExistingPoints_IntervallDegradation.Id = TEXT("DetectNonExistingPoints_IntervallDegradation");
-    DetectNonExistingPoints_IntervallDegradation.Type = EActorAttributeType::Float;
-    DetectNonExistingPoints_IntervallDegradation.RecommendedValues = { TEXT("0") };
-    DetectNonExistingPoints_IntervallDegradation.bRestrictToRecommended = false;
+    FActorVariation DetectNonExistingPoints_IntervalDegradation;
+    DetectNonExistingPoints_IntervalDegradation.Id = TEXT("DetectNonExistingPoints_IntervalDegradation");
+    DetectNonExistingPoints_IntervalDegradation.Type = EActorAttributeType::Float;
+    DetectNonExistingPoints_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_IntervalDegradation.bRestrictToRecommended = false;
 
     FActorVariation DetectNonExistingPoints_DurationDegradation;
     DetectNonExistingPoints_DurationDegradation.Id = TEXT("DetectNonExistingPoints_DurationDegradation");
@@ -1177,11 +1177,11 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     DetectNonExistingPoints_DurationDegradation.RecommendedValues = { TEXT("0") };
     DetectNonExistingPoints_DurationDegradation.bRestrictToRecommended = false;
 
-    FActorVariation DetectNonExistingPoints_AmmountDetections;
-    DetectNonExistingPoints_AmmountDetections.Id = TEXT("DetectNonExistingPoints_AmmountDetections");
-    DetectNonExistingPoints_AmmountDetections.Type = EActorAttributeType::Int;
-    DetectNonExistingPoints_AmmountDetections.RecommendedValues = { TEXT("0") };
-    DetectNonExistingPoints_AmmountDetections.bRestrictToRecommended = false;
+    FActorVariation DetectNonExistingPoints_AmountDetections;
+    DetectNonExistingPoints_AmountDetections.Id = TEXT("DetectNonExistingPoints_AmountDetections");
+    DetectNonExistingPoints_AmountDetections.Type = EActorAttributeType::Int;
+    DetectNonExistingPoints_AmountDetections.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_AmountDetections.bRestrictToRecommended = false;
 
     FActorVariation DetectNonExistingPoints_HorFOVFlag;
     DetectNonExistingPoints_HorFOVFlag.Id = TEXT("DetectNonExistingPoints_HorFOVFlag");
@@ -1201,11 +1201,11 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     SensorShift_Start.RecommendedValues = { TEXT("0") };
     SensorShift_Start.bRestrictToRecommended = false;
 
-    FActorVariation SensorShift_Intervall;
-    SensorShift_Intervall.Id = TEXT("SensorShift_Intervall");
-    SensorShift_Intervall.Type = EActorAttributeType::Float;
-    SensorShift_Intervall.RecommendedValues = { TEXT("0") };
-    SensorShift_Intervall.bRestrictToRecommended = false;
+    FActorVariation SensorShift_Interval;
+    SensorShift_Interval.Id = TEXT("SensorShift_Interval");
+    SensorShift_Interval.Type = EActorAttributeType::Float;
+    SensorShift_Interval.RecommendedValues = { TEXT("0") };
+    SensorShift_Interval.bRestrictToRecommended = false;
 
     FActorVariation SensorShift_Duration;
     SensorShift_Duration.Id = TEXT("SensorShift_Duration");
@@ -1213,11 +1213,11 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     SensorShift_Duration.RecommendedValues = { TEXT("0") };
     SensorShift_Duration.bRestrictToRecommended = false;
 
-    FActorVariation SensorShift_IntervallDegradation;
-    SensorShift_IntervallDegradation.Id = TEXT("SensorShift_IntervallDegradation");
-    SensorShift_IntervallDegradation.Type = EActorAttributeType::Float;
-    SensorShift_IntervallDegradation.RecommendedValues = { TEXT("0") };
-    SensorShift_IntervallDegradation.bRestrictToRecommended = false;
+    FActorVariation SensorShift_IntervalDegradation;
+    SensorShift_IntervalDegradation.Id = TEXT("SensorShift_IntervalDegradation");
+    SensorShift_IntervalDegradation.Type = EActorAttributeType::Float;
+    SensorShift_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    SensorShift_IntervalDegradation.bRestrictToRecommended = false;
 
     FActorVariation SensorShift_DurationDegradation;
     SensorShift_DurationDegradation.Id = TEXT("SensorShift_DurationDegradation");
@@ -1255,7 +1255,62 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     SensorShiftTriggerFlag.RecommendedValues = { TEXT("0") };
     SensorShiftTriggerFlag.bRestrictToRecommended = false;
 
+    FActorVariation SensorBlockage_Start;
+    SensorBlockage_Start.Id = TEXT("SensorBlockage_Start");
+    SensorBlockage_Start.Type = EActorAttributeType::Float;
+    SensorBlockage_Start.RecommendedValues = { TEXT("0") };
+    SensorBlockage_Start.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_Interval;
+    SensorBlockage_Interval.Id = TEXT("SensorBlockage_Interval");
+    SensorBlockage_Interval.Type = EActorAttributeType::Float;
+    SensorBlockage_Interval.RecommendedValues = { TEXT("0") };
+    SensorBlockage_Interval.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_IntervalDegradation;
+    SensorBlockage_IntervalDegradation.Id = TEXT("SensorBlockage_IntervalDegradation");
+    SensorBlockage_IntervalDegradation.Type = EActorAttributeType::Float;
+    SensorBlockage_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    SensorBlockage_IntervalDegradation.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_BlockingObjectLifeTime;
+    SensorBlockage_BlockingObjectLifeTime.Id = TEXT("SensorBlockage_BlockingObjectLifeTime");
+    SensorBlockage_BlockingObjectLifeTime.Type = EActorAttributeType::Float;
+    SensorBlockage_BlockingObjectLifeTime.RecommendedValues = { TEXT("0") };
+    SensorBlockage_BlockingObjectLifeTime.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_MaxBlockingObjectLifeTime;
+    SensorBlockage_MaxBlockingObjectLifeTime.Id = TEXT("SensorBlockage_MaxBlockingObjectLifeTime");
+    SensorBlockage_MaxBlockingObjectLifeTime.Type = EActorAttributeType::Float;
+    SensorBlockage_MaxBlockingObjectLifeTime.RecommendedValues = { TEXT("0") };
+    SensorBlockage_MaxBlockingObjectLifeTime.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_BlockageDropSpeed;
+    SensorBlockage_BlockageDropSpeed.Id = TEXT("SensorBlockage_BlockageDropSpeed");
+    SensorBlockage_BlockageDropSpeed.Type = EActorAttributeType::Float;
+    SensorBlockage_BlockageDropSpeed.RecommendedValues = { TEXT("0") };
+    SensorBlockage_BlockageDropSpeed.bRestrictToRecommended = false;
 
+    FActorVariation SensorBlockage_AmountOfBlockingObjects;
+    SensorBlockage_AmountOfBlockingObjects.Id = TEXT("SensorBlockage_AmountOfBlockingObjects");
+    SensorBlockage_AmountOfBlockingObjects.Type = EActorAttributeType::Int;
+    SensorBlockage_AmountOfBlockingObjects.RecommendedValues = { TEXT("0") };
+    SensorBlockage_AmountOfBlockingObjects.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_Type;
+    SensorBlockage_Type.Id = TEXT("SensorBlockage_Type");
+    SensorBlockage_Type.Type = EActorAttributeType::Int;
+    SensorBlockage_Type.RecommendedValues = { TEXT("0") };
+    SensorBlockage_Type.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_LifeTime;
+    SensorBlockage_LifeTime.Id = TEXT("SensorBlockage_LifeTime");
+    SensorBlockage_LifeTime.Type = EActorAttributeType::Int;
+    SensorBlockage_LifeTime.RecommendedValues = { TEXT("0") };
+    SensorBlockage_LifeTime.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_HorFOVFlag;
+    SensorBlockage_HorFOVFlag.Id = TEXT("SensorBlockage_HorFOVFlag");
+    SensorBlockage_HorFOVFlag.Type = EActorAttributeType::Int;
+    SensorBlockage_HorFOVFlag.RecommendedValues = { TEXT("0") };
+    SensorBlockage_HorFOVFlag.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_VertFOVFlag;
+    SensorBlockage_VertFOVFlag.Id = TEXT("SensorBlockage_VertFOVFlag");
+    SensorBlockage_VertFOVFlag.Type = EActorAttributeType::Int;
+    SensorBlockage_VertFOVFlag.RecommendedValues = { TEXT("0") };
+    SensorBlockage_VertFOVFlag.bRestrictToRecommended = false;
     Definition.Variations.Append({
       HorizontalFOV,
       VerticalFOV,
@@ -1266,7 +1321,7 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
         PackageLoss_Interval,
         PackageLoss_Duration,
         PackageLoss_Start,
-        PackageLoss_IntervallDegradation,
+        PackageLoss_IntervalDegradation,
         PackageLoss_DurationDegradation,
         PackageDelay_Start,
         PackageDelay_Interval,
@@ -1274,45 +1329,56 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
         PackageDelay_DelaySize,
         PackageDelay_RingBufferMaxUseSize,
         DetectionPointShift_Start,
-        DetectionPointShift_Intervall,
+        DetectionPointShift_Interval,
         DetectionPointShift_Duration,
-        DetectionPointShift_IntervallDegradation,
+        DetectionPointShift_IntervalDegradation,
         DetectionPointShift_DurationDegradation,
         DetectionPoint_MaxDepthDisturbance,
         DetectionPoint_MaxAzimuthDisturbance,
         DetectionPoint_MaxAltitudeDisturbance,
         DetectionPoint_Distribution,
         VelocityShift_Start,
-        VelocityShift_Intervall,
+        VelocityShift_Interval,
         VelocityShift_Duration,
-        VelocityShift_IntervallDegradation,
+        VelocityShift_IntervalDegradation,
         VelocityShift_DurationDegradation,
         VelocityShift_MaxVelocityDisturbance,
         VelocityShift_Distribution,
         RangeReduction_Start,
-        RangeReduction_Intervall,
+        RangeReduction_Interval,
         RangeReduction_Duration,
-        RangeReduction_IntervallDegradation,
+        RangeReduction_IntervalDegradation,
         RangeReduction_DurationDegradation,
         RangeReduction_RangeReductionValue,
         DetectNonExistingPoints_Start,
-        DetectNonExistingPoints_Intervall,
+        DetectNonExistingPoints_Interval,
         DetectNonExistingPoints_Duration,
-        DetectNonExistingPoints_IntervallDegradation,
+        DetectNonExistingPoints_IntervalDegradation,
         DetectNonExistingPoints_DurationDegradation,
-        DetectNonExistingPoints_AmmountDetections,
+        DetectNonExistingPoints_AmountDetections,
         DetectNonExistingPoints_HorFOVFlag,
         DetectNonExistingPoints_VertFOVFlag,
         SensorShift_Start,
-        SensorShift_Intervall,
+        SensorShift_Interval,
         SensorShift_Duration,
-        SensorShift_IntervallDegradation,
+        SensorShift_IntervalDegradation,
         SensorShift_DurationDegradation,
         SensorShift_Yaw,
         SensorShift_Pitch,
         SensorShift_Roll,
         SensorShiftFlag,
-        SensorShiftTriggerFlag
+        SensorShiftTriggerFlag,
+        SensorBlockage_Start,
+        SensorBlockage_Interval,
+        SensorBlockage_IntervalDegradation,
+        SensorBlockage_AmountOfBlockingObjects,
+        SensorBlockage_Type,
+        SensorBlockage_LifeTime,
+        SensorBlockage_BlockingObjectLifeTime,
+        SensorBlockage_MaxBlockingObjectLifeTime,
+        SensorBlockage_BlockageDropSpeed,
+        SensorBlockage_HorFOVFlag,
+        SensorBlockage_VertFOVFlag
         });
 
     Success = CheckActorDefinition(Definition);
@@ -1551,11 +1617,11 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
     PackageLoss_Start.RecommendedValues = { TEXT("0") };
     PackageLoss_Start.bRestrictToRecommended = false;
 
-    FActorVariation PackageLoss_IntervallDegradation;
-    PackageLoss_IntervallDegradation.Id = TEXT("PackageLoss_IntervallDegradation");
-    PackageLoss_IntervallDegradation.Type = EActorAttributeType::Float;
-    PackageLoss_IntervallDegradation.RecommendedValues = { TEXT("0") };
-    PackageLoss_IntervallDegradation.bRestrictToRecommended = false;
+    FActorVariation PackageLoss_IntervalDegradation;
+    PackageLoss_IntervalDegradation.Id = TEXT("PackageLoss_IntervalDegradation");
+    PackageLoss_IntervalDegradation.Type = EActorAttributeType::Float;
+    PackageLoss_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    PackageLoss_IntervalDegradation.bRestrictToRecommended = false;
 
     FActorVariation ConstantShift_Rotation;
     ConstantShift_Rotation.Id = TEXT("ConstantShift_Rotation");
@@ -1613,7 +1679,7 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
             PackageLoss_Interval,
             PackageLoss_Duration,
             PackageLoss_Start,
-            PackageLoss_IntervallDegradation,
+            PackageLoss_IntervalDegradation,
             ConstantShift_Rotation,
             ConstantShift_Interval,
             ConstantShift_Start,
@@ -1634,7 +1700,7 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
             PackageLoss_Interval,
             PackageLoss_Duration,
             PackageLoss_Start,
-            PackageLoss_IntervallDegradation,
+            PackageLoss_IntervalDegradation,
             ConstantShift_Rotation,
             ConstantShift_Interval,
             ConstantShift_Start,
@@ -2338,7 +2404,7 @@ void UActorBlueprintFunctionLibrary::SetFaultyLidar(const FActorDescription& Des
 #pragma region Loose Contanct
     FaultyLidar.PackageLoss_Interval = RetrieveActorAttributeToFloat("PackageLoss_Interval", Description.Variations, 0.0f);
     FaultyLidar.PackageLoss_Duration = RetrieveActorAttributeToFloat("PackageLoss_Duration", Description.Variations, 0.0f);
-    FaultyLidar.PackageLoss_IntervallDegradation = RetrieveActorAttributeToFloat("PackageLoss_IntervallDegradation", Description.Variations, 0.0f);
+    FaultyLidar.PackageLoss_IntervalDegradation = RetrieveActorAttributeToFloat("PackageLoss_IntervalDegradation", Description.Variations, 0.0f);
     FaultyLidar.PackageLoss_StartOffset = RetrieveActorAttributeToFloat("PackageLoss_Start", Description.Variations, 0.0f);
 #pragma endregion
 
@@ -2454,7 +2520,7 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
 #pragma region PackageLoss
     IQZ_SENSOR_SET_MACRO(Radar, AddPackageLossInterval, "PackageLoss_Interval", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, AddPackageLossDuration, "PackageLoss_Duration", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetProgressionRate, "PackageLoss_IntervallDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetProgressionRate, "PackageLoss_IntervalDegradation", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetDurationDegradation, "PackageLoss_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, AddPackageLossStart, "PackageLoss_Start", RetrieveActorAttributeToFloat, 0.0f);
 #pragma endregion
@@ -2469,9 +2535,9 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
 
 #pragma region DetectionPointShift
   IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPointShift_Start, "DetectionPointShift_Start", RetrieveActorAttributeToFloat, 0.0f);
-  IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPointShift_Intervall, "DetectionPointShift_Intervall", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPointShift_Interval, "DetectionPointShift_Interval", RetrieveActorAttributeToFloat, 0.0f);
   IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPointShift_Duration, "DetectionPointShift_Duration", RetrieveActorAttributeToFloat, 0.0f);
-  IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPointShift_IntervallDegradation, "DetectionPointShift_IntervallDegradation", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPointShift_IntervalDegradation, "DetectionPointShift_IntervalDegradation", RetrieveActorAttributeToFloat, 0.0f);
   IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPointShift_DurationDegradation, "DetectionPointShift_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
   IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPoint_MaxDepthDisturbance, "DetectionPoint_MaxDepthDisturbance", RetrieveActorAttributeToFloat, 0.0f);
   IQZ_SENSOR_SET_MACRO(Radar, SetDetectionPoint_MaxAzimuthDisturbance, "DetectionPoint_MaxAzimuthDisturbance", RetrieveActorAttributeToFloat, 0.0f);
@@ -2481,9 +2547,9 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
 
 #pragma region DetectionPointShift
   IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_Start, "VelocityShift_Start", RetrieveActorAttributeToFloat, 0.0f);
-  IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_Intervall, "VelocityShift_Intervall", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_Interval, "VelocityShift_Interval", RetrieveActorAttributeToFloat, 0.0f);
   IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_Duration, "VelocityShift_Duration", RetrieveActorAttributeToFloat, 0.0f);
-  IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_IntervallDegradation, "VelocityShift_IntervallDegradation", RetrieveActorAttributeToFloat, 0.0f);
+  IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_IntervalDegradation, "VelocityShift_IntervalDegradation", RetrieveActorAttributeToFloat, 0.0f);
   IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_DurationDegradation, "VelocityShift_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
   IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_MaxVelocityDisturbance, "VelocityShift_MaxVelocityDisturbance", RetrieveActorAttributeToFloat, 0.0f);
   IQZ_SENSOR_SET_MACRO(Radar, SetVelocityShift_Distribution, "VelocityShift_Distribution", RetrieveActorAttributeToInt, 0);
@@ -2491,21 +2557,21 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
 
 #pragma region RangeReduction
     IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_Start, "RangeReduction_Start", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_Intervall, "RangeReduction_Intervall", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_Interval, "RangeReduction_Interval", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_Duration, "RangeReduction_Duration", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_IntervallDegradation, "RangeReduction_IntervallDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_IntervalDegradation, "RangeReduction_IntervalDegradation", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_DurationDegradation, "RangeReduction_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetRangeReduction_RangeReductionValue, "RangeReduction_RangeReductionValue", RetrieveActorAttributeToFloat, 0.0f);
 #pragma endregion
 
 #pragma region DetectNonExistingPoints
     IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_Start, "DetectNonExistingPoints_Start", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_Intervall, "DetectNonExistingPoints_Intervall", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_Interval, "DetectNonExistingPoints_Interval", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_Duration, "DetectNonExistingPoints_Duration", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_IntervallDegradation, "DetectNonExistingPoints_IntervallDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_IntervalDegradation, "DetectNonExistingPoints_IntervalDegradation", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_DurationDegradation, "DetectNonExistingPoints_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
 
-    IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_AmmountDetections, "DetectNonExistingPoints_AmmountDetections", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_AmountDetections, "DetectNonExistingPoints_AmountDetections", RetrieveActorAttributeToInt, 0);
     IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_HorFOVFlag, "DetectNonExistingPoints_HorFOVFlag", RetrieveActorAttributeToInt, 0);
     IQZ_SENSOR_SET_MACRO(Radar, SetDetectNonExistingPoints_VertFOVFlag, "DetectNonExistingPoints_VertFOVFlag", RetrieveActorAttributeToInt, 0);
 
@@ -2513,9 +2579,9 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
 
 #pragma region SensorShift
     IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_Start, "SensorShift_Start", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_Intervall, "SensorShift_Intervall", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_Interval, "SensorShift_Interval", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_Duration, "SensorShift_Duration", RetrieveActorAttributeToFloat, 0.0f);
-    IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_IntervallDegradation, "SensorShift_IntervallDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_IntervalDegradation, "SensorShift_IntervalDegradation", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_DurationDegradation, "SensorShift_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_Yaw, "SensorShift_Yaw", RetrieveActorAttributeToFloat, 0.0f);
     IQZ_SENSOR_SET_MACRO(Radar, SetSensorShift_Pitch, "SensorShift_Pitch", RetrieveActorAttributeToFloat, 0.0f);
@@ -2525,6 +2591,21 @@ void UActorBlueprintFunctionLibrary::SetFaultyRadar(const FActorDescription& Des
     IQZ_SENSOR_SET_MACRO(Radar, SetSensorShiftTriggerFlag, "SensorShiftTriggerFlag", RetrieveActorAttributeToInt, 0);
 
 #pragma endregion
+
+#pragma region SensorBlockage
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorBlockage_Start, "SensorBlockage_Start", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorBlockage_Interval, "SensorBlockage_Interval", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorBlockage_IntervalDegradation, "SensorBlockage_IntervalDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorBlockage_BlockingObjectLifeTime, "SensorBlockage_BlockingObjectLifeTime", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorBlockage_MaxBlockingObjectLifeTime, "SensorBlockage_MaxBlockingObjectLifeTime", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorBlockage_BlockageDropSpeed, "SensorBlockage_BlockageDropSpeed", RetrieveActorAttributeToFloat, 0.0f);
+
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorBlockage_AmountOfBlockingObjects, "SensorBlockage_AmountOfBlockingObjects", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorBlockage_Type, "SensorBlockage_Type", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorBlockage_LifeTime, "SensorBlockage_LifeTime", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorBlockage_HorFOVFlag, "SensorBlockage_HorFOVFlag", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO(Radar, SetSensorBlockage_VertFOVFlag, "SensorBlockage_VertFOVFlag", RetrieveActorAttributeToInt, 0);
+ #pragma endregion
 }
 
 #undef CARLA_ABFL_CHECK_ACTOR

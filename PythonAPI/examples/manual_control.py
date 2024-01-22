@@ -1037,11 +1037,20 @@ class RadarSensor(object):
         bp = world.get_blueprint_library().find('sensor.other.faulty_radar')
         #bp.set_attribute('scenario', str(Scenario.RadarCollosionShift.value))
 
-        bp.set_attribute('horizontal_fov', str(80))
-        bp.set_attribute('vertical_fov', str(35))
+        bp.set_attribute('horizontal_fov', str(90))
+        bp.set_attribute('vertical_fov', str(30))
         bp.set_attribute('range', str(12))
-        bp.set_attribute('points_per_second', str(10000))
+        #bp.set_attribute('points_per_second', str(10000))
+        bp.set_attribute("scenario",str(Scenario.SensorBlockage.value))
 
+        bp.set_attribute('SensorBlockage_Start', str(5))
+        bp.set_attribute('SensorBlockage_Interval', str(10))
+        bp.set_attribute('SensorBlockage_AmountOfBlockingObjects', str(25))
+        bp.set_attribute('SensorBlockage_Type', str(0))
+        bp.set_attribute('SensorBlockage_HorFOVFlag', str(1))
+        bp.set_attribute('SensorBlockage_VertFOVFlag', str(1))
+        bp.set_attribute('SensorBlockage_LifeTime', str(0))
+        bp.set_attribute('SensorBlockage_BlockingObjectLifeTime', str(5))
 
 
         #bp.set_attribute('PackageLoss_Interval', str(10))

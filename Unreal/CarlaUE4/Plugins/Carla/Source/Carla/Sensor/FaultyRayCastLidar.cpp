@@ -38,7 +38,7 @@ void AFaultyRayCastLidar::ComputeAndSaveDetections(const FTransform& SensorTrans
             if (time >= FaultyLidarDescription.PackageLoss_Start + FaultyLidarDescription.PackageLoss_Duration)
             {
                 FaultyLidarDescription.PackageLoss_Start += FaultyLidarDescription.PackageLoss_Interval;
-                FaultyLidarDescription.PackageLoss_Interval -= FaultyLidarDescription.PackageLoss_IntervallDegradation;
+                FaultyLidarDescription.PackageLoss_Interval -= FaultyLidarDescription.PackageLoss_IntervalDegradation;
             }
             return;
         }

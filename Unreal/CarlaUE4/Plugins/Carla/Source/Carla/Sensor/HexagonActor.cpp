@@ -2,6 +2,7 @@
 
 void AHexagonActor::CreateHexagonMesh(float Radius)
 {
+    SpawnTime = GetWorld()->GetTimeSeconds();
     PrimaryActorTick.bCanEverTick = false;
 
     HexagonMeshComponent->SetMobility(EComponentMobility::Movable);
@@ -65,6 +66,23 @@ void AHexagonActor::CreateHexagonMesh(float Radius)
 
 }
 
+void AHexagonActor::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+    if (LifeTime > 0.0f)
+    {
+        if (LifeTime + SpawnTime < GetWorld()->GetTimeSeconds())
+            if (!this->Destroy()) {
+                UE_LOG(LogTemp, Error, TEXT("Cant Destroy Blocking Hexagon!"));
+            }
+    }
+    if(DropSpeed != 0.0f)
+        this->AddActorLocalTransform(FTransform(FVector(DropSpeed, 0.0f, 0.0f )));
+}
+void AHexagonActor::BeginPlay()
+{
+    Super::BeginPlay();
+}
 
 
 
