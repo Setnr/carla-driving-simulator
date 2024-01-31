@@ -1593,6 +1593,152 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
     StdDevLidar.Type = EActorAttributeType::Float;
     StdDevLidar.RecommendedValues = { TEXT("0.0") };
 
+    FActorVariation LidarScenario;
+    LidarScenario.Id = TEXT("scenario");
+    LidarScenario.Type = EActorAttributeType::Int;
+    LidarScenario.RecommendedValues = { TEXT("0") };
+    LidarScenario.bRestrictToRecommended = false;
+
+    FActorVariation PackageLoss_Interval;
+    PackageLoss_Interval.Id = TEXT("PackageLoss_Interval");
+    PackageLoss_Interval.Type = EActorAttributeType::Float;
+    PackageLoss_Interval.RecommendedValues = { TEXT("0") };
+    PackageLoss_Interval.bRestrictToRecommended = false;
+
+    FActorVariation PackageLoss_Duration;
+    PackageLoss_Duration.Id = TEXT("PackageLoss_Duration");
+    PackageLoss_Duration.Type = EActorAttributeType::Float;
+    PackageLoss_Duration.RecommendedValues = { TEXT("0") };
+    PackageLoss_Duration.bRestrictToRecommended = false;
+
+    FActorVariation PackageLoss_Start;
+    PackageLoss_Start.Id = TEXT("PackageLoss_Start");
+    PackageLoss_Start.Type = EActorAttributeType::Float;
+    PackageLoss_Start.RecommendedValues = { TEXT("0") };
+    PackageLoss_Start.bRestrictToRecommended = false;
+
+    FActorVariation PackageLoss_IntervalDegradation;
+    PackageLoss_IntervalDegradation.Id = TEXT("PackageLoss_IntervalDegradation");
+    PackageLoss_IntervalDegradation.Type = EActorAttributeType::Float;
+    PackageLoss_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    PackageLoss_IntervalDegradation.bRestrictToRecommended = false;
+
+    FActorVariation PackageLoss_DurationDegradation;
+    PackageLoss_DurationDegradation.Id = TEXT("PackageLoss_DurationDegradation");
+    PackageLoss_DurationDegradation.Type = EActorAttributeType::Float;
+    PackageLoss_DurationDegradation.RecommendedValues = { TEXT("0") };
+    PackageLoss_DurationDegradation.bRestrictToRecommended = false;
+
+    FActorVariation PackageDelay_Start;
+    PackageDelay_Start.Id = TEXT("PackageDelay_Start");
+    PackageDelay_Start.Type = EActorAttributeType::Float;
+    PackageDelay_Start.RecommendedValues = { TEXT("0") };
+    PackageDelay_Start.bRestrictToRecommended = false;
+
+    FActorVariation PackageDelay_Interval;
+    PackageDelay_Interval.Id = TEXT("PackageDelay_Interval");
+    PackageDelay_Interval.Type = EActorAttributeType::Float;
+    PackageDelay_Interval.RecommendedValues = { TEXT("0") };
+    PackageDelay_Interval.bRestrictToRecommended = false;
+
+    FActorVariation PackageDelay_DegradationSize;
+    PackageDelay_DegradationSize.Id = TEXT("PackageDelay_DegradationSize");
+    PackageDelay_DegradationSize.Type = EActorAttributeType::Float;
+    PackageDelay_DegradationSize.RecommendedValues = { TEXT("0") };
+    PackageDelay_DegradationSize.bRestrictToRecommended = false;
+
+    FActorVariation PackageDelay_DelaySize;
+    PackageDelay_DelaySize.Id = TEXT("PackageDelay_DelaySize");
+    PackageDelay_DelaySize.Type = EActorAttributeType::Float;
+    PackageDelay_DelaySize.RecommendedValues = { TEXT("0") };
+    PackageDelay_DelaySize.bRestrictToRecommended = false;
+
+    FActorVariation PackageDelay_RingBufferMaxUseSize;
+    PackageDelay_RingBufferMaxUseSize.Id = TEXT("PackageDelay_RingBufferMaxUseSize");
+    PackageDelay_RingBufferMaxUseSize.Type = EActorAttributeType::Float;
+    PackageDelay_RingBufferMaxUseSize.RecommendedValues = { TEXT("0") };
+    PackageDelay_RingBufferMaxUseSize.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPointShift_Start;
+    DetectionPointShift_Start.Id = TEXT("DetectionPointShift_Start");
+    DetectionPointShift_Start.Type = EActorAttributeType::Float;
+    DetectionPointShift_Start.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_Start.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPointShift_Interval;
+    DetectionPointShift_Interval.Id = TEXT("DetectionPointShift_Interval");
+    DetectionPointShift_Interval.Type = EActorAttributeType::Float;
+    DetectionPointShift_Interval.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_Interval.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPointShift_Duration;
+    DetectionPointShift_Duration.Id = TEXT("DetectionPointShift_Duration");
+    DetectionPointShift_Duration.Type = EActorAttributeType::Float;
+    DetectionPointShift_Duration.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_Duration.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPointShift_IntervalDegradation;
+    DetectionPointShift_IntervalDegradation.Id = TEXT("DetectionPointShift_IntervalDegradation");
+    DetectionPointShift_IntervalDegradation.Type = EActorAttributeType::Float;
+    DetectionPointShift_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_IntervalDegradation.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPointShift_DurationDegradation;
+    DetectionPointShift_DurationDegradation.Id = TEXT("DetectionPointShift_DurationDegradation");
+    DetectionPointShift_DurationDegradation.Type = EActorAttributeType::Float;
+    DetectionPointShift_DurationDegradation.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_DurationDegradation.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPoint_MaxDepthDisturbance;
+    DetectionPoint_MaxDepthDisturbance.Id = TEXT("DetectionPoint_MaxDepthDisturbance");
+    DetectionPoint_MaxDepthDisturbance.Type = EActorAttributeType::Float;
+    DetectionPoint_MaxDepthDisturbance.RecommendedValues = { TEXT("0") };
+    DetectionPoint_MaxDepthDisturbance.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPoint_MaxAzimuthDisturbance;
+    DetectionPoint_MaxAzimuthDisturbance.Id = TEXT("DetectionPoint_MaxAzimuthDisturbance");
+    DetectionPoint_MaxAzimuthDisturbance.Type = EActorAttributeType::Float;
+    DetectionPoint_MaxAzimuthDisturbance.RecommendedValues = { TEXT("0") };
+    DetectionPoint_MaxAzimuthDisturbance.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPoint_MaxAltitudeDisturbance;
+    DetectionPoint_MaxAltitudeDisturbance.Id = TEXT("DetectionPoint_MaxAltitudeDisturbance");
+    DetectionPoint_MaxAltitudeDisturbance.Type = EActorAttributeType::Float;
+    DetectionPoint_MaxAltitudeDisturbance.RecommendedValues = { TEXT("0") };
+    DetectionPoint_MaxAltitudeDisturbance.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPoint_Distribution;
+    DetectionPoint_Distribution.Id = TEXT("DetectionPoint_Distribution");
+    DetectionPoint_Distribution.Type = EActorAttributeType::Float;
+    DetectionPoint_Distribution.RecommendedValues = { TEXT("0") };
+    DetectionPoint_Distribution.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_Start;
+    VelocityShift_Start.Id = TEXT("VelocityShift_Start");
+    VelocityShift_Start.Type = EActorAttributeType::Float;
+    VelocityShift_Start.RecommendedValues = { TEXT("0") };
+    VelocityShift_Start.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_Interval;
+    VelocityShift_Interval.Id = TEXT("VelocityShift_Interval");
+    VelocityShift_Interval.Type = EActorAttributeType::Float;
+    VelocityShift_Interval.RecommendedValues = { TEXT("0") };
+    VelocityShift_Interval.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_Duration;
+    VelocityShift_Duration.Id = TEXT("VelocityShift_Duration");
+    VelocityShift_Duration.Type = EActorAttributeType::Float;
+    VelocityShift_Duration.RecommendedValues = { TEXT("0") };
+    VelocityShift_Duration.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_IntervalDegradation;
+    VelocityShift_IntervalDegradation.Id = TEXT("VelocityShift_IntervalDegradation");
+    VelocityShift_IntervalDegradation.Type = EActorAttributeType::Float;
+    VelocityShift_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    VelocityShift_IntervalDegradation.bRestrictToRecommended = false;
+
+
+
 
 
 
@@ -1610,7 +1756,31 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
           DropOffIntensityLimit,
           DropOffAtZeroIntensity,
           StdDevLidar,
-          HorizontalFOV });
+          HorizontalFOV,
+          LidarScenario,
+          PackageLoss_Interval,
+          PackageLoss_Duration,
+          PackageLoss_Start,
+          PackageLoss_IntervalDegradation,
+          PackageLoss_DurationDegradation,
+          PackageDelay_Start,
+          PackageDelay_Interval,
+          PackageDelay_DegradationSize,
+          PackageDelay_DelaySize,
+          PackageDelay_RingBufferMaxUseSize,
+          DetectionPointShift_Start,
+          DetectionPointShift_Interval,
+          DetectionPointShift_Duration,
+          DetectionPointShift_IntervalDegradation,
+          DetectionPointShift_DurationDegradation,
+          DetectionPoint_MaxDepthDisturbance,
+          DetectionPoint_MaxAzimuthDisturbance,
+          DetectionPoint_MaxAltitudeDisturbance,
+          DetectionPoint_Distribution,
+          VelocityShift_Start,
+          VelocityShift_Interval,
+          VelocityShift_Duration,
+          VelocityShift_IntervalDegradation});
     }
     else if (Id == "ray_cast_semantic") {
         Definition.Variations.Append({
@@ -1620,7 +1790,31 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
           Frequency,
           UpperFOV,
           LowerFOV,
-          HorizontalFOV });
+          HorizontalFOV,
+          LidarScenario,
+          PackageLoss_Interval,
+          PackageLoss_Duration,
+          PackageLoss_Start,
+          PackageLoss_IntervalDegradation,
+          PackageLoss_DurationDegradation,
+          PackageDelay_Start,
+          PackageDelay_Interval,
+          PackageDelay_DegradationSize,
+          PackageDelay_DelaySize,
+          PackageDelay_RingBufferMaxUseSize,
+          DetectionPointShift_Start,
+          DetectionPointShift_Interval,
+          DetectionPointShift_Duration,
+          DetectionPointShift_IntervalDegradation,
+          DetectionPointShift_DurationDegradation,
+          DetectionPoint_MaxDepthDisturbance,
+          DetectionPoint_MaxAzimuthDisturbance,
+          DetectionPoint_MaxAltitudeDisturbance,
+          DetectionPoint_Distribution,
+          VelocityShift_Start,
+          VelocityShift_Interval,
+          VelocityShift_Duration,
+          VelocityShift_IntervalDegradation });
     }
     else {
         DEBUG_ASSERT(false);
