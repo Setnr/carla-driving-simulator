@@ -44,7 +44,7 @@ void ARayCastLidar::Set(const FActorDescription &ActorDescription)
 void ARayCastLidar::Set(const FLidarDescription &LidarDescription)
 {
   Description = LidarDescription;
-  LidarData = FLidarData(Description.Channels);
+  LidarData = carla::sensor::data::LidarData(Description.Channels);
   CreateLasers();
   PointsPerChannel.resize(Description.Channels);
 

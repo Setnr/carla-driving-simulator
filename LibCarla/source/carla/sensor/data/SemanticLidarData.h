@@ -129,7 +129,14 @@ namespace data {
     virtual void WritePointSync(SemanticLidarDetection &detection) {
       _ser_points.emplace_back(detection);
     }
+    std::vector<uint32_t> GetHeader(){return _header;}
+    void SetHeader(std::vector<uint32_t> Header){_header = Header;}
 
+    uint32_t GetMaxChannelPoints(){return _max_channel_points;}
+    void SetMaxChannelPoints(uint32_t MaxChannelPoints){_max_channel_points = MaxChannelPoints;}
+
+    //std::vector<SemanticLidarDetection> GetSerPoints(){return _ser_points;}
+    //void SetSerPoints(std::vector<SemanticLidarDetection> SerPoints){_ser_points = SerPoints;}
   protected:
     std::vector<uint32_t> _header;
     uint32_t _max_channel_points;

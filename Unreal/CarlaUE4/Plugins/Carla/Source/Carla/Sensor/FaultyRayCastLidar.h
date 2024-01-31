@@ -19,6 +19,14 @@ class CARLA_API  AFaultyRayCastLidar : public ARayCastLidar
 
   using FLidarData = carla::sensor::data::LidarData;
   using FDetection = carla::sensor::data::LidarDetection;
+  using Distribution = FFaultyLidarDescription::Distribution;
+  using VerticalFOV_Type = FFaultyLidarDescription::VerticalFOV_Type;
+  using HorizontalFOV_Type = FFaultyLidarDescription::HorizontalFOV_Type;
+  using SensorBlockage_ObjectLifeTime = FFaultyLidarDescription::SensorBlockage_ObjectLifeTime;
+  using SensorBlockage_BlockageType = FFaultyLidarDescription::SensorBlockage_BlockageType;
+  using ScenarioID = FFaultyLidarDescription::ScenarioID;
+  using SensorShift_Flag = FFaultyLidarDescription::SensorShift_Flag;
+  using SensorShift_TriggerFlag = FFaultyLidarDescription::SensorShift_TriggerFlag;
 public:
   static FActorDefinition GetSensorDefinition();
 
@@ -26,25 +34,31 @@ public:
   virtual void Set(const FActorDescription &Description) override;
 
   virtual void ComputeAndSaveDetections(const FTransform& SensorTransform) override;
-
-
-  void MoveLidar()
-  {
-      if (FaultyLidarDescription.Scenario & FFaultyLidarDescription::ScenarioID::RadarCollosionShift)
-      {
-          auto rot = this->GetActorRotation();
-          rot.Yaw += 10;
-          this->SetActorRotation(rot);
-      }
-  }
-  void MoveLidar(FRotator rot)
-  {
-      auto RadarRot = this->GetActorRotation();
-      RadarRot += rot;
-      this->SetActorRotation(RadarRot);
-  }
+  void PostPhysTick(UWorld* World, ELevelTick TickType, float DeltaTime) override;
 
 protected:
 	FFaultyLidarDescription FaultyLidarDescription;
+	void CreatePoints();
+	FVector CalculateEndLocation(bool CloseRange, VerticalFOV_Type VertFOV, HorizontalFOV_Type HorzFOV);
+	void CreateBlockage();
+	void DetectNonExisitingPoints();
+	void CheckRangeReduction();
+	void ShiftDetectionPoints();
+	float CreateRandomNumber(Distribution DistType);
+	bool HasToLooseCurrentPackage();
+	void Destroyed() override;
+	void GenerateHexagons();
+	void MoveLidar(FRotator rot);
+	void ShiftSensor();
+	void MoveLidar();
+	void EventShift();
 
+	TArray<AActor*> BlockObjects;
+
+	bool MoveOnce = true;
+
+	std::mt19937 gen_weibull;
+	std::weibull_distribution<float> weibull;
+	std::mt19937 gen_uniform;
+	std::uniform_real_distribution<float> uniform;
 };

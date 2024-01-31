@@ -47,7 +47,7 @@ protected:
 
   virtual void ComputeAndSaveDetections(const FTransform& SensorTransform) override;
 
-  FLidarData LidarData;
+  carla::sensor::data::LidarData LidarData;
 
   /// Enable/Disable general dropoff of lidar points
   bool DropOffGenActive;

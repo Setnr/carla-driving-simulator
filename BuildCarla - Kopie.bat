@@ -5,6 +5,6 @@ for %%A in (clean LibCarla PythonAPI launch) do (
     cls
     title make %%A
     make %%A
-    pause
+    
 )
 choice /C X /N /M "Press X to continue"

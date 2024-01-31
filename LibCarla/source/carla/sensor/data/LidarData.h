@@ -101,7 +101,19 @@ namespace data {
       (void) detection;
       DEBUG_ASSERT(false);
     }
+    
+    size_t GetSize(){
+      return _points.size() / 4;
+    }
 
+    void ShiftPoint(int PointPos, float x, float y, float z)
+    {
+      _points[PointPos * 4] += x;
+      _points[PointPos * 4 + 1] += y;
+      _points[PointPos * 4 + 2] += z;
+    }
+    std::vector<float> GetPoints(){return _points;}
+    void SetPoints(std::vector<float> Points){_points=Points;}
   private:
     std::vector<float> _points;
 

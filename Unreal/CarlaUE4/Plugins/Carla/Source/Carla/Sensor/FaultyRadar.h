@@ -317,7 +317,7 @@ private:
 								// Kann initial gesetzt werden um zu sagen wie viele Packete beim ersten Auftreten versetzt werden sollen.
 	int PackageDelay_WaitCounter; // Wie viele Packete sind zu dem Zeitpunkt schon versetzt
 
-	std::vector<RayData> PackageDelay_RingBuffer[RadarDelay_RingBufferSize] ;
+	std::vector<RayData> PackageDelay_RingBuffer[RadarDelay_RingBufferSize];
 	int PackageDelay_WriteRingBufferPtr;
 	int PackageDelay_ReadRingBufferPtr;
 	int PackageDelay_RingBufferMaxUseSize;

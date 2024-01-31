@@ -532,17 +532,6 @@ void AFaultyRadar::DrawRadarBorder()
 
 void AFaultyRadar::DetectNonExisitingPoints()
 {
-#ifdef DEBUG_NONEXISITING_POINTS
-    Rays.clear();
-    this->Scenario = ScenarioID::DetectNonExistingPoints;
-    DrawRadarBorder();
-    DetectNonExistingPoints_HorFOVFlag = HorizontalFOV_Type::WholeHorFOV;
-    DetectNonExistingPoints_VertFOVFlag = VerticalFOV_Type::WholeVerFOV;
-    DetectNonExistingPoints_AmountDetections = 5000;
-    DetectNonExistingPoints_Duration = MAX_FLT;
-    this->Range = 12.0f;
-#endif
-
     float time = GetWorld()->GetTimeSeconds();
     if(this->Scenario & ScenarioID::DetectNonExistingPoints)
     {
