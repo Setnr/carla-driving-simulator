@@ -1737,6 +1737,18 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
     VelocityShift_IntervalDegradation.RecommendedValues = { TEXT("0") };
     VelocityShift_IntervalDegradation.bRestrictToRecommended = false;
 
+    FActorVariation VelocityShift_DurationDegradation;
+    VelocityShift_DurationDegradation.Id = TEXT("VelocityShift_DurationDegradation");
+    VelocityShift_DurationDegradation.Type = EActorAttributeType::Float;
+    VelocityShift_DurationDegradation.RecommendedValues = { TEXT("0") };
+    VelocityShift_DurationDegradation.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_MaxVelocityDisturbance;
+    VelocityShift_MaxVelocityDisturbance.Id = TEXT("VelocityShift_MaxVelocityDisturbance");
+    VelocityShift_MaxVelocityDisturbance.Type = EActorAttributeType::Float;
+    VelocityShift_MaxVelocityDisturbance.RecommendedValues = { TEXT("0") };
+    VelocityShift_MaxVelocityDisturbance.bRestrictToRecommended = false;
+
 
 
 
@@ -1780,7 +1792,10 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
           VelocityShift_Start,
           VelocityShift_Interval,
           VelocityShift_Duration,
-          VelocityShift_IntervalDegradation});
+          VelocityShift_IntervalDegradation,
+          VelocityShift_DurationDegradation,
+          VelocityShift_MaxVelocityDisturbance
+           });
     }
     else if (Id == "ray_cast_semantic") {
         Definition.Variations.Append({
@@ -1814,7 +1829,10 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
           VelocityShift_Start,
           VelocityShift_Interval,
           VelocityShift_Duration,
-          VelocityShift_IntervalDegradation });
+          VelocityShift_IntervalDegradation,
+          VelocityShift_DurationDegradation,
+          VelocityShift_MaxVelocityDisturbance
+           });
     }
     else {
         DEBUG_ASSERT(false);
