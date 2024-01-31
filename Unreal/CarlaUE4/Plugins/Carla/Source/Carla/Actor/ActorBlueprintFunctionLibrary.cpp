@@ -1749,11 +1749,6 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
     VelocityShift_MaxVelocityDisturbance.RecommendedValues = { TEXT("0") };
     VelocityShift_MaxVelocityDisturbance.bRestrictToRecommended = false;
 
-
-
-
-
-
     if (Id == "ray_cast") {
         Definition.Variations.Append({
           Channels,
@@ -1768,33 +1763,7 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
           DropOffIntensityLimit,
           DropOffAtZeroIntensity,
           StdDevLidar,
-          HorizontalFOV,
-          LidarScenario,
-          PackageLoss_Interval,
-          PackageLoss_Duration,
-          PackageLoss_Start,
-          PackageLoss_IntervalDegradation,
-          PackageLoss_DurationDegradation,
-          PackageDelay_Start,
-          PackageDelay_Interval,
-          PackageDelay_DegradationSize,
-          PackageDelay_DelaySize,
-          PackageDelay_RingBufferMaxUseSize,
-          DetectionPointShift_Start,
-          DetectionPointShift_Interval,
-          DetectionPointShift_Duration,
-          DetectionPointShift_IntervalDegradation,
-          DetectionPointShift_DurationDegradation,
-          DetectionPoint_MaxDepthDisturbance,
-          DetectionPoint_MaxAzimuthDisturbance,
-          DetectionPoint_MaxAltitudeDisturbance,
-          DetectionPoint_Distribution,
-          VelocityShift_Start,
-          VelocityShift_Interval,
-          VelocityShift_Duration,
-          VelocityShift_IntervalDegradation,
-          VelocityShift_DurationDegradation,
-          VelocityShift_MaxVelocityDisturbance
+          HorizontalFOV
            });
     }
     else if (Id == "ray_cast_semantic") {
@@ -1805,7 +1774,20 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
           Frequency,
           UpperFOV,
           LowerFOV,
-          HorizontalFOV,
+          HorizontalFOV
+           });
+    }
+    else {
+        DEBUG_ASSERT(false);
+    }
+
+
+    FActorVariation VelocityShift_Distribution;
+    VelocityShift_Distribution.Id = TEXT("VelocityShift_Distribution");
+    VelocityShift_Distribution.Type = EActorAttributeType::Float;
+    VelocityShift_Distribution.RecommendedValues = {TEXT("0")};
+    VelocityShift_Distribution.bRestrictToRecommended = false;
+    Definition.Variations.Append({
           LidarScenario,
           PackageLoss_Interval,
           PackageLoss_Duration,
@@ -1831,13 +1813,8 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
           VelocityShift_Duration,
           VelocityShift_IntervalDegradation,
           VelocityShift_DurationDegradation,
-          VelocityShift_MaxVelocityDisturbance
-           });
-    }
-    else {
-        DEBUG_ASSERT(false);
-    }
-
+          VelocityShift_MaxVelocityDisturbance,
+          VelocityShift_Distribution });
     Success = CheckActorDefinition(Definition);
 }
 
