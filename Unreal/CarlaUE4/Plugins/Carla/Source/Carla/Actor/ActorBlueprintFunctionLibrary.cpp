@@ -18,6 +18,448 @@
 
 #define IQZ_SENSOR_SET_MACRO(sensor,function,AttributeName,RetrieveFunction,StandardValue) if (Description.Variations.Contains(AttributeName)) {sensor->function(RetrieveFunction(AttributeName, Description.Variations, StandardValue));}
 
+void CreateFaultyDefinition(FActorDefinition& Definition) 
+{
+
+    FActorVariation Scenario;
+    Scenario.Id = TEXT("scenario");
+    Scenario.Type = EActorAttributeType::Int;
+    Scenario.RecommendedValues = { TEXT("0") };
+    Scenario.bRestrictToRecommended = false;
+
+    FActorVariation PackageLoss_Interval;
+    PackageLoss_Interval.Id = TEXT("PackageLoss_Interval");
+    PackageLoss_Interval.Type = EActorAttributeType::Float;
+    PackageLoss_Interval.RecommendedValues = { TEXT("0") };
+    PackageLoss_Interval.bRestrictToRecommended = false;
+
+    FActorVariation PackageLoss_Duration;
+    PackageLoss_Duration.Id = TEXT("PackageLoss_Duration");
+    PackageLoss_Duration.Type = EActorAttributeType::Float;
+    PackageLoss_Duration.RecommendedValues = { TEXT("0") };
+    PackageLoss_Duration.bRestrictToRecommended = false;
+
+    FActorVariation PackageLoss_Start;
+    PackageLoss_Start.Id = TEXT("PackageLoss_Start");
+    PackageLoss_Start.Type = EActorAttributeType::Float;
+    PackageLoss_Start.RecommendedValues = { TEXT("0") };
+    PackageLoss_Start.bRestrictToRecommended = false;
+
+    FActorVariation PackageLoss_IntervalDegradation;
+    PackageLoss_IntervalDegradation.Id = TEXT("PackageLoss_IntervalDegradation");
+    PackageLoss_IntervalDegradation.Type = EActorAttributeType::Float;
+    PackageLoss_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    PackageLoss_IntervalDegradation.bRestrictToRecommended = false;
+
+    FActorVariation PackageLoss_DurationDegradation;
+    PackageLoss_DurationDegradation.Id = TEXT("PackageLoss_DurationDegradation");
+    PackageLoss_DurationDegradation.Type = EActorAttributeType::Float;
+    PackageLoss_DurationDegradation.RecommendedValues = { TEXT("0") };
+    PackageLoss_DurationDegradation.bRestrictToRecommended = false;
+
+    FActorVariation PackageDelay_Start;
+    PackageDelay_Start.Id = TEXT("PackageDelay_Start");
+    PackageDelay_Start.Type = EActorAttributeType::Float;
+    PackageDelay_Start.RecommendedValues = { TEXT("0") };
+    PackageDelay_Start.bRestrictToRecommended = false;
+
+    FActorVariation PackageDelay_Interval;
+    PackageDelay_Interval.Id = TEXT("PackageDelay_Interval");
+    PackageDelay_Interval.Type = EActorAttributeType::Float;
+    PackageDelay_Interval.RecommendedValues = { TEXT("0") };
+    PackageDelay_Interval.bRestrictToRecommended = false;
+
+    FActorVariation PackageDelay_DegradationSize;
+    PackageDelay_DegradationSize.Id = TEXT("PackageDelay_DegradationSize");
+    PackageDelay_DegradationSize.Type = EActorAttributeType::Int;
+    PackageDelay_DegradationSize.RecommendedValues = { TEXT("0") };
+    PackageDelay_DegradationSize.bRestrictToRecommended = false;
+
+    FActorVariation PackageDelay_DelaySize;
+    PackageDelay_DelaySize.Id = TEXT("PackageDelay_DelaySize");
+    PackageDelay_DelaySize.Type = EActorAttributeType::Int;
+    PackageDelay_DelaySize.RecommendedValues = { TEXT("0") };
+    PackageDelay_DelaySize.bRestrictToRecommended = false;
+
+    FActorVariation PackageDelay_RingBufferMaxUseSize;
+    PackageDelay_RingBufferMaxUseSize.Id = TEXT("PackageDelay_RingBufferMaxUseSize");
+    PackageDelay_RingBufferMaxUseSize.Type = EActorAttributeType::Int;
+    PackageDelay_RingBufferMaxUseSize.RecommendedValues = { TEXT("0") };
+    PackageDelay_RingBufferMaxUseSize.bRestrictToRecommended = false;
+
+
+    FActorVariation DetectionPointShift_Start;
+    DetectionPointShift_Start.Id = TEXT("DetectionPointShift_Start");
+    DetectionPointShift_Start.Type = EActorAttributeType::Float;
+    DetectionPointShift_Start.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_Start.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPointShift_Interval;
+    DetectionPointShift_Interval.Id = TEXT("DetectionPointShift_Interval");
+    DetectionPointShift_Interval.Type = EActorAttributeType::Float;
+    DetectionPointShift_Interval.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_Interval.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPointShift_Duration;
+    DetectionPointShift_Duration.Id = TEXT("DetectionPointShift_Duration");
+    DetectionPointShift_Duration.Type = EActorAttributeType::Float;
+    DetectionPointShift_Duration.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_Duration.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPointShift_IntervalDegradation;
+    DetectionPointShift_IntervalDegradation.Id = TEXT("DetectionPointShift_IntervalDegradation");
+    DetectionPointShift_IntervalDegradation.Type = EActorAttributeType::Float;
+    DetectionPointShift_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_IntervalDegradation.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPointShift_DurationDegradation;
+    DetectionPointShift_DurationDegradation.Id = TEXT("DetectionPointShift_DurationDegradation");
+    DetectionPointShift_DurationDegradation.Type = EActorAttributeType::Float;
+    DetectionPointShift_DurationDegradation.RecommendedValues = { TEXT("0") };
+    DetectionPointShift_DurationDegradation.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPoint_MaxDepthDisturbance;
+    DetectionPoint_MaxDepthDisturbance.Id = TEXT("DetectionPoint_MaxDepthDisturbance");
+    DetectionPoint_MaxDepthDisturbance.Type = EActorAttributeType::Float;
+    DetectionPoint_MaxDepthDisturbance.RecommendedValues = { TEXT("0") };
+    DetectionPoint_MaxDepthDisturbance.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPoint_MaxAzimuthDisturbance;
+    DetectionPoint_MaxAzimuthDisturbance.Id = TEXT("DetectionPoint_MaxAzimuthDisturbance");
+    DetectionPoint_MaxAzimuthDisturbance.Type = EActorAttributeType::Float;
+    DetectionPoint_MaxAzimuthDisturbance.RecommendedValues = { TEXT("0") };
+    DetectionPoint_MaxAzimuthDisturbance.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPoint_MaxAltitudeDisturbance;
+    DetectionPoint_MaxAltitudeDisturbance.Id = TEXT("DetectionPoint_MaxAltitudeDisturbance");
+    DetectionPoint_MaxAltitudeDisturbance.Type = EActorAttributeType::Float;
+    DetectionPoint_MaxAltitudeDisturbance.RecommendedValues = { TEXT("0") };
+    DetectionPoint_MaxAltitudeDisturbance.bRestrictToRecommended = false;
+
+    FActorVariation DetectionPoint_Distribution;
+    DetectionPoint_Distribution.Id = TEXT("DetectionPoint_Distribution");
+    DetectionPoint_Distribution.Type = EActorAttributeType::Int;
+    DetectionPoint_Distribution.RecommendedValues = { TEXT("0") };
+    DetectionPoint_Distribution.bRestrictToRecommended = false;
+
+
+
+    FActorVariation VelocityShift_Start;
+    VelocityShift_Start.Id = TEXT("VelocityShift_Start");
+    VelocityShift_Start.Type = EActorAttributeType::Float;
+    VelocityShift_Start.RecommendedValues = { TEXT("0") };
+    VelocityShift_Start.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_Interval;
+    VelocityShift_Interval.Id = TEXT("VelocityShift_Interval");
+    VelocityShift_Interval.Type = EActorAttributeType::Float;
+    VelocityShift_Interval.RecommendedValues = { TEXT("0") };
+    VelocityShift_Interval.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_Duration;
+    VelocityShift_Duration.Id = TEXT("VelocityShift_Duration");
+    VelocityShift_Duration.Type = EActorAttributeType::Float;
+    VelocityShift_Duration.RecommendedValues = { TEXT("0") };
+    VelocityShift_Duration.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_IntervalDegradation;
+    VelocityShift_IntervalDegradation.Id = TEXT("VelocityShift_IntervalDegradation");
+    VelocityShift_IntervalDegradation.Type = EActorAttributeType::Float;
+    VelocityShift_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    VelocityShift_IntervalDegradation.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_DurationDegradation;
+    VelocityShift_DurationDegradation.Id = TEXT("VelocityShift_DurationDegradation");
+    VelocityShift_DurationDegradation.Type = EActorAttributeType::Float;
+    VelocityShift_DurationDegradation.RecommendedValues = { TEXT("0") };
+    VelocityShift_DurationDegradation.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_MaxVelocityDisturbance;
+    VelocityShift_MaxVelocityDisturbance.Id = TEXT("VelocityShift_MaxVelocityDisturbance");
+    VelocityShift_MaxVelocityDisturbance.Type = EActorAttributeType::Float;
+    VelocityShift_MaxVelocityDisturbance.RecommendedValues = { TEXT("0") };
+    VelocityShift_MaxVelocityDisturbance.bRestrictToRecommended = false;
+
+    FActorVariation VelocityShift_Distribution;
+    VelocityShift_Distribution.Id = TEXT("VelocityShift_Distribution");
+    VelocityShift_Distribution.Type = EActorAttributeType::Int;
+    VelocityShift_Distribution.RecommendedValues = { TEXT("0") };
+    VelocityShift_Distribution.bRestrictToRecommended = false;
+
+
+
+    FActorVariation RangeReduction_Start;
+    RangeReduction_Start.Id = TEXT("RangeReduction_Start");
+    RangeReduction_Start.Type = EActorAttributeType::Float;
+    RangeReduction_Start.RecommendedValues = { TEXT("0") };
+    RangeReduction_Start.bRestrictToRecommended = false;
+
+
+    FActorVariation RangeReduction_Interval;
+    RangeReduction_Interval.Id = TEXT("RangeReduction_Interval");
+    RangeReduction_Interval.Type = EActorAttributeType::Float;
+    RangeReduction_Interval.RecommendedValues = { TEXT("0") };
+    RangeReduction_Interval.bRestrictToRecommended = false;
+
+
+    FActorVariation RangeReduction_Duration;
+    RangeReduction_Duration.Id = TEXT("RangeReduction_Duration");
+    RangeReduction_Duration.Type = EActorAttributeType::Float;
+    RangeReduction_Duration.RecommendedValues = { TEXT("0") };
+    RangeReduction_Duration.bRestrictToRecommended = false;
+
+
+    FActorVariation RangeReduction_IntervalDegradation;
+    RangeReduction_IntervalDegradation.Id = TEXT("RangeReduction_IntervalDegradation");
+    RangeReduction_IntervalDegradation.Type = EActorAttributeType::Float;
+    RangeReduction_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    RangeReduction_IntervalDegradation.bRestrictToRecommended = false;
+
+
+    FActorVariation RangeReduction_DurationDegradation;
+    RangeReduction_DurationDegradation.Id = TEXT("RangeReduction_DurationDegradation");
+    RangeReduction_DurationDegradation.Type = EActorAttributeType::Float;
+    RangeReduction_DurationDegradation.RecommendedValues = { TEXT("0") };
+    RangeReduction_DurationDegradation.bRestrictToRecommended = false;
+
+
+    FActorVariation RangeReduction_RangeReductionValue;
+    RangeReduction_RangeReductionValue.Id = TEXT("RangeReduction_RangeReductionValue");
+    RangeReduction_RangeReductionValue.Type = EActorAttributeType::Float;
+    RangeReduction_RangeReductionValue.RecommendedValues = { TEXT("0") };
+    RangeReduction_RangeReductionValue.bRestrictToRecommended = false;
+
+
+    FActorVariation DetectNonExistingPoints_Start;
+    DetectNonExistingPoints_Start.Id = TEXT("DetectNonExistingPoints_Start");
+    DetectNonExistingPoints_Start.Type = EActorAttributeType::Float;
+    DetectNonExistingPoints_Start.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_Start.bRestrictToRecommended = false;
+
+    FActorVariation DetectNonExistingPoints_Interval;
+    DetectNonExistingPoints_Interval.Id = TEXT("DetectNonExistingPoints_Interval");
+    DetectNonExistingPoints_Interval.Type = EActorAttributeType::Float;
+    DetectNonExistingPoints_Interval.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_Interval.bRestrictToRecommended = false;
+
+    FActorVariation DetectNonExistingPoints_Duration;
+    DetectNonExistingPoints_Duration.Id = TEXT("DetectNonExistingPoints_Duration");
+    DetectNonExistingPoints_Duration.Type = EActorAttributeType::Float;
+    DetectNonExistingPoints_Duration.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_Duration.bRestrictToRecommended = false;
+
+    FActorVariation DetectNonExistingPoints_IntervalDegradation;
+    DetectNonExistingPoints_IntervalDegradation.Id = TEXT("DetectNonExistingPoints_IntervalDegradation");
+    DetectNonExistingPoints_IntervalDegradation.Type = EActorAttributeType::Float;
+    DetectNonExistingPoints_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_IntervalDegradation.bRestrictToRecommended = false;
+
+    FActorVariation DetectNonExistingPoints_DurationDegradation;
+    DetectNonExistingPoints_DurationDegradation.Id = TEXT("DetectNonExistingPoints_DurationDegradation");
+    DetectNonExistingPoints_DurationDegradation.Type = EActorAttributeType::Float;
+    DetectNonExistingPoints_DurationDegradation.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_DurationDegradation.bRestrictToRecommended = false;
+
+    FActorVariation DetectNonExistingPoints_AmountDetections;
+    DetectNonExistingPoints_AmountDetections.Id = TEXT("DetectNonExistingPoints_AmountDetections");
+    DetectNonExistingPoints_AmountDetections.Type = EActorAttributeType::Int;
+    DetectNonExistingPoints_AmountDetections.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_AmountDetections.bRestrictToRecommended = false;
+
+    FActorVariation DetectNonExistingPoints_HorFOVFlag;
+    DetectNonExistingPoints_HorFOVFlag.Id = TEXT("DetectNonExistingPoints_HorFOVFlag");
+    DetectNonExistingPoints_HorFOVFlag.Type = EActorAttributeType::Int;
+    DetectNonExistingPoints_HorFOVFlag.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_HorFOVFlag.bRestrictToRecommended = false;
+
+    FActorVariation DetectNonExistingPoints_VertFOVFlag;
+    DetectNonExistingPoints_VertFOVFlag.Id = TEXT("DetectNonExistingPoints_VertFOVFlag");
+    DetectNonExistingPoints_VertFOVFlag.Type = EActorAttributeType::Int;
+    DetectNonExistingPoints_VertFOVFlag.RecommendedValues = { TEXT("0") };
+    DetectNonExistingPoints_VertFOVFlag.bRestrictToRecommended = false;
+
+    FActorVariation SensorShift_Start;
+    SensorShift_Start.Id = TEXT("SensorShift_Start");
+    SensorShift_Start.Type = EActorAttributeType::Float;
+    SensorShift_Start.RecommendedValues = { TEXT("0") };
+    SensorShift_Start.bRestrictToRecommended = false;
+
+    FActorVariation SensorShift_Interval;
+    SensorShift_Interval.Id = TEXT("SensorShift_Interval");
+    SensorShift_Interval.Type = EActorAttributeType::Float;
+    SensorShift_Interval.RecommendedValues = { TEXT("0") };
+    SensorShift_Interval.bRestrictToRecommended = false;
+
+    FActorVariation SensorShift_Duration;
+    SensorShift_Duration.Id = TEXT("SensorShift_Duration");
+    SensorShift_Duration.Type = EActorAttributeType::Float;
+    SensorShift_Duration.RecommendedValues = { TEXT("0") };
+    SensorShift_Duration.bRestrictToRecommended = false;
+
+    FActorVariation SensorShift_IntervalDegradation;
+    SensorShift_IntervalDegradation.Id = TEXT("SensorShift_IntervalDegradation");
+    SensorShift_IntervalDegradation.Type = EActorAttributeType::Float;
+    SensorShift_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    SensorShift_IntervalDegradation.bRestrictToRecommended = false;
+
+    FActorVariation SensorShift_DurationDegradation;
+    SensorShift_DurationDegradation.Id = TEXT("SensorShift_DurationDegradation");
+    SensorShift_DurationDegradation.Type = EActorAttributeType::Float;
+    SensorShift_DurationDegradation.RecommendedValues = { TEXT("0") };
+    SensorShift_DurationDegradation.bRestrictToRecommended = false;
+
+    FActorVariation SensorShift_Yaw;
+    SensorShift_Yaw.Id = TEXT("SensorShift_Yaw");
+    SensorShift_Yaw.Type = EActorAttributeType::Float;
+    SensorShift_Yaw.RecommendedValues = { TEXT("0") };
+    SensorShift_Yaw.bRestrictToRecommended = false;
+
+    FActorVariation SensorShift_Pitch;
+    SensorShift_Pitch.Id = TEXT("SensorShift_Pitch");
+    SensorShift_Pitch.Type = EActorAttributeType::Float;
+    SensorShift_Pitch.RecommendedValues = { TEXT("0") };
+    SensorShift_Pitch.bRestrictToRecommended = false;
+
+    FActorVariation SensorShift_Roll;
+    SensorShift_Roll.Id = TEXT("SensorShift_Roll");
+    SensorShift_Roll.Type = EActorAttributeType::Float;
+    SensorShift_Roll.RecommendedValues = { TEXT("0") };
+    SensorShift_Roll.bRestrictToRecommended = false;
+
+    FActorVariation SensorShiftFlag;
+    SensorShiftFlag.Id = TEXT("SensorShiftFlag");
+    SensorShiftFlag.Type = EActorAttributeType::Int;
+    SensorShiftFlag.RecommendedValues = { TEXT("0") };
+    SensorShiftFlag.bRestrictToRecommended = false;
+
+    FActorVariation SensorShiftTriggerFlag;
+    SensorShiftTriggerFlag.Id = TEXT("SensorShift_Pitch");
+    SensorShiftTriggerFlag.Type = EActorAttributeType::Int;
+    SensorShiftTriggerFlag.RecommendedValues = { TEXT("0") };
+    SensorShiftTriggerFlag.bRestrictToRecommended = false;
+
+    FActorVariation SensorBlockage_Start;
+    SensorBlockage_Start.Id = TEXT("SensorBlockage_Start");
+    SensorBlockage_Start.Type = EActorAttributeType::Float;
+    SensorBlockage_Start.RecommendedValues = { TEXT("0") };
+    SensorBlockage_Start.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_Interval;
+    SensorBlockage_Interval.Id = TEXT("SensorBlockage_Interval");
+    SensorBlockage_Interval.Type = EActorAttributeType::Float;
+    SensorBlockage_Interval.RecommendedValues = { TEXT("0") };
+    SensorBlockage_Interval.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_IntervalDegradation;
+    SensorBlockage_IntervalDegradation.Id = TEXT("SensorBlockage_IntervalDegradation");
+    SensorBlockage_IntervalDegradation.Type = EActorAttributeType::Float;
+    SensorBlockage_IntervalDegradation.RecommendedValues = { TEXT("0") };
+    SensorBlockage_IntervalDegradation.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_BlockingObjectLifeTime;
+    SensorBlockage_BlockingObjectLifeTime.Id = TEXT("SensorBlockage_BlockingObjectLifeTime");
+    SensorBlockage_BlockingObjectLifeTime.Type = EActorAttributeType::Float;
+    SensorBlockage_BlockingObjectLifeTime.RecommendedValues = { TEXT("0") };
+    SensorBlockage_BlockingObjectLifeTime.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_MaxBlockingObjectLifeTime;
+    SensorBlockage_MaxBlockingObjectLifeTime.Id = TEXT("SensorBlockage_MaxBlockingObjectLifeTime");
+    SensorBlockage_MaxBlockingObjectLifeTime.Type = EActorAttributeType::Float;
+    SensorBlockage_MaxBlockingObjectLifeTime.RecommendedValues = { TEXT("0") };
+    SensorBlockage_MaxBlockingObjectLifeTime.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_BlockageDropSpeed;
+    SensorBlockage_BlockageDropSpeed.Id = TEXT("SensorBlockage_BlockageDropSpeed");
+    SensorBlockage_BlockageDropSpeed.Type = EActorAttributeType::Float;
+    SensorBlockage_BlockageDropSpeed.RecommendedValues = { TEXT("0") };
+    SensorBlockage_BlockageDropSpeed.bRestrictToRecommended = false;
+
+    FActorVariation SensorBlockage_AmountOfBlockingObjects;
+    SensorBlockage_AmountOfBlockingObjects.Id = TEXT("SensorBlockage_AmountOfBlockingObjects");
+    SensorBlockage_AmountOfBlockingObjects.Type = EActorAttributeType::Int;
+    SensorBlockage_AmountOfBlockingObjects.RecommendedValues = { TEXT("0") };
+    SensorBlockage_AmountOfBlockingObjects.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_Type;
+    SensorBlockage_Type.Id = TEXT("SensorBlockage_Type");
+    SensorBlockage_Type.Type = EActorAttributeType::Int;
+    SensorBlockage_Type.RecommendedValues = { TEXT("0") };
+    SensorBlockage_Type.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_LifeTime;
+    SensorBlockage_LifeTime.Id = TEXT("SensorBlockage_LifeTime");
+    SensorBlockage_LifeTime.Type = EActorAttributeType::Int;
+    SensorBlockage_LifeTime.RecommendedValues = { TEXT("0") };
+    SensorBlockage_LifeTime.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_HorFOVFlag;
+    SensorBlockage_HorFOVFlag.Id = TEXT("SensorBlockage_HorFOVFlag");
+    SensorBlockage_HorFOVFlag.Type = EActorAttributeType::Int;
+    SensorBlockage_HorFOVFlag.RecommendedValues = { TEXT("0") };
+    SensorBlockage_HorFOVFlag.bRestrictToRecommended = false;
+    FActorVariation SensorBlockage_VertFOVFlag;
+    SensorBlockage_VertFOVFlag.Id = TEXT("SensorBlockage_VertFOVFlag");
+    SensorBlockage_VertFOVFlag.Type = EActorAttributeType::Int;
+    SensorBlockage_VertFOVFlag.RecommendedValues = { TEXT("0") };
+    SensorBlockage_VertFOVFlag.bRestrictToRecommended = false;
+    Definition.Variations.Append({
+        Scenario,
+        PackageLoss_Interval,
+        PackageLoss_Duration,
+        PackageLoss_Start,
+        PackageLoss_IntervalDegradation,
+        PackageLoss_DurationDegradation,
+        PackageDelay_Start,
+        PackageDelay_Interval,
+        PackageDelay_DegradationSize,
+        PackageDelay_DelaySize,
+        PackageDelay_RingBufferMaxUseSize,
+        DetectionPointShift_Start,
+        DetectionPointShift_Interval,
+        DetectionPointShift_Duration,
+        DetectionPointShift_IntervalDegradation,
+        DetectionPointShift_DurationDegradation,
+        DetectionPoint_MaxDepthDisturbance,
+        DetectionPoint_MaxAzimuthDisturbance,
+        DetectionPoint_MaxAltitudeDisturbance,
+        DetectionPoint_Distribution,
+        VelocityShift_Start,
+        VelocityShift_Interval,
+        VelocityShift_Duration,
+        VelocityShift_IntervalDegradation,
+        VelocityShift_DurationDegradation,
+        VelocityShift_MaxVelocityDisturbance,
+        VelocityShift_Distribution,
+        RangeReduction_Start,
+        RangeReduction_Interval,
+        RangeReduction_Duration,
+        RangeReduction_IntervalDegradation,
+        RangeReduction_DurationDegradation,
+        RangeReduction_RangeReductionValue,
+        DetectNonExistingPoints_Start,
+        DetectNonExistingPoints_Interval,
+        DetectNonExistingPoints_Duration,
+        DetectNonExistingPoints_IntervalDegradation,
+        DetectNonExistingPoints_DurationDegradation,
+        DetectNonExistingPoints_AmountDetections,
+        DetectNonExistingPoints_HorFOVFlag,
+        DetectNonExistingPoints_VertFOVFlag,
+        SensorShift_Start,
+        SensorShift_Interval,
+        SensorShift_Duration,
+        SensorShift_IntervalDegradation,
+        SensorShift_DurationDegradation,
+        SensorShift_Yaw,
+        SensorShift_Pitch,
+        SensorShift_Roll,
+        SensorShiftFlag,
+        SensorShiftTriggerFlag,
+        SensorBlockage_Start,
+        SensorBlockage_Interval,
+        SensorBlockage_IntervalDegradation,
+        SensorBlockage_AmountOfBlockingObjects,
+        SensorBlockage_Type,
+        SensorBlockage_LifeTime,
+        SensorBlockage_BlockingObjectLifeTime,
+        SensorBlockage_MaxBlockingObjectLifeTime,
+        SensorBlockage_BlockageDropSpeed,
+        SensorBlockage_HorFOVFlag,
+        SensorBlockage_VertFOVFlag
+        });
+}
+
 /// Checks validity of FActorDefinition.
 class FActorDefinitionValidator
 {
@@ -938,449 +1380,15 @@ void UActorBlueprintFunctionLibrary::MakeFaultyRadarDefinition(
     NoiseSeed.RecommendedValues = { TEXT("0") };
     NoiseSeed.bRestrictToRecommended = false;
 
-    FActorVariation Scenario;
-    Scenario.Id = TEXT("scenario");
-    Scenario.Type = EActorAttributeType::Int;
-    Scenario.RecommendedValues = { TEXT("0") };
-    Scenario.bRestrictToRecommended = false;
-
-    FActorVariation PackageLoss_Interval;
-    PackageLoss_Interval.Id = TEXT("PackageLoss_Interval");
-    PackageLoss_Interval.Type = EActorAttributeType::Float;
-    PackageLoss_Interval.RecommendedValues = { TEXT("0") };
-    PackageLoss_Interval.bRestrictToRecommended = false;
-
-    FActorVariation PackageLoss_Duration;
-    PackageLoss_Duration.Id = TEXT("PackageLoss_Duration");
-    PackageLoss_Duration.Type = EActorAttributeType::Float;
-    PackageLoss_Duration.RecommendedValues = { TEXT("0") };
-    PackageLoss_Duration.bRestrictToRecommended = false;
-
-    FActorVariation PackageLoss_Start;
-    PackageLoss_Start.Id = TEXT("PackageLoss_Start");
-    PackageLoss_Start.Type = EActorAttributeType::Float;
-    PackageLoss_Start.RecommendedValues = { TEXT("0") };
-    PackageLoss_Start.bRestrictToRecommended = false;
-
-    FActorVariation PackageLoss_IntervalDegradation;
-    PackageLoss_IntervalDegradation.Id = TEXT("PackageLoss_IntervalDegradation");
-    PackageLoss_IntervalDegradation.Type = EActorAttributeType::Float;
-    PackageLoss_IntervalDegradation.RecommendedValues = { TEXT("0") };
-    PackageLoss_IntervalDegradation.bRestrictToRecommended = false;
-
-    FActorVariation PackageLoss_DurationDegradation;
-    PackageLoss_DurationDegradation.Id = TEXT("PackageLoss_DurationDegradation");
-    PackageLoss_DurationDegradation.Type = EActorAttributeType::Float;
-    PackageLoss_DurationDegradation.RecommendedValues = { TEXT("0") };
-    PackageLoss_DurationDegradation.bRestrictToRecommended = false;
-
-    FActorVariation PackageDelay_Start;
-    PackageDelay_Start.Id = TEXT("PackageDelay_Start");
-    PackageDelay_Start.Type = EActorAttributeType::Float;
-    PackageDelay_Start.RecommendedValues = { TEXT("0") };
-    PackageDelay_Start.bRestrictToRecommended = false;
-
-    FActorVariation PackageDelay_Interval;
-    PackageDelay_Interval.Id = TEXT("PackageDelay_Interval");
-    PackageDelay_Interval.Type = EActorAttributeType::Float;
-    PackageDelay_Interval.RecommendedValues = { TEXT("0") };
-    PackageDelay_Interval.bRestrictToRecommended = false;
-
-    FActorVariation PackageDelay_DegradationSize;
-    PackageDelay_DegradationSize.Id = TEXT("PackageDelay_DegradationSize");
-    PackageDelay_DegradationSize.Type = EActorAttributeType::Int;
-    PackageDelay_DegradationSize.RecommendedValues = { TEXT("0") };
-    PackageDelay_DegradationSize.bRestrictToRecommended = false;
-
-    FActorVariation PackageDelay_DelaySize;
-    PackageDelay_DelaySize.Id = TEXT("PackageDelay_DelaySize");
-    PackageDelay_DelaySize.Type = EActorAttributeType::Int;
-    PackageDelay_DelaySize.RecommendedValues = { TEXT("0") };
-    PackageDelay_DelaySize.bRestrictToRecommended = false;
-
-    FActorVariation PackageDelay_RingBufferMaxUseSize;
-    PackageDelay_RingBufferMaxUseSize.Id = TEXT("PackageDelay_RingBufferMaxUseSize");
-    PackageDelay_RingBufferMaxUseSize.Type = EActorAttributeType::Int;
-    PackageDelay_RingBufferMaxUseSize.RecommendedValues = { TEXT("0") };
-    PackageDelay_RingBufferMaxUseSize.bRestrictToRecommended = false;
-
-
-    FActorVariation DetectionPointShift_Start;
-    DetectionPointShift_Start.Id = TEXT("DetectionPointShift_Start");
-    DetectionPointShift_Start.Type = EActorAttributeType::Float;
-    DetectionPointShift_Start.RecommendedValues = { TEXT("0") };
-    DetectionPointShift_Start.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPointShift_Interval;
-    DetectionPointShift_Interval.Id = TEXT("DetectionPointShift_Interval");
-    DetectionPointShift_Interval.Type = EActorAttributeType::Float;
-    DetectionPointShift_Interval.RecommendedValues = { TEXT("0") };
-    DetectionPointShift_Interval.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPointShift_Duration;
-    DetectionPointShift_Duration.Id = TEXT("DetectionPointShift_Duration");
-    DetectionPointShift_Duration.Type = EActorAttributeType::Float;
-    DetectionPointShift_Duration.RecommendedValues = { TEXT("0") };
-    DetectionPointShift_Duration.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPointShift_IntervalDegradation;
-    DetectionPointShift_IntervalDegradation.Id = TEXT("DetectionPointShift_IntervalDegradation");
-    DetectionPointShift_IntervalDegradation.Type = EActorAttributeType::Float;
-    DetectionPointShift_IntervalDegradation.RecommendedValues = { TEXT("0") };
-    DetectionPointShift_IntervalDegradation.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPointShift_DurationDegradation;
-    DetectionPointShift_DurationDegradation.Id = TEXT("DetectionPointShift_DurationDegradation");
-    DetectionPointShift_DurationDegradation.Type = EActorAttributeType::Float;
-    DetectionPointShift_DurationDegradation.RecommendedValues = { TEXT("0") };
-    DetectionPointShift_DurationDegradation.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPoint_MaxDepthDisturbance;
-    DetectionPoint_MaxDepthDisturbance.Id = TEXT("DetectionPoint_MaxDepthDisturbance");
-    DetectionPoint_MaxDepthDisturbance.Type = EActorAttributeType::Float;
-    DetectionPoint_MaxDepthDisturbance.RecommendedValues = { TEXT("0") };
-    DetectionPoint_MaxDepthDisturbance.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPoint_MaxAzimuthDisturbance;
-    DetectionPoint_MaxAzimuthDisturbance.Id = TEXT("DetectionPoint_MaxAzimuthDisturbance");
-    DetectionPoint_MaxAzimuthDisturbance.Type = EActorAttributeType::Float;
-    DetectionPoint_MaxAzimuthDisturbance.RecommendedValues = { TEXT("0") };
-    DetectionPoint_MaxAzimuthDisturbance.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPoint_MaxAltitudeDisturbance;
-    DetectionPoint_MaxAltitudeDisturbance.Id = TEXT("DetectionPoint_MaxAltitudeDisturbance");
-    DetectionPoint_MaxAltitudeDisturbance.Type = EActorAttributeType::Float;
-    DetectionPoint_MaxAltitudeDisturbance.RecommendedValues = { TEXT("0") };
-    DetectionPoint_MaxAltitudeDisturbance.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPoint_Distribution;
-    DetectionPoint_Distribution.Id = TEXT("DetectionPoint_Distribution");
-    DetectionPoint_Distribution.Type = EActorAttributeType::Int;
-    DetectionPoint_Distribution.RecommendedValues = { TEXT("0") };
-    DetectionPoint_Distribution.bRestrictToRecommended = false;
-
-
-
-    FActorVariation VelocityShift_Start;
-    VelocityShift_Start.Id = TEXT("VelocityShift_Start");
-    VelocityShift_Start.Type = EActorAttributeType::Float;
-    VelocityShift_Start.RecommendedValues = { TEXT("0") };
-    VelocityShift_Start.bRestrictToRecommended = false;
-
-    FActorVariation VelocityShift_Interval;
-    VelocityShift_Interval.Id = TEXT("VelocityShift_Interval");
-    VelocityShift_Interval.Type = EActorAttributeType::Float;
-    VelocityShift_Interval.RecommendedValues = { TEXT("0") };
-    VelocityShift_Interval.bRestrictToRecommended = false;
-
-    FActorVariation VelocityShift_Duration;
-    VelocityShift_Duration.Id = TEXT("VelocityShift_Duration");
-    VelocityShift_Duration.Type = EActorAttributeType::Float;
-    VelocityShift_Duration.RecommendedValues = { TEXT("0") };
-    VelocityShift_Duration.bRestrictToRecommended = false;
-
-    FActorVariation VelocityShift_IntervalDegradation;
-    VelocityShift_IntervalDegradation.Id = TEXT("VelocityShift_IntervalDegradation");
-    VelocityShift_IntervalDegradation.Type = EActorAttributeType::Float;
-    VelocityShift_IntervalDegradation.RecommendedValues = { TEXT("0") };
-    VelocityShift_IntervalDegradation.bRestrictToRecommended = false;
-
-    FActorVariation VelocityShift_DurationDegradation;
-    VelocityShift_DurationDegradation.Id = TEXT("VelocityShift_DurationDegradation");
-    VelocityShift_DurationDegradation.Type = EActorAttributeType::Float;
-    VelocityShift_DurationDegradation.RecommendedValues = { TEXT("0") };
-    VelocityShift_DurationDegradation.bRestrictToRecommended = false;
-
-    FActorVariation VelocityShift_MaxVelocityDisturbance;
-    VelocityShift_MaxVelocityDisturbance.Id = TEXT("VelocityShift_MaxVelocityDisturbance");
-    VelocityShift_MaxVelocityDisturbance.Type = EActorAttributeType::Float;
-    VelocityShift_MaxVelocityDisturbance.RecommendedValues = { TEXT("0") };
-    VelocityShift_MaxVelocityDisturbance.bRestrictToRecommended = false;
-
-    FActorVariation VelocityShift_Distribution;
-    VelocityShift_Distribution.Id = TEXT("VelocityShift_Distribution");
-    VelocityShift_Distribution.Type = EActorAttributeType::Int;
-    VelocityShift_Distribution.RecommendedValues = { TEXT("0") };
-    VelocityShift_Distribution.bRestrictToRecommended = false;
-
-
-
-    FActorVariation RangeReduction_Start;
-    RangeReduction_Start.Id = TEXT("RangeReduction_Start");
-    RangeReduction_Start.Type = EActorAttributeType::Float;
-    RangeReduction_Start.RecommendedValues = { TEXT("0") };
-    RangeReduction_Start.bRestrictToRecommended = false;
-
-
-    FActorVariation RangeReduction_Interval;
-    RangeReduction_Interval.Id = TEXT("RangeReduction_Interval");
-    RangeReduction_Interval.Type = EActorAttributeType::Float;
-    RangeReduction_Interval.RecommendedValues = { TEXT("0") };
-    RangeReduction_Interval.bRestrictToRecommended = false;
-
-
-    FActorVariation RangeReduction_Duration;
-    RangeReduction_Duration.Id = TEXT("RangeReduction_Duration");
-    RangeReduction_Duration.Type = EActorAttributeType::Float;
-    RangeReduction_Duration.RecommendedValues = { TEXT("0") };
-    RangeReduction_Duration.bRestrictToRecommended = false;
-
-
-    FActorVariation RangeReduction_IntervalDegradation;
-    RangeReduction_IntervalDegradation.Id = TEXT("RangeReduction_IntervalDegradation");
-    RangeReduction_IntervalDegradation.Type = EActorAttributeType::Float;
-    RangeReduction_IntervalDegradation.RecommendedValues = { TEXT("0") };
-    RangeReduction_IntervalDegradation.bRestrictToRecommended = false;
-
-
-    FActorVariation RangeReduction_DurationDegradation;
-    RangeReduction_DurationDegradation.Id = TEXT("RangeReduction_DurationDegradation");
-    RangeReduction_DurationDegradation.Type = EActorAttributeType::Float;
-    RangeReduction_DurationDegradation.RecommendedValues = { TEXT("0") };
-    RangeReduction_DurationDegradation.bRestrictToRecommended = false;
-
-
-    FActorVariation RangeReduction_RangeReductionValue;
-    RangeReduction_RangeReductionValue.Id = TEXT("RangeReduction_RangeReductionValue");
-    RangeReduction_RangeReductionValue.Type = EActorAttributeType::Float;
-    RangeReduction_RangeReductionValue.RecommendedValues = { TEXT("0") };
-    RangeReduction_RangeReductionValue.bRestrictToRecommended = false;
-
-
-    FActorVariation DetectNonExistingPoints_Start;
-    DetectNonExistingPoints_Start.Id = TEXT("DetectNonExistingPoints_Start");
-    DetectNonExistingPoints_Start.Type = EActorAttributeType::Float;
-    DetectNonExistingPoints_Start.RecommendedValues = { TEXT("0") };
-    DetectNonExistingPoints_Start.bRestrictToRecommended = false;
-
-    FActorVariation DetectNonExistingPoints_Interval;
-    DetectNonExistingPoints_Interval.Id = TEXT("DetectNonExistingPoints_Interval");
-    DetectNonExistingPoints_Interval.Type = EActorAttributeType::Float;
-    DetectNonExistingPoints_Interval.RecommendedValues = { TEXT("0") };
-    DetectNonExistingPoints_Interval.bRestrictToRecommended = false;
-
-    FActorVariation DetectNonExistingPoints_Duration;
-    DetectNonExistingPoints_Duration.Id = TEXT("DetectNonExistingPoints_Duration");
-    DetectNonExistingPoints_Duration.Type = EActorAttributeType::Float;
-    DetectNonExistingPoints_Duration.RecommendedValues = { TEXT("0") };
-    DetectNonExistingPoints_Duration.bRestrictToRecommended = false;
-
-    FActorVariation DetectNonExistingPoints_IntervalDegradation;
-    DetectNonExistingPoints_IntervalDegradation.Id = TEXT("DetectNonExistingPoints_IntervalDegradation");
-    DetectNonExistingPoints_IntervalDegradation.Type = EActorAttributeType::Float;
-    DetectNonExistingPoints_IntervalDegradation.RecommendedValues = { TEXT("0") };
-    DetectNonExistingPoints_IntervalDegradation.bRestrictToRecommended = false;
-
-    FActorVariation DetectNonExistingPoints_DurationDegradation;
-    DetectNonExistingPoints_DurationDegradation.Id = TEXT("DetectNonExistingPoints_DurationDegradation");
-    DetectNonExistingPoints_DurationDegradation.Type = EActorAttributeType::Float;
-    DetectNonExistingPoints_DurationDegradation.RecommendedValues = { TEXT("0") };
-    DetectNonExistingPoints_DurationDegradation.bRestrictToRecommended = false;
-
-    FActorVariation DetectNonExistingPoints_AmountDetections;
-    DetectNonExistingPoints_AmountDetections.Id = TEXT("DetectNonExistingPoints_AmountDetections");
-    DetectNonExistingPoints_AmountDetections.Type = EActorAttributeType::Int;
-    DetectNonExistingPoints_AmountDetections.RecommendedValues = { TEXT("0") };
-    DetectNonExistingPoints_AmountDetections.bRestrictToRecommended = false;
-
-    FActorVariation DetectNonExistingPoints_HorFOVFlag;
-    DetectNonExistingPoints_HorFOVFlag.Id = TEXT("DetectNonExistingPoints_HorFOVFlag");
-    DetectNonExistingPoints_HorFOVFlag.Type = EActorAttributeType::Int;
-    DetectNonExistingPoints_HorFOVFlag.RecommendedValues = { TEXT("0") };
-    DetectNonExistingPoints_HorFOVFlag.bRestrictToRecommended = false;
-
-    FActorVariation DetectNonExistingPoints_VertFOVFlag;
-    DetectNonExistingPoints_VertFOVFlag.Id = TEXT("DetectNonExistingPoints_VertFOVFlag");
-    DetectNonExistingPoints_VertFOVFlag.Type = EActorAttributeType::Int;
-    DetectNonExistingPoints_VertFOVFlag.RecommendedValues = { TEXT("0") };
-    DetectNonExistingPoints_VertFOVFlag.bRestrictToRecommended = false;
-
-    FActorVariation SensorShift_Start;
-    SensorShift_Start.Id = TEXT("SensorShift_Start");
-    SensorShift_Start.Type = EActorAttributeType::Float;
-    SensorShift_Start.RecommendedValues = { TEXT("0") };
-    SensorShift_Start.bRestrictToRecommended = false;
-
-    FActorVariation SensorShift_Interval;
-    SensorShift_Interval.Id = TEXT("SensorShift_Interval");
-    SensorShift_Interval.Type = EActorAttributeType::Float;
-    SensorShift_Interval.RecommendedValues = { TEXT("0") };
-    SensorShift_Interval.bRestrictToRecommended = false;
-
-    FActorVariation SensorShift_Duration;
-    SensorShift_Duration.Id = TEXT("SensorShift_Duration");
-    SensorShift_Duration.Type = EActorAttributeType::Float;
-    SensorShift_Duration.RecommendedValues = { TEXT("0") };
-    SensorShift_Duration.bRestrictToRecommended = false;
-
-    FActorVariation SensorShift_IntervalDegradation;
-    SensorShift_IntervalDegradation.Id = TEXT("SensorShift_IntervalDegradation");
-    SensorShift_IntervalDegradation.Type = EActorAttributeType::Float;
-    SensorShift_IntervalDegradation.RecommendedValues = { TEXT("0") };
-    SensorShift_IntervalDegradation.bRestrictToRecommended = false;
-
-    FActorVariation SensorShift_DurationDegradation;
-    SensorShift_DurationDegradation.Id = TEXT("SensorShift_DurationDegradation");
-    SensorShift_DurationDegradation.Type = EActorAttributeType::Float;
-    SensorShift_DurationDegradation.RecommendedValues = { TEXT("0") };
-    SensorShift_DurationDegradation.bRestrictToRecommended = false;
-
-    FActorVariation SensorShift_Yaw;
-    SensorShift_Yaw.Id = TEXT("SensorShift_Yaw");
-    SensorShift_Yaw.Type = EActorAttributeType::Float;
-    SensorShift_Yaw.RecommendedValues = { TEXT("0") };
-    SensorShift_Yaw.bRestrictToRecommended = false;
-
-    FActorVariation SensorShift_Pitch;
-    SensorShift_Pitch.Id = TEXT("SensorShift_Pitch");
-    SensorShift_Pitch.Type = EActorAttributeType::Float;
-    SensorShift_Pitch.RecommendedValues = { TEXT("0") };
-    SensorShift_Pitch.bRestrictToRecommended = false;
-
-    FActorVariation SensorShift_Roll;
-    SensorShift_Roll.Id = TEXT("SensorShift_Roll");
-    SensorShift_Roll.Type = EActorAttributeType::Float;
-    SensorShift_Roll.RecommendedValues = { TEXT("0") };
-    SensorShift_Roll.bRestrictToRecommended = false;
-
-    FActorVariation SensorShiftFlag;
-    SensorShiftFlag.Id = TEXT("SensorShiftFlag");
-    SensorShiftFlag.Type = EActorAttributeType::Int;
-    SensorShiftFlag.RecommendedValues = { TEXT("0") };
-    SensorShiftFlag.bRestrictToRecommended = false;
-
-    FActorVariation SensorShiftTriggerFlag;
-    SensorShiftTriggerFlag.Id = TEXT("SensorShift_Pitch");
-    SensorShiftTriggerFlag.Type = EActorAttributeType::Int;
-    SensorShiftTriggerFlag.RecommendedValues = { TEXT("0") };
-    SensorShiftTriggerFlag.bRestrictToRecommended = false;
-
-    FActorVariation SensorBlockage_Start;
-    SensorBlockage_Start.Id = TEXT("SensorBlockage_Start");
-    SensorBlockage_Start.Type = EActorAttributeType::Float;
-    SensorBlockage_Start.RecommendedValues = { TEXT("0") };
-    SensorBlockage_Start.bRestrictToRecommended = false;
-    FActorVariation SensorBlockage_Interval;
-    SensorBlockage_Interval.Id = TEXT("SensorBlockage_Interval");
-    SensorBlockage_Interval.Type = EActorAttributeType::Float;
-    SensorBlockage_Interval.RecommendedValues = { TEXT("0") };
-    SensorBlockage_Interval.bRestrictToRecommended = false;
-    FActorVariation SensorBlockage_IntervalDegradation;
-    SensorBlockage_IntervalDegradation.Id = TEXT("SensorBlockage_IntervalDegradation");
-    SensorBlockage_IntervalDegradation.Type = EActorAttributeType::Float;
-    SensorBlockage_IntervalDegradation.RecommendedValues = { TEXT("0") };
-    SensorBlockage_IntervalDegradation.bRestrictToRecommended = false;
-    FActorVariation SensorBlockage_BlockingObjectLifeTime;
-    SensorBlockage_BlockingObjectLifeTime.Id = TEXT("SensorBlockage_BlockingObjectLifeTime");
-    SensorBlockage_BlockingObjectLifeTime.Type = EActorAttributeType::Float;
-    SensorBlockage_BlockingObjectLifeTime.RecommendedValues = { TEXT("0") };
-    SensorBlockage_BlockingObjectLifeTime.bRestrictToRecommended = false;
-    FActorVariation SensorBlockage_MaxBlockingObjectLifeTime;
-    SensorBlockage_MaxBlockingObjectLifeTime.Id = TEXT("SensorBlockage_MaxBlockingObjectLifeTime");
-    SensorBlockage_MaxBlockingObjectLifeTime.Type = EActorAttributeType::Float;
-    SensorBlockage_MaxBlockingObjectLifeTime.RecommendedValues = { TEXT("0") };
-    SensorBlockage_MaxBlockingObjectLifeTime.bRestrictToRecommended = false;
-    FActorVariation SensorBlockage_BlockageDropSpeed;
-    SensorBlockage_BlockageDropSpeed.Id = TEXT("SensorBlockage_BlockageDropSpeed");
-    SensorBlockage_BlockageDropSpeed.Type = EActorAttributeType::Float;
-    SensorBlockage_BlockageDropSpeed.RecommendedValues = { TEXT("0") };
-    SensorBlockage_BlockageDropSpeed.bRestrictToRecommended = false;
-
-    FActorVariation SensorBlockage_AmountOfBlockingObjects;
-    SensorBlockage_AmountOfBlockingObjects.Id = TEXT("SensorBlockage_AmountOfBlockingObjects");
-    SensorBlockage_AmountOfBlockingObjects.Type = EActorAttributeType::Int;
-    SensorBlockage_AmountOfBlockingObjects.RecommendedValues = { TEXT("0") };
-    SensorBlockage_AmountOfBlockingObjects.bRestrictToRecommended = false;
-    FActorVariation SensorBlockage_Type;
-    SensorBlockage_Type.Id = TEXT("SensorBlockage_Type");
-    SensorBlockage_Type.Type = EActorAttributeType::Int;
-    SensorBlockage_Type.RecommendedValues = { TEXT("0") };
-    SensorBlockage_Type.bRestrictToRecommended = false;
-    FActorVariation SensorBlockage_LifeTime;
-    SensorBlockage_LifeTime.Id = TEXT("SensorBlockage_LifeTime");
-    SensorBlockage_LifeTime.Type = EActorAttributeType::Int;
-    SensorBlockage_LifeTime.RecommendedValues = { TEXT("0") };
-    SensorBlockage_LifeTime.bRestrictToRecommended = false;
-    FActorVariation SensorBlockage_HorFOVFlag;
-    SensorBlockage_HorFOVFlag.Id = TEXT("SensorBlockage_HorFOVFlag");
-    SensorBlockage_HorFOVFlag.Type = EActorAttributeType::Int;
-    SensorBlockage_HorFOVFlag.RecommendedValues = { TEXT("0") };
-    SensorBlockage_HorFOVFlag.bRestrictToRecommended = false;
-    FActorVariation SensorBlockage_VertFOVFlag;
-    SensorBlockage_VertFOVFlag.Id = TEXT("SensorBlockage_VertFOVFlag");
-    SensorBlockage_VertFOVFlag.Type = EActorAttributeType::Int;
-    SensorBlockage_VertFOVFlag.RecommendedValues = { TEXT("0") };
-    SensorBlockage_VertFOVFlag.bRestrictToRecommended = false;
+    
     Definition.Variations.Append({
       HorizontalFOV,
       VerticalFOV,
       Range,
       PointsPerSecond,
-      NoiseSeed,
-        Scenario,
-        PackageLoss_Interval,
-        PackageLoss_Duration,
-        PackageLoss_Start,
-        PackageLoss_IntervalDegradation,
-        PackageLoss_DurationDegradation,
-        PackageDelay_Start,
-        PackageDelay_Interval,
-        PackageDelay_DegradationSize,
-        PackageDelay_DelaySize,
-        PackageDelay_RingBufferMaxUseSize,
-        DetectionPointShift_Start,
-        DetectionPointShift_Interval,
-        DetectionPointShift_Duration,
-        DetectionPointShift_IntervalDegradation,
-        DetectionPointShift_DurationDegradation,
-        DetectionPoint_MaxDepthDisturbance,
-        DetectionPoint_MaxAzimuthDisturbance,
-        DetectionPoint_MaxAltitudeDisturbance,
-        DetectionPoint_Distribution,
-        VelocityShift_Start,
-        VelocityShift_Interval,
-        VelocityShift_Duration,
-        VelocityShift_IntervalDegradation,
-        VelocityShift_DurationDegradation,
-        VelocityShift_MaxVelocityDisturbance,
-        VelocityShift_Distribution,
-        RangeReduction_Start,
-        RangeReduction_Interval,
-        RangeReduction_Duration,
-        RangeReduction_IntervalDegradation,
-        RangeReduction_DurationDegradation,
-        RangeReduction_RangeReductionValue,
-        DetectNonExistingPoints_Start,
-        DetectNonExistingPoints_Interval,
-        DetectNonExistingPoints_Duration,
-        DetectNonExistingPoints_IntervalDegradation,
-        DetectNonExistingPoints_DurationDegradation,
-        DetectNonExistingPoints_AmountDetections,
-        DetectNonExistingPoints_HorFOVFlag,
-        DetectNonExistingPoints_VertFOVFlag,
-        SensorShift_Start,
-        SensorShift_Interval,
-        SensorShift_Duration,
-        SensorShift_IntervalDegradation,
-        SensorShift_DurationDegradation,
-        SensorShift_Yaw,
-        SensorShift_Pitch,
-        SensorShift_Roll,
-        SensorShiftFlag,
-        SensorShiftTriggerFlag,
-        SensorBlockage_Start,
-        SensorBlockage_Interval,
-        SensorBlockage_IntervalDegradation,
-        SensorBlockage_AmountOfBlockingObjects,
-        SensorBlockage_Type,
-        SensorBlockage_LifeTime,
-        SensorBlockage_BlockingObjectLifeTime,
-        SensorBlockage_MaxBlockingObjectLifeTime,
-        SensorBlockage_BlockageDropSpeed,
-        SensorBlockage_HorFOVFlag,
-        SensorBlockage_VertFOVFlag
+      NoiseSeed
         });
-
+    CreateFaultyDefinition(Definition);
     Success = CheckActorDefinition(Definition);
 }
 
@@ -1593,161 +1601,6 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
     StdDevLidar.Type = EActorAttributeType::Float;
     StdDevLidar.RecommendedValues = { TEXT("0.0") };
 
-    FActorVariation LidarScenario;
-    LidarScenario.Id = TEXT("scenario");
-    LidarScenario.Type = EActorAttributeType::Int;
-    LidarScenario.RecommendedValues = { TEXT("0") };
-    LidarScenario.bRestrictToRecommended = false;
-
-    FActorVariation PackageLoss_Interval;
-    PackageLoss_Interval.Id = TEXT("PackageLoss_Interval");
-    PackageLoss_Interval.Type = EActorAttributeType::Float;
-    PackageLoss_Interval.RecommendedValues = { TEXT("0") };
-    PackageLoss_Interval.bRestrictToRecommended = false;
-
-    FActorVariation PackageLoss_Duration;
-    PackageLoss_Duration.Id = TEXT("PackageLoss_Duration");
-    PackageLoss_Duration.Type = EActorAttributeType::Float;
-    PackageLoss_Duration.RecommendedValues = { TEXT("0") };
-    PackageLoss_Duration.bRestrictToRecommended = false;
-
-    FActorVariation PackageLoss_Start;
-    PackageLoss_Start.Id = TEXT("PackageLoss_Start");
-    PackageLoss_Start.Type = EActorAttributeType::Float;
-    PackageLoss_Start.RecommendedValues = { TEXT("0") };
-    PackageLoss_Start.bRestrictToRecommended = false;
-
-    FActorVariation PackageLoss_IntervalDegradation;
-    PackageLoss_IntervalDegradation.Id = TEXT("PackageLoss_IntervalDegradation");
-    PackageLoss_IntervalDegradation.Type = EActorAttributeType::Float;
-    PackageLoss_IntervalDegradation.RecommendedValues = { TEXT("0") };
-    PackageLoss_IntervalDegradation.bRestrictToRecommended = false;
-
-    FActorVariation PackageLoss_DurationDegradation;
-    PackageLoss_DurationDegradation.Id = TEXT("PackageLoss_DurationDegradation");
-    PackageLoss_DurationDegradation.Type = EActorAttributeType::Float;
-    PackageLoss_DurationDegradation.RecommendedValues = { TEXT("0") };
-    PackageLoss_DurationDegradation.bRestrictToRecommended = false;
-
-    FActorVariation PackageDelay_Start;
-    PackageDelay_Start.Id = TEXT("PackageDelay_Start");
-    PackageDelay_Start.Type = EActorAttributeType::Float;
-    PackageDelay_Start.RecommendedValues = { TEXT("0") };
-    PackageDelay_Start.bRestrictToRecommended = false;
-
-    FActorVariation PackageDelay_Interval;
-    PackageDelay_Interval.Id = TEXT("PackageDelay_Interval");
-    PackageDelay_Interval.Type = EActorAttributeType::Float;
-    PackageDelay_Interval.RecommendedValues = { TEXT("0") };
-    PackageDelay_Interval.bRestrictToRecommended = false;
-
-    FActorVariation PackageDelay_DegradationSize;
-    PackageDelay_DegradationSize.Id = TEXT("PackageDelay_DegradationSize");
-    PackageDelay_DegradationSize.Type = EActorAttributeType::Float;
-    PackageDelay_DegradationSize.RecommendedValues = { TEXT("0") };
-    PackageDelay_DegradationSize.bRestrictToRecommended = false;
-
-    FActorVariation PackageDelay_DelaySize;
-    PackageDelay_DelaySize.Id = TEXT("PackageDelay_DelaySize");
-    PackageDelay_DelaySize.Type = EActorAttributeType::Float;
-    PackageDelay_DelaySize.RecommendedValues = { TEXT("0") };
-    PackageDelay_DelaySize.bRestrictToRecommended = false;
-
-    FActorVariation PackageDelay_RingBufferMaxUseSize;
-    PackageDelay_RingBufferMaxUseSize.Id = TEXT("PackageDelay_RingBufferMaxUseSize");
-    PackageDelay_RingBufferMaxUseSize.Type = EActorAttributeType::Float;
-    PackageDelay_RingBufferMaxUseSize.RecommendedValues = { TEXT("0") };
-    PackageDelay_RingBufferMaxUseSize.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPointShift_Start;
-    DetectionPointShift_Start.Id = TEXT("DetectionPointShift_Start");
-    DetectionPointShift_Start.Type = EActorAttributeType::Float;
-    DetectionPointShift_Start.RecommendedValues = { TEXT("0") };
-    DetectionPointShift_Start.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPointShift_Interval;
-    DetectionPointShift_Interval.Id = TEXT("DetectionPointShift_Interval");
-    DetectionPointShift_Interval.Type = EActorAttributeType::Float;
-    DetectionPointShift_Interval.RecommendedValues = { TEXT("0") };
-    DetectionPointShift_Interval.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPointShift_Duration;
-    DetectionPointShift_Duration.Id = TEXT("DetectionPointShift_Duration");
-    DetectionPointShift_Duration.Type = EActorAttributeType::Float;
-    DetectionPointShift_Duration.RecommendedValues = { TEXT("0") };
-    DetectionPointShift_Duration.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPointShift_IntervalDegradation;
-    DetectionPointShift_IntervalDegradation.Id = TEXT("DetectionPointShift_IntervalDegradation");
-    DetectionPointShift_IntervalDegradation.Type = EActorAttributeType::Float;
-    DetectionPointShift_IntervalDegradation.RecommendedValues = { TEXT("0") };
-    DetectionPointShift_IntervalDegradation.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPointShift_DurationDegradation;
-    DetectionPointShift_DurationDegradation.Id = TEXT("DetectionPointShift_DurationDegradation");
-    DetectionPointShift_DurationDegradation.Type = EActorAttributeType::Float;
-    DetectionPointShift_DurationDegradation.RecommendedValues = { TEXT("0") };
-    DetectionPointShift_DurationDegradation.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPoint_MaxDepthDisturbance;
-    DetectionPoint_MaxDepthDisturbance.Id = TEXT("DetectionPoint_MaxDepthDisturbance");
-    DetectionPoint_MaxDepthDisturbance.Type = EActorAttributeType::Float;
-    DetectionPoint_MaxDepthDisturbance.RecommendedValues = { TEXT("0") };
-    DetectionPoint_MaxDepthDisturbance.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPoint_MaxAzimuthDisturbance;
-    DetectionPoint_MaxAzimuthDisturbance.Id = TEXT("DetectionPoint_MaxAzimuthDisturbance");
-    DetectionPoint_MaxAzimuthDisturbance.Type = EActorAttributeType::Float;
-    DetectionPoint_MaxAzimuthDisturbance.RecommendedValues = { TEXT("0") };
-    DetectionPoint_MaxAzimuthDisturbance.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPoint_MaxAltitudeDisturbance;
-    DetectionPoint_MaxAltitudeDisturbance.Id = TEXT("DetectionPoint_MaxAltitudeDisturbance");
-    DetectionPoint_MaxAltitudeDisturbance.Type = EActorAttributeType::Float;
-    DetectionPoint_MaxAltitudeDisturbance.RecommendedValues = { TEXT("0") };
-    DetectionPoint_MaxAltitudeDisturbance.bRestrictToRecommended = false;
-
-    FActorVariation DetectionPoint_Distribution;
-    DetectionPoint_Distribution.Id = TEXT("DetectionPoint_Distribution");
-    DetectionPoint_Distribution.Type = EActorAttributeType::Float;
-    DetectionPoint_Distribution.RecommendedValues = { TEXT("0") };
-    DetectionPoint_Distribution.bRestrictToRecommended = false;
-
-    FActorVariation VelocityShift_Start;
-    VelocityShift_Start.Id = TEXT("VelocityShift_Start");
-    VelocityShift_Start.Type = EActorAttributeType::Float;
-    VelocityShift_Start.RecommendedValues = { TEXT("0") };
-    VelocityShift_Start.bRestrictToRecommended = false;
-
-    FActorVariation VelocityShift_Interval;
-    VelocityShift_Interval.Id = TEXT("VelocityShift_Interval");
-    VelocityShift_Interval.Type = EActorAttributeType::Float;
-    VelocityShift_Interval.RecommendedValues = { TEXT("0") };
-    VelocityShift_Interval.bRestrictToRecommended = false;
-
-    FActorVariation VelocityShift_Duration;
-    VelocityShift_Duration.Id = TEXT("VelocityShift_Duration");
-    VelocityShift_Duration.Type = EActorAttributeType::Float;
-    VelocityShift_Duration.RecommendedValues = { TEXT("0") };
-    VelocityShift_Duration.bRestrictToRecommended = false;
-
-    FActorVariation VelocityShift_IntervalDegradation;
-    VelocityShift_IntervalDegradation.Id = TEXT("VelocityShift_IntervalDegradation");
-    VelocityShift_IntervalDegradation.Type = EActorAttributeType::Float;
-    VelocityShift_IntervalDegradation.RecommendedValues = { TEXT("0") };
-    VelocityShift_IntervalDegradation.bRestrictToRecommended = false;
-
-    FActorVariation VelocityShift_DurationDegradation;
-    VelocityShift_DurationDegradation.Id = TEXT("VelocityShift_DurationDegradation");
-    VelocityShift_DurationDegradation.Type = EActorAttributeType::Float;
-    VelocityShift_DurationDegradation.RecommendedValues = { TEXT("0") };
-    VelocityShift_DurationDegradation.bRestrictToRecommended = false;
-
-    FActorVariation VelocityShift_MaxVelocityDisturbance;
-    VelocityShift_MaxVelocityDisturbance.Id = TEXT("VelocityShift_MaxVelocityDisturbance");
-    VelocityShift_MaxVelocityDisturbance.Type = EActorAttributeType::Float;
-    VelocityShift_MaxVelocityDisturbance.RecommendedValues = { TEXT("0") };
-    VelocityShift_MaxVelocityDisturbance.bRestrictToRecommended = false;
 
     if (Id == "ray_cast") {
         Definition.Variations.Append({
@@ -1781,40 +1634,8 @@ void UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(
         DEBUG_ASSERT(false);
     }
 
-
-    FActorVariation VelocityShift_Distribution;
-    VelocityShift_Distribution.Id = TEXT("VelocityShift_Distribution");
-    VelocityShift_Distribution.Type = EActorAttributeType::Float;
-    VelocityShift_Distribution.RecommendedValues = {TEXT("0")};
-    VelocityShift_Distribution.bRestrictToRecommended = false;
-    Definition.Variations.Append({
-          LidarScenario,
-          PackageLoss_Interval,
-          PackageLoss_Duration,
-          PackageLoss_Start,
-          PackageLoss_IntervalDegradation,
-          PackageLoss_DurationDegradation,
-          PackageDelay_Start,
-          PackageDelay_Interval,
-          PackageDelay_DegradationSize,
-          PackageDelay_DelaySize,
-          PackageDelay_RingBufferMaxUseSize,
-          DetectionPointShift_Start,
-          DetectionPointShift_Interval,
-          DetectionPointShift_Duration,
-          DetectionPointShift_IntervalDegradation,
-          DetectionPointShift_DurationDegradation,
-          DetectionPoint_MaxDepthDisturbance,
-          DetectionPoint_MaxAzimuthDisturbance,
-          DetectionPoint_MaxAltitudeDisturbance,
-          DetectionPoint_Distribution,
-          VelocityShift_Start,
-          VelocityShift_Interval,
-          VelocityShift_Duration,
-          VelocityShift_IntervalDegradation,
-          VelocityShift_DurationDegradation,
-          VelocityShift_MaxVelocityDisturbance,
-          VelocityShift_Distribution });
+    CreateFaultyDefinition(Definition);
+   
     Success = CheckActorDefinition(Definition);
 }
 
