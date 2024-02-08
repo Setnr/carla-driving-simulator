@@ -1183,23 +1183,22 @@ class CameraManager(object):
                                                                         "horizontal_fov" : "360",
                                                                         "rotation_frequency" : "25",
                                                                         "points_per_second" : "128000",
-                                                                        "scenario" : "4", 
-                                                                       
-                                                                        #Szenario 3 Random Shift At Random Time
-                                                                        #"RandomShift_Start" : "5", 
-                                                                        #"RandomShift_End" : "15", 
-                                                                        #"RandomShif_StartOffset" : "10", 
-                                                                        
-                                                                        #Szenario 4 Fix Shift
-                                                                        "ConstantShift_Rotation" : "0;10;10",
-                                                                        "ConstantShift_Interval" : "5",
-                                                                        "ConstantShift_Start" : "5",
-
-                                                                        # Szenario 2 Loose Contact
-                                                                        #'LooseContact_Interval': '3.0',
-                                                                        #'LooseContact_Duration': '0.5',
-                                                                        #'LooseContact_Start': '5.0',
-                                                                        #'LooseContact_ProgressionRate' : '1.0'
+                                                                        "scenario" : str(16 | 128), 
+                                                                        "SensorBlockage_Start" : "5",
+                                                                        "SensorBlockage_Interval" : "5",
+                                                                        "SensorBlockage_AmountOfBlockingObjects" : "500",
+                                                                        "SensorBlockage_Type" : "0",
+                                                                        "SensorBlockage_HorFOVFlag" : "1",
+                                                                        "SensorBlockage_VertFOVFlag" : "1",
+                                                                        "SensorBlockage_LifeTime" : "0",
+                                                                        "PackageLoss_Interval" : "8",
+                                                                        "PackageLoss_Duration" : "0.5",
+                                                                        "PackageLoss_Start" : "5",
+                                                                        "PackageLoss_IntervalDegradation" : "1",
+                                                                        "RangeReduction_Start" : "5",
+                                                                        "RangeReduction_Interval" : "5",
+                                                                        "RangeReduction_Duration" : "2",
+                                                                        "RangeReduction_RangeReductionValue" : "40"
                                                                         }],
             ['sensor.camera.dvs', cc.Raw, 'Dynamic Vision Sensor', {}],
             ['sensor.camera.rgb', cc.Raw, 'Camera RGB Distorted',

@@ -14,7 +14,6 @@
 #include "Carla/Sensor/Radar.h"
 #include "FaultyRadar.generated.h"
 
-
 #define RadarDelay_RingBufferSize 100
 #define RandomEngineSeed 9857
 //#define DEBUG_NONEXISITING_POINTS //DEFINE FOR SPOOFINGTEST
@@ -138,7 +137,7 @@ public:
 		this->RangeReduction_DurationDegradation = DurDeg;
 	}
 	void SetRangeReduction_RangeReductionValue(float RangeRed){
-		this->RangeReduction_RangeReductionValue = RangeRed;
+		this->RangeReduction_RangeReductionValue = RangeRed * 100.f;
 	}
 #pragma endregion
   

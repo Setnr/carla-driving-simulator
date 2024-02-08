@@ -15,10 +15,73 @@ FActorDefinition AFaultyRayCastLidar::GetSensorDefinition()
 
 AFaultyRayCastLidar::AFaultyRayCastLidar(const FObjectInitializer& ObjectInitializer)
   : Super(ObjectInitializer) {
+    gen_weibull.seed(RandomEngineSeed);
+    gen_uniform.seed(RandomEngineSeed);
+    weibull = std::weibull_distribution<float>(0.0, 1.0);
+    uniform = std::uniform_real_distribution<float>(0.0, 1.0);
+
+    this->FaultyLidarDescription.PackageLoss_Interval = 15.0f;
+    this->FaultyLidarDescription.PackageLoss_Duration = 2.5f;
+    this->FaultyLidarDescription.PackageLoss_Start = FLT_MAX;
+    this->FaultyLidarDescription.PackageLoss_IntervalDegradation = 0.0f;
+    this->FaultyLidarDescription.PackageLoss_DurationDegradation = 0.0f;
+
+    this->FaultyLidarDescription.PackageDelay_Start = FLT_MAX;
+    this->FaultyLidarDescription.PackageDelay_DegradationZeit = 0.0f;
+    this->FaultyLidarDescription.PackageDelay_Interval = 0.0f;
+    this->FaultyLidarDescription.PackageDelay_DegradationSize = 0;
+    this->FaultyLidarDescription.PackageDelay_DelaySize = 0;
+    this->FaultyLidarDescription.PackageDelay_WaitCounter = 0;
+    this->FaultyLidarDescription.PackageDelay_WriteRingBufferPtr = 0;
+    this->FaultyLidarDescription.PackageDelay_ReadRingBufferPtr = 0;
+    this->FaultyLidarDescription.PackageDelay_RingBufferMaxUseSize = 100;
+
+    this->FaultyLidarDescription.DetectionPointShift_Start = FLT_MAX;
+    this->FaultyLidarDescription.DetectionPointShift_Interval = 0.0f;
+    this->FaultyLidarDescription.DetectionPointShift_Duration = 0.0f;
+    this->FaultyLidarDescription.DetectionPointShift_IntervalDegradation = 0.0f;
+    this->FaultyLidarDescription.DetectionPointShift_DurationDegradation = 0.0f;
+    this->FaultyLidarDescription.DetectionPoint_MaxDepthDisturbance = 0.0f;
+    this->FaultyLidarDescription.DetectionPoint_MaxAzimuthDisturbance = 0.0f;
+    this->FaultyLidarDescription.DetectionPoint_MaxAltitudeDisturbance = 0.0f;
+    this->FaultyLidarDescription.DetectionPoint_Distribution = Distribution::None;
+
+    this->FaultyLidarDescription.VelocityShift_Start = FLT_MAX;
+    this->FaultyLidarDescription.VelocityShift_Interval = 0.0f;
+    this->FaultyLidarDescription.VelocityShift_Duration = 0.0f;
+    this->FaultyLidarDescription.VelocityShift_IntervalDegradation = 0.0f;
+    this->FaultyLidarDescription.VelocityShift_DurationDegradation = 0.0f;
+    this->FaultyLidarDescription.VelocityShift_MaxVelocityDisturbance = 0.0f;
+    this->FaultyLidarDescription.VelocityShift_Distribution = Distribution::None;
+
+    this->FaultyLidarDescription.RangeReduction_Start = FLT_MAX;
+    this->FaultyLidarDescription.RangeReduction_Interval = 0.0f;
+    this->FaultyLidarDescription.RangeReduction_Duration = 0.0f;
+    this->FaultyLidarDescription.RangeReduction_IntervalDegradation = 0.0f;
+    this->FaultyLidarDescription.RangeReduction_DurationDegradation = 0.0f;
+    this->FaultyLidarDescription.RangeReduction_RangeReductionValue = 0.0f;
+    this->FaultyLidarDescription.RangeReduction_OldRangeValue = 0.0f;
+    this->FaultyLidarDescription.RangeReduction_Active = false;;
+
+    this->FaultyLidarDescription.SensorBlockage_Start = FLT_MAX;
+    this->FaultyLidarDescription.SensorBlockage_Interval = 0.0f;
+    this->FaultyLidarDescription.SensorBlockage_IntervalDegradation = 0.0f;
+
+    this->FaultyLidarDescription.SensorBlockage_AmountOfBlockingObjects = 0;
+    this->FaultyLidarDescription.SensorBlockage_Type = SensorBlockage_BlockageType::CloseRange;
+
+    this->FaultyLidarDescription.SensorBlockage_LifeTime = SensorBlockage_ObjectLifeTime::Static;
+    this->FaultyLidarDescription.SensorBlockage_BlockingObjectLifeTime = -1.0f;
+    this->FaultyLidarDescription.SensorBlockage_MaxBlockingObjectLifeTime = 0.0f;
+
+    this->FaultyLidarDescription.SensorBlockage_BlockageDropSpeed = 0.0f;
+    this->FaultyLidarDescription.SensorBlockage_HorFOVFlag = HorizontalFOV_Type::WholeHorFOV;
+    this->FaultyLidarDescription.SensorBlockage_VertFOVFlag = VerticalFOV_Type::WholeVerFOV;
 }
 
 void AFaultyRayCastLidar::Set(const FActorDescription &ActorDescription)
 {
+  this->FaultyLidarDescription.World = GetWorld();
   ASensor::Set(ActorDescription);
   FLidarDescription LidarDescription;
   UActorBlueprintFunctionLibrary::SetFaultyLidar(ActorDescription, LidarDescription, FaultyLidarDescription);
@@ -100,7 +163,7 @@ void AFaultyRayCastLidar::GenerateHexagons()
             else
                 LifeTime = FaultyLidarDescription.SensorBlockage_BlockingObjectLifeTime;
             Hexagon->SetBlockageParamter(LifeTime, FaultyLidarDescription.SensorBlockage_BlockageDropSpeed);
-            if (LifeTime < 0.0f)
+            if (LifeTime <= 0.0f)
                 BlockObjects.Add(Hexagon);
         }
         else
@@ -323,39 +386,44 @@ void AFaultyRayCastLidar::PostPhysTick(UWorld* World, ELevelTick TickType, float
 
 FVector AFaultyRayCastLidar::CalculateEndLocation(bool CloseRange, VerticalFOV_Type VertFOV, HorizontalFOV_Type HorzFOV)
 {
-    // Create Random Angle and get Cos & Sin for that Angle
     float SpawnRange = CreateRandomNumber(Distribution::Linear) * this->Description.Range;
     if (CloseRange)
-        SpawnRange = 1.0f;
-    float VerticalFOV = Description.LowerFovLimit;
-    if (VerticalFOV < 0.0f)
-        VerticalFOV *= -1.0f;
-    if (Description.UpperFovLimit > VerticalFOV)
-        VerticalFOV = Description.UpperFovLimit;
-    const float MaxRx = FMath::Tan(FMath::DegreesToRadians(Description.HorizontalFov * 0.5f)) * SpawnRange;
-    const float MaxRy = FMath::Tan(FMath::DegreesToRadians(VerticalFOV)) * SpawnRange;
-    float Angle = carla::geom::Math::Pi2<float>() * CreateRandomNumber(Distribution::Linear);
-    float Sin, Cos;
-    FMath::SinCos(&Sin, &Cos, Angle);
+        SpawnRange = 1.f;
+
+
+    float LocHepler = 1.0f;
+    if(this->Description.HorizontalFov >= 180.0f)
+        if (CreateRandomNumber(Distribution::Linear) >= 0.5f)
+            LocHepler = -1.0f;
+    float MaxRx = CreateRandomNumber(Distribution::Linear) * SpawnRange * LocHepler;
+    if (CreateRandomNumber(Distribution::Linear) >= 0.5f)
+        LocHepler = -1.0f;
+    float MaxRy = CreateRandomNumber(Distribution::Linear) * SpawnRange * LocHepler; 
+    if (CreateRandomNumber(Distribution::Linear) >= 0.5f)
+        LocHepler = -1.0f;
+    float MaxRz = CreateRandomNumber(Distribution::Linear) * SpawnRange * LocHepler;
+   
 
     //Create a EndPoint within the FOV based on the Random Angle
-    if (VertFOV == VerticalFOV_Type::Down && Sin >= 0.0f)
-        Sin = Sin * -1;
-    if (VertFOV == VerticalFOV_Type::Up && Sin <= 0.0f)
-        Sin = Sin * -1;
+    if (VertFOV == VerticalFOV_Type::Down && MaxRz >= 0.0f)
+        MaxRz = MaxRz * -1;
+    if (VertFOV == VerticalFOV_Type::Up && MaxRz <= 0.0f)
+        MaxRz = MaxRz * -1;
 
-    if (HorzFOV == HorizontalFOV_Type::Left && Cos >= 0.0f)
-        Cos = Cos * -1;
-    if (HorzFOV == HorizontalFOV_Type::Right && Cos <= 0.0f)
-        Cos = Cos * -1;
+    if (HorzFOV == HorizontalFOV_Type::Left && MaxRy >= 0.0f)
+        MaxRy = MaxRy * -1;
+    if (HorzFOV == HorizontalFOV_Type::Right && MaxRy <= 0.0f)
+        MaxRy = MaxRy * -1;
 
     const FVector& RadarLocation = GetActorLocation();
     const FTransform& ActorTransform = GetActorTransform();
     const FRotator& TransformRotator = ActorTransform.Rotator();
+    if (CreateRandomNumber(Distribution::Linear) >= 0.5f)
+        SpawnRange *= -1.0f;
     FVector Helper = {
-       SpawnRange,
-       MaxRx * Cos,
-       MaxRy * Sin
+       MaxRx,
+       MaxRy,
+       MaxRz
     };
     FVector EndLocation = RadarLocation + TransformRotator.RotateVector(Helper);
 

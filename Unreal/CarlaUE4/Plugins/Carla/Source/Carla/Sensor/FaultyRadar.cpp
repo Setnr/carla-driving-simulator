@@ -288,7 +288,7 @@ void AFaultyRadar::GenerateHexagons()
             else
                 LifeTime = SensorBlockage_BlockingObjectLifeTime;
             Hexagon->SetBlockageParamter(LifeTime, SensorBlockage_BlockageDropSpeed);
-            if(LifeTime < 0.0f)
+            if(LifeTime <= 0.0f)
                 BlockObjects.Add(Hexagon);
         }else
             UE_LOG(LogTemp, Error, TEXT("Hexagon == nullptr!"));

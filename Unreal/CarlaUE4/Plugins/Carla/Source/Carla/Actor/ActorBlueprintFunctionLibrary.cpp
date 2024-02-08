@@ -17,10 +17,10 @@
 #include <stack>
 
 #define IQZ_SENSOR_SET_MACRO(sensor,function,AttributeName,RetrieveFunction,StandardValue) if (Description.Variations.Contains(AttributeName)) {sensor->function(RetrieveFunction(AttributeName, Description.Variations, StandardValue));}
+#define IQZ_SENSOR_SET_MACRO_NOPTR(sensor,function,AttributeName,RetrieveFunction,StandardValue) if (Description.Variations.Contains(AttributeName)) {sensor.function(RetrieveFunction(AttributeName, Description.Variations, StandardValue));}
 
 void CreateFaultyDefinition(FActorDefinition& Definition) 
 {
-
     FActorVariation Scenario;
     Scenario.Id = TEXT("scenario");
     Scenario.Type = EActorAttributeType::Int;
@@ -2326,6 +2326,95 @@ void UActorBlueprintFunctionLibrary::SetFaultyLidar(const FActorDescription& Des
     FaultyLidar.AddScenario(RetrieveActorAttributeToInt("scenario", Description.Variations, 0));
 
 
+#pragma region PackageLoss
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, AddPackageLossInterval, "PackageLoss_Interval", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, AddPackageLossDuration, "PackageLoss_Duration", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetProgressionRate, "PackageLoss_IntervalDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDurationDegradation, "PackageLoss_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, AddPackageLossStart, "PackageLoss_Start", RetrieveActorAttributeToFloat, 0.0f);
+#pragma endregion
+
+#pragma region PackageDelay
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetPackageDelay_Start, "PackageDelay_Start", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetPackageDelay_Interval, "PackageDelay_Interval", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetPackageDelay_DegradationSize, "PackageDelay_DegradationSize", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetPackageDelay_DelaySize, "PackageDelay_DelaySize", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetPackageDelay_RingBufferMaxUseSize, "PackageDelay_RingBufferMaxUseSize", RetrieveActorAttributeToInt, 0);
+#pragma endregion
+
+#pragma region DetectionPointShift
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectionPointShift_Start, "DetectionPointShift_Start", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectionPointShift_Interval, "DetectionPointShift_Interval", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectionPointShift_Duration, "DetectionPointShift_Duration", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectionPointShift_IntervalDegradation, "DetectionPointShift_IntervalDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectionPointShift_DurationDegradation, "DetectionPointShift_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectionPoint_MaxDepthDisturbance, "DetectionPoint_MaxDepthDisturbance", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectionPoint_MaxAzimuthDisturbance, "DetectionPoint_MaxAzimuthDisturbance", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectionPoint_MaxAltitudeDisturbance, "DetectionPoint_MaxAltitudeDisturbance", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectionPoint_Distribution, "DetectionPoint_Distribution", RetrieveActorAttributeToInt, 0);
+#pragma endregion
+
+#pragma region DetectionPointShift
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetVelocityShift_Start, "VelocityShift_Start", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetVelocityShift_Interval, "VelocityShift_Interval", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetVelocityShift_Duration, "VelocityShift_Duration", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetVelocityShift_IntervalDegradation, "VelocityShift_IntervalDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetVelocityShift_DurationDegradation, "VelocityShift_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetVelocityShift_MaxVelocityDisturbance, "VelocityShift_MaxVelocityDisturbance", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetVelocityShift_Distribution, "VelocityShift_Distribution", RetrieveActorAttributeToInt, 0);
+#pragma endregion
+
+#pragma region RangeReduction
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetRangeReduction_Start, "RangeReduction_Start", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetRangeReduction_Interval, "RangeReduction_Interval", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetRangeReduction_Duration, "RangeReduction_Duration", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetRangeReduction_IntervalDegradation, "RangeReduction_IntervalDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetRangeReduction_DurationDegradation, "RangeReduction_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetRangeReduction_RangeReductionValue, "RangeReduction_RangeReductionValue", RetrieveActorAttributeToFloat, 0.0f);
+#pragma endregion
+
+#pragma region DetectNonExistingPoints
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectNonExistingPoints_Start, "DetectNonExistingPoints_Start", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectNonExistingPoints_Interval, "DetectNonExistingPoints_Interval", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectNonExistingPoints_Duration, "DetectNonExistingPoints_Duration", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectNonExistingPoints_IntervalDegradation, "DetectNonExistingPoints_IntervalDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectNonExistingPoints_DurationDegradation, "DetectNonExistingPoints_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
+
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectNonExistingPoints_AmountDetections, "DetectNonExistingPoints_AmountDetections", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectNonExistingPoints_HorFOVFlag, "DetectNonExistingPoints_HorFOVFlag", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetDetectNonExistingPoints_VertFOVFlag, "DetectNonExistingPoints_VertFOVFlag", RetrieveActorAttributeToInt, 0);
+
+#pragma endregion
+
+#pragma region SensorShift
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorShift_Start, "SensorShift_Start", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorShift_Interval, "SensorShift_Interval", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorShift_Duration, "SensorShift_Duration", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorShift_IntervalDegradation, "SensorShift_IntervalDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorShift_DurationDegradation, "SensorShift_DurationDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorShift_Yaw, "SensorShift_Yaw", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorShift_Pitch, "SensorShift_Pitch", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorShift_Roll, "SensorShift_Roll", RetrieveActorAttributeToFloat, 0.0f);
+
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorShiftFlag, "SensorShiftFlag", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorShiftTriggerFlag, "SensorShiftTriggerFlag", RetrieveActorAttributeToInt, 0);
+
+#pragma endregion
+
+#pragma region SensorBlockage
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorBlockage_Start, "SensorBlockage_Start", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorBlockage_Interval, "SensorBlockage_Interval", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorBlockage_IntervalDegradation, "SensorBlockage_IntervalDegradation", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorBlockage_BlockingObjectLifeTime, "SensorBlockage_BlockingObjectLifeTime", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorBlockage_MaxBlockingObjectLifeTime, "SensorBlockage_MaxBlockingObjectLifeTime", RetrieveActorAttributeToFloat, 0.0f);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorBlockage_BlockageDropSpeed, "SensorBlockage_BlockageDropSpeed", RetrieveActorAttributeToFloat, 0.0f);
+
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorBlockage_AmountOfBlockingObjects, "SensorBlockage_AmountOfBlockingObjects", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorBlockage_Type, "SensorBlockage_Type", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorBlockage_LifeTime, "SensorBlockage_LifeTime", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorBlockage_HorFOVFlag, "SensorBlockage_HorFOVFlag", RetrieveActorAttributeToInt, 0);
+    IQZ_SENSOR_SET_MACRO_NOPTR(FaultyLidar, SetSensorBlockage_VertFOVFlag, "SensorBlockage_VertFOVFlag", RetrieveActorAttributeToInt, 0);
+#pragma endregion
 }
 
 void UActorBlueprintFunctionLibrary::SetGnss(
