@@ -120,7 +120,7 @@ At the Current state the Radar supports the following Failure modes, while the L
 	* RangeReduction_Duration (Duration how long the range will be reduced)
 	* RangeReduction_IntervalDegradation (How the Interval will change between failures)
 	* RangeReduction_DurationDegradation (How the Duration will change between failures)
-	* RangeReduction_RangeReductionValue (The Amount the RadarRange gets decresed (in Centimeter))
+	* RangeReduction_RangeReductionValue (The Amount the RadarRange gets decresed Value is in Meters as the Usual "Range" Value)
 	
 * __Detect Nonexisting Points__
 	* DetectNonExistingPoints_Start (time when the first appearence of non exsisting Points will happen)
