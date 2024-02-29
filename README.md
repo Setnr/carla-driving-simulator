@@ -7,20 +7,18 @@ In the end, these sensors can be used to create a more realistic perception outp
 
 ## General
 The Radar aswell as the Lidar got extended by certain models.
-```python
-class Scenario(Enum):
-
-    RadarBlocked = 1
-    RadarPackageLoss = 2
-    RadarConstantShift = 4
-    RadarVibration = 8
-    RadarDisturbance = 16
-    RadarRandomShift = 32
-    RadarCollosionShift = 64
-    RadarSpoofing = 128
-    RadarBlockage = 256
-    RadarPackageDelay = 512
-
+```c++
+	enum ScenarioID : int
+	{
+		PackageLoss = 0x1, //
+		PackageDelay = 0x2, //
+		DetectionPointShift = 0x4, //
+		VelocityShift = 0x8, //
+		RangeReduction = 0x10, //
+		DetectNonExistingPoints = 0x20,//
+		SensorShift = 0x40,
+		SensorBlockage = 0x80
+	};
 ```
 
 For Distributed Failures following Distributions can be used
@@ -80,7 +78,7 @@ Blockage Flags
 	};
 ```
 
-At the Current state the Radar supports the following Failure modes, while the LiDAR only supports the first 3 Models.
+At the Current state Radar und Lidar support the current Failure Effects.
 * __Package Loss__ (Data transfer error/loss)
 	* PackageLoss_Start (time as amount of seconds after the sensor's creation the failure will appear for the first time)
 	* PackageLoss_Interval (interval the failure (re)appears)
