@@ -1035,13 +1035,13 @@ class RadarSensor(object):
         world = self._parent.get_world()
         self.debug = world.debug
         bp = world.get_blueprint_library().find('sensor.other.faulty_radar')
-        #bp.set_attribute('scenario', str(Scenario.RadarCollosionShift.value))
+        bp.set_attribute('scenario', str(Scenario.Bloc.value))
 
         bp.set_attribute('horizontal_fov', str(90))
         bp.set_attribute('vertical_fov', str(30))
         bp.set_attribute('range', str(12))
         #bp.set_attribute('points_per_second', str(10000))
-        bp.set_attribute("scenario",str(Scenario.PackageLoss.value))
+        #bp.set_attribute("scenario",str(Scenario.PackageLoss.value))
 
        # bp.set_attribute('SensorBlockage_Start', str(5))
        # bp.set_attribute('SensorBlockage_Interval', str(10))
@@ -1066,7 +1066,7 @@ class RadarSensor(object):
         #bp.set_attribute('RadarSpoof_CutOff', str(35))
 
         #bp.set_attribute('LooseContact_Interval', str(10))
-        #bp.set_attribute('LooseContact_Duration', str(0.35))
+        #bp.set_attribute('LooseContact_Duration',ok str(0.35))
         #bp.set_attribute('LooseContact_Start', str(5))
         #bp.set_attribute('LooseContact_ProgressionRate', str(1))
 
@@ -1155,10 +1155,11 @@ class CameraManager(object):
 
         if not self._parent.type_id.startswith("walker.pedestrian"):
             self._camera_transforms = [
+                (carla.Transform(carla.Location(x=-2.8*bound_x, y=-10.0*bound_y, z=4.6*bound_z), carla.Rotation(roll=-5,pitch=0.0,yaw=-35.0)), Attachment.SpringArmGhost),
                 (carla.Transform(carla.Location(x=-2.0*bound_x, y=+0.0*bound_y, z=2.0*bound_z), carla.Rotation(pitch=8.0)), Attachment.SpringArmGhost),
                 (carla.Transform(carla.Location(x=+0.8*bound_x, y=+0.0*bound_y, z=1.3*bound_z)), Attachment.Rigid),
                 (carla.Transform(carla.Location(x=+1.9*bound_x, y=+1.0*bound_y, z=1.2*bound_z)), Attachment.SpringArmGhost),
-                (carla.Transform(carla.Location(x=-2.8*bound_x, y=+0.0*bound_y, z=4.6*bound_z), carla.Rotation(pitch=6.0)), Attachment.SpringArmGhost),
+                (carla.Transform(carla.Location(x=-2.8*bound_x, y=-5.0*bound_y, z=4.6*bound_z), carla.Rotation(pitch=0.0)), Attachment.SpringArmGhost),
                 (carla.Transform(carla.Location(x=-1.0, y=-1.0*bound_y, z=0.4*bound_z)), Attachment.Rigid)]
         else:
             self._camera_transforms = [
@@ -1326,7 +1327,6 @@ def game_loop(args):
     try:
         client = carla.Client(args.host, args.port)
         client.set_timeout(2000.0)
-
         sim_world = client.get_world()
         if args.sync:
             original_settings = sim_world.get_settings()
@@ -1352,12 +1352,21 @@ def game_loop(args):
         hud = HUD(args.width, args.height)
         world = World(sim_world, hud, args)
         controller = KeyboardControl(world, args.autopilot)
-
+       
         if args.sync:
             sim_world.tick()
         else:
             sim_world.wait_for_tick()
-
+        actors = []
+        for i in range(0,15):
+            fresh_bp = random.choice(sim_world.get_blueprint_library().filter('vehicle.*.*'))
+            spawn_points = sim_world.get_map().get_spawn_points()
+            for spawn in spawn_points:
+                actor = sim_world.try_spawn_actor(fresh_bp, spawn)
+                if actor:
+                    actor.set_autopilot(True)
+                    actors.append(actor)
+                    break
         clock = pygame.time.Clock()
         while True:
             if args.sync:
@@ -1370,7 +1379,9 @@ def game_loop(args):
             pygame.display.flip()
 
     finally:
-
+        
+        for actor in actors:
+            actor.destroy()
         if original_settings:
             sim_world.apply_settings(original_settings)
 

@@ -25,7 +25,7 @@ from carla import ColorConverter as cc
 
 import h5
 
-SIMULATION_TIME = 30 # In Seconds
+SIMULATION_TIME = 240 # In Seconds
 TIMESTAMP = datetime.datetime.timestamp(datetime.datetime.now())
 CHUNNK = 5000
 RENDER_HUD = True
@@ -84,9 +84,9 @@ class VehicleEnvironment:
         # Library of actor blueprints available in the given world
         self.blueprint_library = self.world.get_blueprint_library()
         # Setup ego vehicle
-        self.vehicle_model = "model3"
+        self.vehicle_model = "etron"#"model3"#"T2"
         self.vehicle_bp = self.blueprint_library.filter(self.vehicle_model)[0]
-        self.vehicle_bp.set_attribute('color', "138, 25, 102")
+        self.vehicle_bp.set_attribute('color', "138,25,102")
         self.vehicle_bp.set_attribute('role_name', "IQZ Vehicle")
         self.spawn_points = self.world.get_map().get_spawn_points()
         self.walker_controller_bp = self.world.get_blueprint_library().find('controller.ai.walker')
@@ -209,18 +209,20 @@ class VehicleEnvironment:
 
         # Initialize and Setup front RADAR
         front_radar_model = self.world.get_blueprint_library().find('sensor.other.faulty_radar')
-        front_radar_model.set_attribute('horizontal_fov', str(30))
-        front_radar_model.set_attribute('vertical_fov', str(45))
+        front_radar_model.set_attribute('horizontal_fov', str(60))
+        front_radar_model.set_attribute('vertical_fov', str(30))
         front_radar_model.set_attribute('range', str(80))
-
+        #front_radar_model.set_attribute('points_per_second', str(10000))
+        
         front_radar_model.set_attribute("scenario",str(Scenario.SensorBlockage.value))
-        front_radar_model.set_attribute('SensorBlockage_Start', str(5))
-        front_radar_model.set_attribute('SensorBlockage_Interval', str(7))
-        front_radar_model.set_attribute('SensorBlockage_AmountOfBlockingObjects', str(40))
+        front_radar_model.set_attribute('SensorBlockage_Start', str(8))
+        front_radar_model.set_attribute('SensorBlockage_Interval', str(3))
+        front_radar_model.set_attribute('SensorBlockage_IntervalDegradation', str(0))
+        front_radar_model.set_attribute('SensorBlockage_AmountOfBlockingObjects', str(60))
         front_radar_model.set_attribute('SensorBlockage_Type', str(0))
         front_radar_model.set_attribute('SensorBlockage_HorFOVFlag', str(1))
         front_radar_model.set_attribute('SensorBlockage_VertFOVFlag', str(1))
-        front_radar_model.set_attribute('SensorBlockage_LifeTime', str(0))
+        front_radar_model.set_attribute('SensorBlockage_LifeTime', str(-1))
 
 
         #front_radar_model.set_attribute("scenario",str(Scenario.PackageLoss.value))
@@ -578,6 +580,7 @@ class CameraManager(object):
 
         if not self._parent.type_id.startswith("walker.pedestrian"):
             self._camera_transforms = [
+                #(carla.Transform(carla.Location(x=-2.8*bound_x, y=-10.0*bound_y, z=4.6*bound_z), carla.Rotation(roll=-5,pitch=0.0,yaw=-35.0)), Attachment.SpringArmGhost),
                 (carla.Transform(carla.Location(x=-2.0*bound_x, y=+0.0*bound_y, z=2.0*bound_z), carla.Rotation(pitch=8.0)), Attachment.SpringArmGhost),
                 (carla.Transform(carla.Location(x=+0.8*bound_x, y=+0.0*bound_y, z=1.3*bound_z)), Attachment.Rigid),
                 (carla.Transform(carla.Location(x=+1.9*bound_x, y=+1.0*bound_y, z=1.2*bound_z)), Attachment.SpringArmGhost),

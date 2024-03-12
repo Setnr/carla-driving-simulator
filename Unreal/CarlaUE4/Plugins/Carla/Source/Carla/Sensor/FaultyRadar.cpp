@@ -26,7 +26,7 @@ AFaultyRadar::AFaultyRadar(const FObjectInitializer& ObjectInitializer)
     this->SetHorizontalFOV(35);
     gen_weibull.seed(RandomEngineSeed);
     gen_uniform.seed(RandomEngineSeed);
-    weibull = std::weibull_distribution<float>(0.0, 1.0);
+    weibull = std::weibull_distribution<float>(1.0, 3.602);
     uniform = std::uniform_real_distribution<float>(0.0, 1.0);
 
     this->PackageLoss_Interval = 15.0f;
