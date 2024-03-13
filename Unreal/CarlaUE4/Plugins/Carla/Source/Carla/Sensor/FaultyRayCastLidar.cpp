@@ -17,7 +17,7 @@ AFaultyRayCastLidar::AFaultyRayCastLidar(const FObjectInitializer& ObjectInitial
   : Super(ObjectInitializer) {
     gen_weibull.seed(RandomEngineSeed);
     gen_uniform.seed(RandomEngineSeed);
-    weibull = std::weibull_distribution<float>(0.0, 1.0);
+    weibull = std::weibull_distribution<float>(1.0, 3.602);
     uniform = std::uniform_real_distribution<float>(0.0, 1.0);
 
     this->FaultyLidarDescription.PackageLoss_Interval = 15.0f;
@@ -213,6 +213,9 @@ float AFaultyRayCastLidar::CreateRandomNumber(Distribution DistType)
     case Distribution::Weibull:
     {
         ret = weibull(gen_weibull);
+        if (ret > 15.0f)
+            return CreateRandomNumber(DistType);
+        ret = ret / 15.0f;
     }
     break;
     case Distribution::Linear:
@@ -239,9 +242,18 @@ void AFaultyRayCastLidar::ShiftDetectionPoints()
             }
             for (int i = 0; i < LidarData.GetSize(); i++) 
             {
-                float x = CreateRandomNumber(FaultyLidarDescription.DetectionPoint_Distribution);
-                float y = CreateRandomNumber(FaultyLidarDescription.DetectionPoint_Distribution);
-                float z = CreateRandomNumber(FaultyLidarDescription.DetectionPoint_Distribution);
+                float x, y, z;
+
+                float x = CreateRandomNumber(FaultyLidarDescription.DetectionPoint_Distribution) * FaultyLidarDescription.DetectionPoint_MaxDepthDisturbance;
+                float y = CreateRandomNumber(FaultyLidarDescription.DetectionPoint_Distribution) * FaultyLidarDescription.DetectionPoint_MaxAzimuthDisturbance;
+                float z = CreateRandomNumber(FaultyLidarDescription.DetectionPoint_Distribution) * FaultyLidarDescription.DetectionPoint_MaxAltitudeDisturbance;
+
+                if (CreateRandomNumber(Distribution::Linear) < 0.5f)
+                    x = x * -1;
+                if (CreateRandomNumber(Distribution::Linear) < 0.5f)
+                    y = y * -1;
+                if (CreateRandomNumber(Distribution::Linear) < 0.5f)
+                    z = z * -1;
                 LidarData.ShiftPoint(i, x, y, z);
             }
         }

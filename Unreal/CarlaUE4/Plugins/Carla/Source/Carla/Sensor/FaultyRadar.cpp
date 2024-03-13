@@ -336,6 +336,9 @@ float AFaultyRadar::CreateRandomNumber(Distribution DistType)
         case Distribution::Weibull:
         {
             ret = weibull(gen_weibull);
+            if (ret > 15.0f)
+                return CreateRandomNumber(DistType);
+            ret = ret / 15.0f;
         }
         break;
         case Distribution::Linear:
