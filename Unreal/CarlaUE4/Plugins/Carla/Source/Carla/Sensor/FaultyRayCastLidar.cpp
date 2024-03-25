@@ -242,7 +242,6 @@ void AFaultyRayCastLidar::ShiftDetectionPoints()
             }
             for (int i = 0; i < LidarData.GetSize(); i++) 
             {
-                float x, y, z;
 
                 float x = CreateRandomNumber(FaultyLidarDescription.DetectionPoint_Distribution) * FaultyLidarDescription.DetectionPoint_MaxDepthDisturbance;
                 float y = CreateRandomNumber(FaultyLidarDescription.DetectionPoint_Distribution) * FaultyLidarDescription.DetectionPoint_MaxAzimuthDisturbance;
