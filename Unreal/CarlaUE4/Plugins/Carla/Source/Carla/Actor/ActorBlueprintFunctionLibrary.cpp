@@ -333,7 +333,7 @@ void CreateFaultyDefinition(FActorDefinition& Definition)
     SensorShiftFlag.bRestrictToRecommended = false;
 
     FActorVariation SensorShiftTriggerFlag;
-    SensorShiftTriggerFlag.Id = TEXT("SensorShift_Pitch");
+    SensorShiftTriggerFlag.Id = TEXT("SensorShiftTriggerFlag");
     SensorShiftTriggerFlag.Type = EActorAttributeType::Int;
     SensorShiftTriggerFlag.RecommendedValues = { TEXT("0") };
     SensorShiftTriggerFlag.bRestrictToRecommended = false;

@@ -20,6 +20,10 @@ AFaultyRayCastLidar::AFaultyRayCastLidar(const FObjectInitializer& ObjectInitial
     weibull = std::weibull_distribution<float>(1.0, 3.602);
     uniform = std::uniform_real_distribution<float>(0.0, 1.0);
 
+    this->FaultyLidarDescription.World = nullptr;
+    this->FaultyLidarDescription.isBlocked = false;
+    this->FaultyLidarDescription.Scenario = 0;
+
     this->FaultyLidarDescription.PackageLoss_Interval = 15.0f;
     this->FaultyLidarDescription.PackageLoss_Duration = 2.5f;
     this->FaultyLidarDescription.PackageLoss_Start = FLT_MAX;
@@ -63,6 +67,26 @@ AFaultyRayCastLidar::AFaultyRayCastLidar(const FObjectInitializer& ObjectInitial
     this->FaultyLidarDescription.RangeReduction_OldRangeValue = 0.0f;
     this->FaultyLidarDescription.RangeReduction_Active = false;;
 
+    this->FaultyLidarDescription.DetectNonExistingPoints_Start = FLT_MAX;
+    this->FaultyLidarDescription.DetectNonExistingPoints_Interval = 0.0f;
+    this->FaultyLidarDescription.DetectNonExistingPoints_Duration = 0.0f;
+    this->FaultyLidarDescription.DetectNonExistingPoints_IntervalDegradation = 0.0f;
+    this->FaultyLidarDescription.DetectNonExistingPoints_DurationDegradation = 0.0f;
+    this->FaultyLidarDescription.DetectNonExistingPoints_AmountDetections = 0;
+    this->FaultyLidarDescription.DetectNonExistingPoints_HorFOVFlag = (HorizontalFOV_Type )0xFFFFFFFF; // -1 to make it dead
+    this->FaultyLidarDescription.DetectNonExistingPoints_VertFOVFlag = (VerticalFOV_Type )0xFFFFFFFF; // -1 to make it dead
+
+    this->FaultyLidarDescription.SensorShift_Start = FLT_MAX;
+    this->FaultyLidarDescription.SensorShift_Interval = 0.0f;
+    this->FaultyLidarDescription.SensorShift_Duration = 0.0f;
+    this->FaultyLidarDescription.SensorShift_IntervalDegradation = 0.0f;
+    this->FaultyLidarDescription.SensorShift_DurationDegradation = 0.0f;
+    this->FaultyLidarDescription.SensorShift_Yaw = 0.0f;
+    this->FaultyLidarDescription.SensorShift_Roll = 0.0f;
+    this->FaultyLidarDescription.SensorShift_Pitch = 0.0f;
+    this->FaultyLidarDescription.SensorShiftFlag = SensorShift_Flag::ConstantShift;
+    this->FaultyLidarDescription.SensorShiftTriggerFlag = SensorShift_TriggerFlag::Timed;
+
     this->FaultyLidarDescription.SensorBlockage_Start = FLT_MAX;
     this->FaultyLidarDescription.SensorBlockage_Interval = 0.0f;
     this->FaultyLidarDescription.SensorBlockage_IntervalDegradation = 0.0f;
@@ -87,10 +111,8 @@ void AFaultyRayCastLidar::Set(const FActorDescription &ActorDescription)
   UActorBlueprintFunctionLibrary::SetFaultyLidar(ActorDescription, LidarDescription, FaultyLidarDescription);
   Super::Set(LidarDescription);
 
-  
-
-
 }
+
 void AFaultyRayCastLidar::EventShift()
 {
     if (this->FaultyLidarDescription.Scenario & ScenarioID::SensorShift && this->FaultyLidarDescription.SensorShiftTriggerFlag == SensorShift_TriggerFlag::Collision)
@@ -330,7 +352,7 @@ void AFaultyRayCastLidar::PostPhysTick(UWorld* World, ELevelTick TickType, float
     if (HasToLooseCurrentPackage())
         return;
     float time = GetWorld()->GetTimeSeconds();
-
+    MoveLidar();
     DetectNonExisitingPoints();
     ShiftDetectionPoints();
 

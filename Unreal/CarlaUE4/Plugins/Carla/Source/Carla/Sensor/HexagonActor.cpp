@@ -69,6 +69,9 @@ void AHexagonActor::CreateHexagonMesh(float Radius)
 void AHexagonActor::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+
+    if (DropSpeed != 0.0f)
+        this->AddActorLocalTransform(FTransform(FVector(DropSpeed, 0.0f, 0.0f)));
     if (LifeTime > 0.0f)
     {
         if (LifeTime + SpawnTime < GetWorld()->GetTimeSeconds())
@@ -76,8 +79,6 @@ void AHexagonActor::Tick(float DeltaTime)
                 UE_LOG(LogTemp, Error, TEXT("Cant Destroy Blocking Hexagon!"));
             }
     }
-    if(DropSpeed != 0.0f)
-        this->AddActorLocalTransform(FTransform(FVector(DropSpeed, 0.0f, 0.0f )));
 }
 void AHexagonActor::BeginPlay()
 {

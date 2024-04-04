@@ -23,7 +23,7 @@ struct FFaultyLidarDescription
         Linear = 0x2
     };
 	UWorld* World;
-  bool isBlocked;
+	bool isBlocked;
   enum ScenarioID : int
   {
 	  PackageLoss = 0x1, //

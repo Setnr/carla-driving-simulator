@@ -36,6 +36,7 @@ public:
   virtual void ComputeAndSaveDetections(const FTransform& SensorTransform) override;
   void PostPhysTick(UWorld* World, ELevelTick TickType, float DeltaTime) override;
 
+  void EventShift();
 protected:
 	FFaultyLidarDescription FaultyLidarDescription;
 	void CreatePoints();
@@ -51,7 +52,6 @@ protected:
 	void MoveLidar(FRotator rot);
 	void ShiftSensor();
 	void MoveLidar();
-	void EventShift();
 
 	TArray<AActor*> BlockObjects;
 

@@ -29,6 +29,8 @@ AFaultyRadar::AFaultyRadar(const FObjectInitializer& ObjectInitializer)
     weibull = std::weibull_distribution<float>(1.0, 3.602);
     uniform = std::uniform_real_distribution<float>(0.0, 1.0);
 
+    this->Scenario = 0;
+
     this->PackageLoss_Interval = 15.0f;
     this->PackageLoss_Duration = 2.5f;
     this->PackageLoss_Start = FLT_MAX;
@@ -71,6 +73,26 @@ AFaultyRadar::AFaultyRadar(const FObjectInitializer& ObjectInitializer)
 	this->RangeReduction_RangeReductionValue = 0.0f;
 	this->RangeReduction_OldRangeValue = 0.0f;
 	this->RangeReduction_Active = false;;
+
+    this->DetectNonExistingPoints_Start = FLT_MAX;
+    this->DetectNonExistingPoints_Interval = 0.0f;
+    this->DetectNonExistingPoints_Duration = 0.0f;
+    this->DetectNonExistingPoints_IntervalDegradation = 0.0f;
+    this->DetectNonExistingPoints_DurationDegradation = 0.0f;
+    this->DetectNonExistingPoints_AmountDetections = 0;
+    this->DetectNonExistingPoints_HorFOVFlag = (HorizontalFOV_Type)0xFFFFFFFF; // -1 to make it dead
+    this->DetectNonExistingPoints_VertFOVFlag = (VerticalFOV_Type)0xFFFFFFFF; // -1 to make it dead
+
+    this->SensorShift_Start = FLT_MAX;
+    this->SensorShift_Interval = 0.0f;
+    this->SensorShift_Duration = 0.0f;
+    this->SensorShift_IntervalDegradation = 0.0f;
+    this->SensorShift_DurationDegradation = 0.0f;
+    this->SensorShift_Yaw = 0.0f;
+    this->SensorShift_Roll = 0.0f;
+    this->SensorShift_Pitch = 0.0f;
+    this->SensorShiftFlag = SensorShift_Flag::ConstantShift;
+    this->SensorShiftTriggerFlag = SensorShift_TriggerFlag::Timed;
 
     this->SensorBlockage_Start = FLT_MAX;
     this->SensorBlockage_Interval = 0.0f;
@@ -575,7 +597,7 @@ void AFaultyRadar::WriteLineTraces()
         return;
 
     float time = GetWorld()->GetTimeSeconds();
-
+    MoveRadar();
     DetectNonExisitingPoints();
     ShiftDetectionPoints();
     ShiftVelocitys();

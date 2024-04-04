@@ -214,15 +214,13 @@ class VehicleEnvironment:
         front_radar_model.set_attribute('range', str(80))
         #front_radar_model.set_attribute('points_per_second', str(10000))
         
-        front_radar_model.set_attribute("scenario",str(Scenario.SensorBlockage.value))
-        front_radar_model.set_attribute('SensorBlockage_Start', str(8))
-        front_radar_model.set_attribute('SensorBlockage_Interval', str(3))
-        front_radar_model.set_attribute('SensorBlockage_IntervalDegradation', str(0))
-        front_radar_model.set_attribute('SensorBlockage_AmountOfBlockingObjects', str(60))
-        front_radar_model.set_attribute('SensorBlockage_Type', str(0))
-        front_radar_model.set_attribute('SensorBlockage_HorFOVFlag', str(1))
-        front_radar_model.set_attribute('SensorBlockage_VertFOVFlag', str(1))
-        front_radar_model.set_attribute('SensorBlockage_LifeTime', str(-1))
+        front_radar_model.set_attribute("scenario",str(Scenario.SensorShift.value))
+        front_radar_model.set_attribute('SensorShift_Start', str(8))
+        front_radar_model.set_attribute('SensorShift_Interval', str(3))
+        front_radar_model.set_attribute('SensorShift_Duration', str(2))
+        front_radar_model.set_attribute('SensorShift_Yaw', str(2))
+        front_radar_model.set_attribute('SensorShiftFlag', str(0)) #Constant Shift
+        front_radar_model.set_attribute('SensorShiftTriggerFlag', str(0)) #Timed Shift
 
 
         #front_radar_model.set_attribute("scenario",str(Scenario.PackageLoss.value))
