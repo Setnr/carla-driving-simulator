@@ -1,3 +1,14 @@
+# Faulty Carla Simulator
+
+This repository is the result of the GAIA-X Project in combination with my Master's Degree. The CARLA Simulator has been extended with failure modes to demonstrate some Radar and LiDAR failures during a simulation.
+
+Further information can be found in the [dev-carlabase-9-0-13](https://github.com/Setnr/carla-driving-simulator/tree/dev-carlabase-9-0-13) branch.
+
+
+
+
+
+
 CARLA Simulator
 ===============
 
