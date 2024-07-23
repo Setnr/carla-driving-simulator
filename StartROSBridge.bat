@@ -1,0 +1,1 @@
+wsl ~ -d Ubuntu-20.04 -e bash ./StartRosBridge.sh

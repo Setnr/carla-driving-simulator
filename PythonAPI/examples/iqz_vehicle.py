@@ -25,7 +25,7 @@ from carla import ColorConverter as cc
 
 import h5
 
-SIMULATION_TIME = 240 # In Seconds
+SIMULATION_TIME = 120 # In Seconds
 TIMESTAMP = datetime.datetime.timestamp(datetime.datetime.now())
 CHUNNK = 5000
 RENDER_HUD = True
@@ -129,11 +129,14 @@ class VehicleEnvironment:
             r = int(self.clamp(0.0, 1.0, 1.0 - norm_velocity) * 255.0)
             g = int(self.clamp(0.0, 1.0, 1.0 - abs(norm_velocity)) * 255.0)
             b = int(abs(self.clamp(- 1.0, 0.0, - 1.0 - norm_velocity)) * 255.0)
-            self.world.debug.draw_point(detection_pos, size=0.075, life_time=0.06, 
+            self.world.debug.draw_point(detection_pos, size=0.075, life_time=0.12, 
                 persistent_lines=False, color=carla.Color(r, g, b))
 
             if self.store_radar_data:
                 self.hdffile.SaveRadarData(detect,radar,data.transform)
+        
+        if self.hdffile: 
+            self.hdffile.NewTimeStamp()
 
 
     def render(self, display):
@@ -147,8 +150,6 @@ class VehicleEnvironment:
         """Method for every tick"""
         self.hud.tick(self, clock)
         
-        if self.hdffile: 
-            self.hdffile.NewTimeStamp()
         if self.vehicle.is_at_traffic_light():
             traffic_light = self.vehicle.get_traffic_light()
             if traffic_light.get_state() == carla.TrafficLightState.Red:
@@ -214,7 +215,23 @@ class VehicleEnvironment:
         front_radar_model.set_attribute('range', str(80))
         #front_radar_model.set_attribute('points_per_second', str(10000))
         
-        front_radar_model.set_attribute("scenario",str(Scenario.SensorShift.value))
+        front_radar_model.set_attribute("scenario",str(Scenario.DetectNonExistingPoints.value))
+
+        front_radar_model.set_attribute('DetectNonExistingPoints_Start', str(1))
+        front_radar_model.set_attribute('DetectNonExistingPoints_Interval', str(2))
+        front_radar_model.set_attribute('DetectNonExistingPoints_Duration', str(3))
+        front_radar_model.set_attribute('DetectNonExistingPoints_AmountDetections', str(15))
+        front_radar_model.set_attribute('DetectNonExistingPoints_HorFOVFlag', str(0))
+        front_radar_model.set_attribute('DetectNonExistingPoints_VertFOVFlag', str(2))
+        
+        front_radar_model.set_attribute('VelocityShift_Start', str(1))
+        front_radar_model.set_attribute('VelocityShift_Interval', str(2))
+        front_radar_model.set_attribute('VelocityShift_Duration', str(3))
+        front_radar_model.set_attribute('VelocityShift_MaxVelocityDisturbance', str(5))
+        front_radar_model.set_attribute('VelocityShift_Distribution', str(1))
+
+
+
         front_radar_model.set_attribute('SensorShift_Start', str(8))
         front_radar_model.set_attribute('SensorShift_Interval', str(3))
         front_radar_model.set_attribute('SensorShift_Duration', str(2))
@@ -223,12 +240,21 @@ class VehicleEnvironment:
         front_radar_model.set_attribute('SensorShiftTriggerFlag', str(0)) #Timed Shift
 
 
+        front_radar_model.set_attribute('SensorBlockage_Start', str(5))
+        front_radar_model.set_attribute('SensorBlockage_Interval', str(5))
+        front_radar_model.set_attribute('SensorBlockage_AmountOfBlockingObjects', str(500))
+        front_radar_model.set_attribute('SensorBlockage_Type', str(0))
+        front_radar_model.set_attribute('SensorBlockage_HorFOVFlag', str(1))
+        front_radar_model.set_attribute('SensorBlockage_VertFOVFlag', str(1))
+        front_radar_model.set_attribute('SensorBlockage_LifeTime', str(0))
+
+
         #front_radar_model.set_attribute("scenario",str(Scenario.PackageLoss.value))
+        #front_radar_model.set_attribute('PackageLoss_Start', str(5))
+        #front_radar_model.set_attribute('PackageLoss_IntervalDegradation', str(2))
+        #front_radar_model.set_attribute('PackageLoss_DurationDegradation', str(2))
         #front_radar_model.set_attribute('PackageLoss_Interval', str(8))
         #front_radar_model.set_attribute('PackageLoss_Duration', str(0.5))
-        #front_radar_model.set_attribute('PackageLoss_Start', str(5))
-        #front_radar_model.set_attribute('PackageLoss_IntervalDegradation', str(1))
-        #front_radar_model.set_attribute('PackageLoss_DurationDegradation', str(0.5))
 
         bound_x = 0.5 + self.vehicle.bounding_box.extent.x
         bound_z = 0.5 + self.vehicle.bounding_box.extent.z
@@ -465,7 +491,8 @@ def simulate(recording, store_radar_data):
         
         print("Creating Display ...")
         # Get world object that was started by another source (hopefully)
-        world = client.get_world()
+        world = client.load_world('Town02_Opt')
+        #world = client.get_world()
         settings = world.get_settings()
         settings.synchronous_mode = SYNC
         settings.fixed_delta_seconds = 0.05
@@ -473,7 +500,7 @@ def simulate(recording, store_radar_data):
             
         world.on_tick(lambda snapshot: hud.on_world_tick(snapshot))
         print("Setting up Vehicle Environment ...")
-        env = VehicleEnvironment(hud, world, store_radar_data)
+        env = VehicleEnvironment(hud, world, True)
         env.setup()
         print("Vehicel got setup")
         controller = KeyboardControl(env)

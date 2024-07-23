@@ -98,8 +98,8 @@ class RadarScenes:
             entry['rcs'] = 0
             entry['vr'] = 0
             entry['vr_compensated'] = detect.velocity *-1
-            entry['x_cc'] = fw_vec.x 
-            entry['y_cc'] = fw_vec.y * -1
+            entry['x_cc'] = fw_vec.y # Diese beiden Spalten rotieren noch, wenn das fahrzeug abbiegt
+            entry['y_cc'] = fw_vec.x      #
             entry['x_seq'] = fw_vec.x 
             entry['y_seq'] = (fw_vec.y) * -1
             entry['uuid'] = str(self.uuid)

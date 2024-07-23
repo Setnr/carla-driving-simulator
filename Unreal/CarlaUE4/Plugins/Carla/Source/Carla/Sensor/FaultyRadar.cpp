@@ -428,10 +428,13 @@ void AFaultyRadar::ShiftVelocitys()
             {
                 if (ray.Hitted)
                 {
-                    float rand = CreateRandomNumber(VelocityShift_Distribution);
-                    if (CreateRandomNumber(DetectionPoint_Distribution))
-                        rand *= -1;
-                    ray.RelativeVelocity += VelocityShift_MaxVelocityDisturbance * rand;
+                    if (CreateRandomNumber(DetectionPoint_Distribution) < 0.2f)
+                    {
+                        float rand = CreateRandomNumber(VelocityShift_Distribution);
+                        if (CreateRandomNumber(DetectionPoint_Distribution) < 0.5f)
+                            rand *= -1;
+                        ray.RelativeVelocity += VelocityShift_MaxVelocityDisturbance * rand;
+                    }
                 }
             }
 
@@ -703,7 +706,7 @@ void AFaultyRadar::CreatePoints()
         data.RelativeVelocity = CreateRandomNumber(Distribution::Linear);
         if(CreateRandomNumber(Distribution::Linear) <= 0.5f)
             data.RelativeVelocity *= -1;
-        float LocalRange = Range * CreateRandomNumber(Distribution::Linear);
+        float LocalRange = Range * CreateRandomNumber(Distribution::Linear) / 100.f;
         //Calculated Azimuth and Altitude for the Fake Point 
         data.AzimuthAndElevation = FMath::GetAzimuthAndElevation(
                     (EndLocation - RadarLocation).GetSafeNormal() * LocalRange,
@@ -713,7 +716,7 @@ void AFaultyRadar::CreatePoints()
                 );
         //Create a Random Distance within the current Range of the Radar
         data.Distance = LocalRange;
-
+        data.label = 9;
         Rays.push_back(data);
     }
 }

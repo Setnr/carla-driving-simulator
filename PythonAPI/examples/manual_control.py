@@ -254,7 +254,7 @@ class World(object):
         self.player_max_speed_fast = 3.713
         # Keep same camera config if the camera manager exists.
         cam_index = self.camera_manager.index if self.camera_manager is not None else 0
-        cam_pos_index = self.camera_manager.transform_index if self.camera_manager is not None else 0
+        cam_pos_index = self.camera_manager.transform_index if self.camera_manager is not None else 1
         # Get a random blueprint.
         blueprint = random.choice(get_actor_blueprints(self.world, self._actor_filter, self._actor_generation))
         blueprint.set_attribute('role_name', self.actor_role_name)
@@ -1035,7 +1035,7 @@ class RadarSensor(object):
         world = self._parent.get_world()
         self.debug = world.debug
         bp = world.get_blueprint_library().find('sensor.other.faulty_radar')
-        bp.set_attribute('scenario', str(Scenario.Bloc.value))
+        bp.set_attribute('scenario', str(Scenario.SensorShift.value))
 
         bp.set_attribute('horizontal_fov', str(90))
         bp.set_attribute('vertical_fov', str(30))
@@ -1043,21 +1043,21 @@ class RadarSensor(object):
         #bp.set_attribute('points_per_second', str(10000))
         #bp.set_attribute("scenario",str(Scenario.PackageLoss.value))
 
-       # bp.set_attribute('SensorBlockage_Start', str(5))
-       # bp.set_attribute('SensorBlockage_Interval', str(10))
-       # bp.set_attribute('SensorBlockage_AmountOfBlockingObjects', str(25))
-       # bp.set_attribute('SensorBlockage_Type', str(0))
-       # bp.set_attribute('SensorBlockage_HorFOVFlag', str(1))
-       # bp.set_attribute('SensorBlockage_VertFOVFlag', str(1))
-       # bp.set_attribute('SensorBlockage_LifeTime', str(0))
-       # bp.set_attribute('SensorBlockage_BlockingObjectLifeTime', str(5))
+        bp.set_attribute('SensorBlockage_Start', str(5))
+        bp.set_attribute('SensorBlockage_Interval', str(10))
+        bp.set_attribute('SensorBlockage_AmountOfBlockingObjects', str(25))
+        bp.set_attribute('SensorBlockage_Type', str(0))
+        bp.set_attribute('SensorBlockage_HorFOVFlag', str(1))
+        bp.set_attribute('SensorBlockage_VertFOVFlag', str(1))
+        bp.set_attribute('SensorBlockage_LifeTime', str(0))
+        bp.set_attribute('SensorBlockage_BlockingObjectLifeTime', str(5))
 
 
-        bp.set_attribute('PackageLoss_Interval', str(10))
-        bp.set_attribute('PackageLoss_Duration', str(8))
-        bp.set_attribute('PackageLoss_Start', str(30))
-        bp.set_attribute('PackageLoss_IntervalDegradation', str(1))
-        bp.set_attribute('PackageLoss_DurationDegradation', str(1))
+        #bp.set_attribute('PackageLoss_Interval', str(10))
+        #bp.set_attribute('PackageLoss_Duration', str(8))
+        #bp.set_attribute('PackageLoss_Start', str(30))
+        #bp.set_attribute('PackageLoss_IntervalDegradation', str(1))
+        #bp.set_attribute('PackageLoss_DurationDegradation', str(1))
 
         #bp.set_attribute('RadarSpoof_Interval', str(10)) #Spoofing ist hier falsch, eigentlich ist das Interference, das muss angepasst werden
         #bp.set_attribute('RadarSpoof_Duration', str(5))
@@ -1184,7 +1184,7 @@ class CameraManager(object):
                                                                         "horizontal_fov" : "360",
                                                                         "rotation_frequency" : "25",
                                                                         "points_per_second" : "128000",
-                                                                        "scenario" : str(64), 
+                                                                        "scenario" : str(128), 
                                                                         "SensorShift_Start" : "8",
                                                                         "SensorShift_Interval" : "3",
                                                                         "SensorShift_Duration" : "0",
@@ -1193,15 +1193,15 @@ class CameraManager(object):
                                                                         "SensorShiftTriggerFlag" : "0",
                                                                         "SensorBlockage_Start" : "5",
                                                                         "SensorBlockage_Interval" : "5",
-                                                                        "SensorBlockage_AmountOfBlockingObjects" : "500",
+                                                                        "SensorBlockage_AmountOfBlockingObjects" : "2000",
                                                                         "SensorBlockage_Type" : "0",
                                                                         "SensorBlockage_HorFOVFlag" : "1",
                                                                         "SensorBlockage_VertFOVFlag" : "1",
                                                                         "SensorBlockage_LifeTime" : "0",
-                                                                        "PackageLoss_Interval" : "8",
-                                                                        "PackageLoss_Duration" : "0.5",
+                                                                        "PackageLoss_Interval" : "2",
+                                                                        "PackageLoss_Duration" : "2",
                                                                         "PackageLoss_Start" : "5",
-                                                                        "PackageLoss_IntervalDegradation" : "1",
+                                                                        "PackageLoss_IntervalDegradation" : "0",
                                                                         "RangeReduction_Start" : "5",
                                                                         "RangeReduction_Interval" : "5",
                                                                         "RangeReduction_Duration" : "2",
@@ -1292,6 +1292,7 @@ class CameraManager(object):
             lidar_img = np.zeros((lidar_img_size), dtype=np.uint8)
             lidar_img[tuple(lidar_data.T)] = (255, 255, 255)
             self.surface = pygame.surfarray.make_surface(lidar_img)
+            pygame.image.save(self.surface,'_out/%08d.jpg' % image.frame)
         elif self.sensors[self.index][0].startswith('sensor.camera.dvs'):
             # Example of converting the raw_data from a carla.DVSEventArray
             # sensor into a NumPy array and using it as an image
@@ -1316,7 +1317,7 @@ class CameraManager(object):
             array = array[:, :, ::-1]
             self.surface = pygame.surfarray.make_surface(array.swapaxes(0, 1))
         if self.recording:
-            image.save_to_disk('_out/%08d' % image.frame)
+            image.save_to_disk('_out/%08d.jpg' % image.frame)
 
 
 # ==============================================================================
@@ -1334,6 +1335,7 @@ def game_loop(args):
         client = carla.Client(args.host, args.port)
         client.set_timeout(2000.0)
         sim_world = client.get_world()
+        #sim_world = client.load_world('Town02_Opt')
         if args.sync:
             original_settings = sim_world.get_settings()
             settings = sim_world.get_settings()
