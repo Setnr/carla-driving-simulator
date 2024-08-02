@@ -120,6 +120,8 @@ rem echo %FILE_N% Packing headers...
 rem b2 headers link=static
 
 echo %FILE_N% Building...
+ pause
+
 b2 -j%NUMBER_OF_ASYNC_JOBS%^
     headers^
     --layout=versioned^

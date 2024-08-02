@@ -7,7 +7,6 @@ export ROOT_PATH=$(CURDIR)/
 
 # dependecy install/build directory (rpclib, gtest, boost)
 export INSTALLATION_DIR=$(ROOT_PATH)Build/
-
 help:
 	@type "${CARLA_BUILD_TOOLS_FOLDER}\Windows.mk.help"
 
@@ -71,7 +70,7 @@ LibCarla: setup
 	@"${CARLA_BUILD_TOOLS_FOLDER}/BuildLibCarla.bat" --server --client
 
 setup:
-	@"${CARLA_BUILD_TOOLS_FOLDER}/Setup.bat" --boost-toolset msvc-14.2 $(ARGS)
+	@"${CARLA_BUILD_TOOLS_FOLDER}/Setup.bat" --boost-toolset msvc-14.3 $(ARGS)
 
 .PHONY: Plugins
 plugins:
