@@ -1,1 +1,1 @@
-wsl ~ -d Ubuntu-20.04 
+wsl ~ -d Carla-Ros-Bridge

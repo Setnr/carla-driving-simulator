@@ -1,1 +1,1 @@
-wsl ~ -d Ubuntu-20.04 -e bash ./StartRosBridge.sh
+wsl ~ -d Carla-Ros-Bridge -e bash ./StartRosBridge.sh

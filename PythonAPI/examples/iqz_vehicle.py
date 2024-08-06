@@ -25,12 +25,12 @@ from carla import ColorConverter as cc
 
 import h5
 
-SIMULATION_TIME = 120 # In Seconds
+SIMULATION_TIME = 20 # In Seconds
 TIMESTAMP = datetime.datetime.timestamp(datetime.datetime.now())
 CHUNNK = 5000
 RENDER_HUD = True
 
-SYNC = True
+SYNC = False
 
 display = pygame.display.set_mode(
             (1280, 720),
@@ -113,6 +113,7 @@ class VehicleEnvironment:
         return max(min_v, min(value, max_v))
 
     def process_radar_data(self, data, radar):
+        
         velocity_range = 7.5 # m/s
         current_rot = data.transform.rotation
         for detect in data:
@@ -495,8 +496,8 @@ def simulate(recording, store_radar_data):
         #world = client.get_world()
         settings = world.get_settings()
         settings.synchronous_mode = SYNC
-        settings.fixed_delta_seconds = 0.05
-        world.apply_settings(settings)
+        settings.fixed_delta_seconds = 0.02 
+        #world.apply_settings(settings)
             
         world.on_tick(lambda snapshot: hud.on_world_tick(snapshot))
         print("Setting up Vehicle Environment ...")
@@ -512,6 +513,7 @@ def simulate(recording, store_radar_data):
             client.start_recorder(str(Path().resolve().joinpath(recordingfile)), True)
         
         while time.time() <= end_time:
+            print(time.time())
             clock.tick()
             world.tick()
             if controller.parse_events():
@@ -527,7 +529,7 @@ def simulate(recording, store_radar_data):
 
         if world is not None:
             settings = world.get_settings()
-            settings.synchronous_mode = SYNC
+            settings.synchronous_mode = False
             settings.fixed_delta_seconds = None
             world.apply_settings(settings)
         if env is not None:
