@@ -1035,7 +1035,7 @@ class RadarSensor(object):
         world = self._parent.get_world()
         self.debug = world.debug
         bp = world.get_blueprint_library().find('sensor.other.faulty_radar')
-        bp.set_attribute('scenario', str(Scenario.SensorShift.value))
+        #bp.set_attribute('scenario', str(Scenario.SensorShift.value))
 
         bp.set_attribute('horizontal_fov', str(90))
         bp.set_attribute('vertical_fov', str(30))
@@ -1043,14 +1043,14 @@ class RadarSensor(object):
         #bp.set_attribute('points_per_second', str(10000))
         #bp.set_attribute("scenario",str(Scenario.PackageLoss.value))
 
-        bp.set_attribute('SensorBlockage_Start', str(5))
-        bp.set_attribute('SensorBlockage_Interval', str(10))
-        bp.set_attribute('SensorBlockage_AmountOfBlockingObjects', str(25))
-        bp.set_attribute('SensorBlockage_Type', str(0))
-        bp.set_attribute('SensorBlockage_HorFOVFlag', str(1))
-        bp.set_attribute('SensorBlockage_VertFOVFlag', str(1))
-        bp.set_attribute('SensorBlockage_LifeTime', str(0))
-        bp.set_attribute('SensorBlockage_BlockingObjectLifeTime', str(5))
+        #bp.set_attribute('SensorBlockage_Start', str(5))
+        #bp.set_attribute('SensorBlockage_Interval', str(10))
+        #bp.set_attribute('SensorBlockage_AmountOfBlockingObjects', str(25))
+        #bp.set_attribute('SensorBlockage_Type', str(0))
+        #bp.set_attribute('SensorBlockage_HorFOVFlag', str(1))
+        #bp.set_attribute('SensorBlockage_VertFOVFlag', str(1))
+        #bp.set_attribute('SensorBlockage_LifeTime', str(0))
+        #bp.set_attribute('SensorBlockage_BlockingObjectLifeTime', str(5))
 
 
         #bp.set_attribute('PackageLoss_Interval', str(10))
@@ -1171,7 +1171,7 @@ class CameraManager(object):
 
         self.transform_index = 1
         self.sensors = [
-            ['sensor.camera.rgb', cc.Raw, 'Camera RGB', {}],
+            ['sensor.camera.rgb', cc.Raw, 'Camera RGB', {'Opacity':'1', 'ColorR':'1', 'ColorG':'1', 'ColorB':'1'}],
             ['sensor.camera.depth', cc.Raw, 'Camera Depth (Raw)', {}],
             ['sensor.camera.depth', cc.Depth, 'Camera Depth (Gray Scale)', {}],
             ['sensor.camera.depth', cc.LogarithmicDepth, 'Camera Depth (Logarithmic Gray Scale)', {}],
@@ -1183,29 +1183,29 @@ class CameraManager(object):
                                                                         'range': '50', 
                                                                         "horizontal_fov" : "360",
                                                                         "rotation_frequency" : "25",
-                                                                        "points_per_second" : "128000",
-                                                                        "scenario" : str(128), 
-                                                                        "SensorShift_Start" : "8",
-                                                                        "SensorShift_Interval" : "3",
-                                                                        "SensorShift_Duration" : "0",
-                                                                        "SensorShift_Yaw" : "2",
-                                                                        "SensorShiftFlag" : "0",
-                                                                        "SensorShiftTriggerFlag" : "0",
-                                                                        "SensorBlockage_Start" : "5",
-                                                                        "SensorBlockage_Interval" : "5",
-                                                                        "SensorBlockage_AmountOfBlockingObjects" : "2000",
-                                                                        "SensorBlockage_Type" : "0",
-                                                                        "SensorBlockage_HorFOVFlag" : "1",
-                                                                        "SensorBlockage_VertFOVFlag" : "1",
-                                                                        "SensorBlockage_LifeTime" : "0",
-                                                                        "PackageLoss_Interval" : "2",
-                                                                        "PackageLoss_Duration" : "2",
-                                                                        "PackageLoss_Start" : "5",
-                                                                        "PackageLoss_IntervalDegradation" : "0",
-                                                                        "RangeReduction_Start" : "5",
-                                                                        "RangeReduction_Interval" : "5",
-                                                                        "RangeReduction_Duration" : "2",
-                                                                        "RangeReduction_RangeReductionValue" : "40"
+                                                                        "points_per_second" : "128000"
+                                                                        #"scenario" : str(128), 
+                                                                        #"SensorShift_Start" : "8",
+                                                                        #"SensorShift_Interval" : "3",
+                                                                        #"SensorShift_Duration" : "0",
+                                                                        #"SensorShift_Yaw" : "2",
+                                                                        #"SensorShiftFlag" : "0",
+                                                                        #"SensorShiftTriggerFlag" : "0",
+                                                                        #"SensorBlockage_Start" : "5",
+                                                                        #"SensorBlockage_Interval" : "5",
+                                                                        #"SensorBlockage_AmountOfBlockingObjects" : "2000",
+                                                                        #"SensorBlockage_Type" : "0",
+                                                                        #"SensorBlockage_HorFOVFlag" : "1",
+                                                                        #"SensorBlockage_VertFOVFlag" : "1",
+                                                                        #"SensorBlockage_LifeTime" : "0",
+                                                                        #"PackageLoss_Interval" : "2",
+                                                                        #"PackageLoss_Duration" : "2",
+                                                                        #"PackageLoss_Start" : "5",
+                                                                        #"PackageLoss_IntervalDegradation" : "0",
+                                                                        #"RangeReduction_Start" : "5",
+                                                                        #"RangeReduction_Interval" : "5",
+                                                                        #"RangeReduction_Duration" : "2",
+                                                                        #"RangeReduction_RangeReductionValue" : "40"
                                                                         }],
             ['sensor.camera.dvs', cc.Raw, 'Dynamic Vision Sensor', {}],
             ['sensor.camera.rgb', cc.Raw, 'Camera RGB Distorted',
@@ -1448,8 +1448,8 @@ def main():
     argparser.add_argument(
         '--rolename',
         metavar='NAME',
-        default='hero',
-        help='actor role name (default: "hero")')
+        default='ego_vehicle',
+        help='actor role name (default: "ego_vehicle")')
     argparser.add_argument(
         '--gamma',
         default=2.2,

@@ -11,6 +11,7 @@
 #include "Carla/Sensor/SceneCaptureSensor.h"
 #include "Carla/Sensor/ShaderBasedSensor.h"
 #include "Carla/Util/ScopedStack.h"
+//#include "Carla/Sensor/SceneCaptureCamera.h"
 
 #include <algorithm>
 #include <limits>
@@ -804,6 +805,31 @@ void UActorBlueprintFunctionLibrary::MakeCameraDefinition(
     LensYSize.RecommendedValues = { TEXT("0.08") };
     LensYSize.bRestrictToRecommended = false;
 
+    /*FActorVariation ColorR;
+    ColorR.Id = TEXT("ColorR");
+    ColorR.Type = EActorAttributeType::Float;
+    ColorR.RecommendedValues = { TEXT("0.08") };
+    ColorR.bRestrictToRecommended = false;
+
+    FActorVariation ColorG;
+    ColorG.Id = TEXT("ColorG");
+    ColorG.Type = EActorAttributeType::Float;
+    ColorG.RecommendedValues = { TEXT("0.08") };
+    ColorG.bRestrictToRecommended = false;
+
+    FActorVariation ColorB;
+    ColorB.Id = TEXT("ColorR");
+    ColorB.Type = EActorAttributeType::Float;
+    ColorB.RecommendedValues = { TEXT("0.08") };
+    ColorB.bRestrictToRecommended = false;
+
+    FActorVariation Opacity;
+    Opacity.Id = TEXT("Opacity");
+    Opacity.Type = EActorAttributeType::Float;
+    Opacity.RecommendedValues = { TEXT("0.08") };
+    Opacity.bRestrictToRecommended = false;*/
+
+
     Definition.Variations.Append({
         ResX,
         ResY,
@@ -813,7 +839,11 @@ void UActorBlueprintFunctionLibrary::MakeCameraDefinition(
         LensK,
         LensKcube,
         LensXSize,
-        LensYSize });
+        LensYSize/*,
+        ColorR,
+        ColorG,
+        ColorB,
+        Opacity*/});
 
     if (bEnableModifyingPostProcessEffects)
     {
@@ -2187,6 +2217,7 @@ void UActorBlueprintFunctionLibrary::SetCamera(
         RetrieveActorAttributeToInt("image_size_y", Description.Variations, 600));
     Camera->SetFOVAngle(
         RetrieveActorAttributeToFloat("fov", Description.Variations, 90.0f));
+    
     if (Description.Variations.Contains("enable_postprocess_effects"))
     {
         Camera->EnablePostProcessingEffects(
@@ -2285,6 +2316,14 @@ void UActorBlueprintFunctionLibrary::SetCamera(
         RetrieveActorAttributeToFloat("lens_x_size", Description.Variations, 0.08f));
     Camera->SetFloatShaderParameter(0, TEXT("YSize_NState"),
         RetrieveActorAttributeToFloat("lens_y_size", Description.Variations, 0.08f));
+    /*if (Camera->GetClass()->IsChildOf(ASceneCaptureCamera::StaticClass()))
+    {
+        ASceneCaptureCamera* cam = (ASceneCaptureCamera*)Camera;
+        cam->UpdateOpacity(RetrieveActorAttributeToFloat("Opacity", Description.Variations, 0.f));
+        cam->UpdateColorR(RetrieveActorAttributeToFloat("ColorR", Description.Variations, 0.f));
+        cam->UpdateColorG(RetrieveActorAttributeToFloat("ColorG", Description.Variations, 0.f));
+        cam->UpdateColorB(RetrieveActorAttributeToFloat("ColorB", Description.Variations, 0.f));
+    }*/
 }
 
 void UActorBlueprintFunctionLibrary::SetLidar(

@@ -1,0 +1,18 @@
+
+Start ScenarioRunner Service 
+ros2 launch carla_ros_scenario_runner carla_ros_scenario_runner.launch.py scenario_runner_path:=/mnt/c/carla/PythonAPI/scenario_runner-0.9.13/ host:=192.168.178.176
+
+Add Scenario to Scenario Runner 
+ros2 service call /scenario_runner/execute_scenario carla_ros_scenario_runner_types/srv/ExecuteScenario "{ 'scenario': { 'scenario_file': '/home/ros/carla-ros-bridge/install/carla_ad_demo/share/carla_ad_demo/config/FollowLeadingVehicle.xosc' } }"
+
+Start ROS Bridge:
+ros2 launch carla_ros_bridge carla_ros_bridge.launch.py host:=192.168.178.176 timeout:=10000
+
+Spawn Objects:
+ros2 launch carla_spawn_objects carla_spawn_objects.launch.py
+
+Control Manual Car:
+ros2 launch carla_manual_control carla_manual_control.launch.py 
+
+Start rviz: (Optional)
+ros2 run rviz2 rviz2

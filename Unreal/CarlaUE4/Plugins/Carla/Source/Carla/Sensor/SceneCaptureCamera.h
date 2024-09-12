@@ -36,6 +36,14 @@ protected:
   
   virtual void OnFirstClientConnected() override;
   virtual void OnLastClientDisconnected() override;
-
+  /*
+public:
+  void UpdateOpacity(float opacity);
+  void UpdateColorR(float Col);
+  void UpdateColorG(float Col);
+  void UpdateColorB(float Col);
+private:
+  float ColR, ColG, ColB;
+  */
 private:
 };

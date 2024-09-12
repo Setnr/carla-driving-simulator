@@ -10,6 +10,7 @@
 #include <chrono>
 
 #include "Runtime/RenderCore/Public/RenderingThread.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 FActorDefinition ASceneCaptureCamera::GetSensorDefinition()
 {
@@ -24,6 +25,18 @@ ASceneCaptureCamera::ASceneCaptureCamera(const FObjectInitializer& ObjectInitial
 {
     AddPostProcessingMaterial(
         TEXT("Material'/Carla/PostProcessingMaterials/PhysicLensDistortion.PhysicLensDistortion'"));
+    AddPostProcessingMaterial(TEXT("Material'/Game/NewMaterial.NewMaterial'"));
+    /*for (const auto& Shader : Shaders)
+    {
+        if (Shader.Name.Contains("NewMaterial"))
+        {
+            FLinearColor col;
+            Shader.PostProcessMaterial->GetVectorParameterValue(FName("MyColor"), col);
+            ColR = col.R;
+            ColG = col.G;
+            ColB = col.B;
+        }
+    }*/
 }
 
 void ASceneCaptureCamera::BeginPlay()
@@ -67,3 +80,57 @@ void ASceneCaptureCamera::SendGBufferTextures(FGBufferRequest& GBuffer)
 {
     SendGBufferTexturesInternal(*this, GBuffer);
 }
+/*
+void ASceneCaptureCamera::UpdateOpacity(float opacity)
+{
+    for (const auto& Shader : Shaders)
+    {
+        if (Shader.Name.Contains("NewMaterial"))
+        {
+            Shader.PostProcessMaterial->SetScalarParameterValue(FName("Opacity"), opacity);
+        }
+    }
+}
+
+void ASceneCaptureCamera::UpdateColorR(float Col) 
+{
+    ColR = Col;
+    FLinearColor ColAll(ColR, ColG, ColB);
+    for (const auto& Shader : Shaders)
+    {
+        if (Shader.Name.Contains("NewMaterial"))
+        {
+            Shader.PostProcessMaterial->SetVectorParameterValue(FName("MyColor"), ColAll);
+        }
+
+    }
+}
+
+void ASceneCaptureCamera::UpdateColorG(float Col)
+{
+    ColG = Col;
+    FLinearColor ColAll(ColR, ColG, ColB);
+    for (const auto& Shader : Shaders)
+    {
+        if (Shader.Name.Contains("NewMaterial"))
+        {
+            Shader.PostProcessMaterial->SetVectorParameterValue(FName("MyColor"), ColAll);
+        }
+
+    }
+}
+
+void ASceneCaptureCamera::UpdateColorB(float Col)
+{
+    ColB = Col;
+    FLinearColor ColAll(ColR, ColG, ColB);
+    for (const auto& Shader : Shaders)
+    {
+        if (Shader.Name.Contains("NewMaterial"))
+        {
+            Shader.PostProcessMaterial->SetVectorParameterValue(FName("MyColor"), ColAll);
+        }
+
+    }
+}
+*/

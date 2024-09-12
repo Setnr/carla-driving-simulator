@@ -37,7 +37,9 @@ struct CARLA_API FSensorShader
   UMaterialInstanceDynamic *PostProcessMaterial = nullptr;
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite)
-  float Weight = 1.0f;
+  float Weight = 1.f;
+
+  //FString Name;
 };
 
 /// A sensor that produces data by applying post-process materials (shaders) to
@@ -84,10 +86,10 @@ private:
 
   UPROPERTY()
   TArray<UMaterial*> MaterialsFound;
-
+//protected:
   UPROPERTY()
   TArray<FSensorShader> Shaders;
-
+private:
   UPROPERTY()
   TArray<FShaderFloatParameterValue> FloatShaderParams;
 };

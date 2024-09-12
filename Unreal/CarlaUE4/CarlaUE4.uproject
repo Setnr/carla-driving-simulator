@@ -37,23 +37,11 @@
 			"Enabled": false
 		},
 		{
-			"Name": "LocationServicesBPLibrary",
-			"Enabled": false
-		},
-		{
 			"Name": "AndroidDeviceProfileSelector",
 			"Enabled": false
 		},
 		{
-			"Name": "ExampleDeviceProfileSelector",
-			"Enabled": false
-		},
-		{
 			"Name": "IOSDeviceProfileSelector",
-			"Enabled": false
-		},
-		{
-			"Name": "UObjectPlugin",
 			"Enabled": false
 		},
 		{
@@ -66,10 +54,6 @@
 		},
 		{
 			"Name": "MobileLauncherProfileWizard",
-			"Enabled": false
-		},
-		{
-			"Name": "MobilePatchingUtils",
 			"Enabled": false
 		},
 		{
@@ -87,14 +71,6 @@
 		{
 			"Name": "PerformanceMonitor",
 			"Enabled": true
-		},
-		{
-			"Name": "OculusVR",
-			"Enabled": false
-		},
-		{
-			"Name": "SteamVR",
-			"Enabled": false
 		},
 		{
 			"Name": "RenderDocPlugin",

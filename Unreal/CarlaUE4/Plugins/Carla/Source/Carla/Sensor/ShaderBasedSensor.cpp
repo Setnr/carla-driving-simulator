@@ -25,13 +25,15 @@ void AShaderBasedSensor::SetUpSceneCaptureComponent(USceneCaptureComponent2D &Sc
   for (const auto &MaterialFound : MaterialsFound)
   {
     // Create a dynamic instance of the Material (Shader)
-    AddShader({UMaterialInstanceDynamic::Create(MaterialFound, this), 1.0});
+    UE_LOG(LogTemp,Warning, TEXT("Found Material %s") ,*MaterialFound->GetFullName());
+    AddShader({UMaterialInstanceDynamic::Create(MaterialFound, this), 1.0,MaterialFound->GetFullName() });
   }
 
   for (const auto &Shader : Shaders)
   {
     // Attach the instance into the blendables
-    SceneCapture.PostProcessSettings.AddBlendable(Shader.PostProcessMaterial, Shader.Weight);
+      UE_LOG(LogTemp, Warning, TEXT("Shader %s"), *Shader.Name);
+      SceneCapture.PostProcessSettings.AddBlendable(Shader.PostProcessMaterial, Shader.Weight);
   }
 
   // Set the value for each Float parameter in the shader
