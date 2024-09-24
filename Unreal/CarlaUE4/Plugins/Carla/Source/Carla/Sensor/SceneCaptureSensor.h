@@ -534,6 +534,7 @@ protected:
   template <typename T>
   void SendGBufferTexturesInternal(T& Self, FGBufferRequest& GBufferData)
   {
+      UE_LOG(LogTemp, Warning, TEXT("SendGBufferTexturesInternal"));
     for (size_t i = 0; i != FGBufferRequest::TextureCount; ++i)
     {
       if ((GBufferData.DesiredTexturesMask & (UINT64_C(1) << i)) == 0) {

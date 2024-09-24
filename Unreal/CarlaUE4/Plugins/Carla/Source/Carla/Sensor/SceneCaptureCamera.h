@@ -37,5 +37,5 @@ protected:
   virtual void OnFirstClientConnected() override;
   virtual void OnLastClientDisconnected() override;
 
-private:
+  void Set(const FActorDescription& ActorDescription) override;	
 };

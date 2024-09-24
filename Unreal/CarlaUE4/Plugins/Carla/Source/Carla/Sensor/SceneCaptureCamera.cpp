@@ -10,7 +10,8 @@
 #include <chrono>
 
 #include "Runtime/RenderCore/Public/RenderingThread.h"
-
+#include "Materials/MaterialInstanceDynamic.h"
+#include "Carla/Actor/ActorBlueprintFunctionLibrary.h"
 FActorDefinition ASceneCaptureCamera::GetSensorDefinition()
 {
     constexpr bool bEnableModifyingPostProcessEffects = true;
@@ -22,8 +23,7 @@ FActorDefinition ASceneCaptureCamera::GetSensorDefinition()
 ASceneCaptureCamera::ASceneCaptureCamera(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer)
 {
-    AddPostProcessingMaterial(
-        TEXT("Material'/Carla/PostProcessingMaterials/PhysicLensDistortion.PhysicLensDistortion'"));
+    AddPostProcessingMaterial(TEXT("Material'/Carla/PostProcessingMaterials/PhysicLensDistortion.PhysicLensDistortion'"));
 }
 
 void ASceneCaptureCamera::BeginPlay()
@@ -65,5 +65,11 @@ void ASceneCaptureCamera::PostPhysTick(UWorld *World, ELevelTick TickType, float
 
 void ASceneCaptureCamera::SendGBufferTextures(FGBufferRequest& GBuffer)
 {
+    UE_LOG(LogTemp, Warning, TEXT("Send Texture"));
     SendGBufferTexturesInternal(*this, GBuffer);
+}
+
+void ASceneCaptureCamera::Set(const FActorDescription& Description)
+{
+    Super::Set(Description);
 }

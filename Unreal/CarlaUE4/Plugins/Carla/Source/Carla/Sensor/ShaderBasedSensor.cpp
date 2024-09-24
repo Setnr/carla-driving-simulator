@@ -25,12 +25,13 @@ void AShaderBasedSensor::SetUpSceneCaptureComponent(USceneCaptureComponent2D &Sc
   for (const auto &MaterialFound : MaterialsFound)
   {
     // Create a dynamic instance of the Material (Shader)
-    AddShader({UMaterialInstanceDynamic::Create(MaterialFound, this), 1.0});
+    AddShader({UMaterialInstanceDynamic::Create(MaterialFound, this), 1.0, MaterialFound->GetFullName()});
   }
 
   for (const auto &Shader : Shaders)
   {
     // Attach the instance into the blendables
+      UE_LOG(LogTemp, Warning, TEXT("SHADER ADD %s"), *Shader.Name);
     SceneCapture.PostProcessSettings.AddBlendable(Shader.PostProcessMaterial, Shader.Weight);
   }
 

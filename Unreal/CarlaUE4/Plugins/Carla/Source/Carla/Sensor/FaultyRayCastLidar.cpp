@@ -262,7 +262,7 @@ void AFaultyRayCastLidar::ShiftDetectionPoints()
                 this->FaultyLidarDescription.DetectionPointShift_Interval -= FaultyLidarDescription.DetectionPointShift_IntervalDegradation;
                 this->FaultyLidarDescription.DetectionPointShift_Duration += FaultyLidarDescription.DetectionPointShift_DurationDegradation;
             }
-            for (int i = 0; i < LidarData.GetSize(); i++) 
+            for (size_t i = 0; i < LidarData.GetSize(); i++) 
             {
 
                 float x = CreateRandomNumber(FaultyLidarDescription.DetectionPoint_Distribution) * FaultyLidarDescription.DetectionPoint_MaxDepthDisturbance;

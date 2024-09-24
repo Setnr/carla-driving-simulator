@@ -38,6 +38,8 @@ struct CARLA_API FSensorShader
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite)
   float Weight = 1.0f;
+
+  FString Name;
 };
 
 /// A sensor that produces data by applying post-process materials (shaders) to
@@ -80,13 +82,13 @@ protected:
 
   void SetUpSceneCaptureComponent(USceneCaptureComponent2D &SceneCapture) override;
 
+  UPROPERTY()
+  TArray<FSensorShader> Shaders;
+
 private:
 
   UPROPERTY()
   TArray<UMaterial*> MaterialsFound;
-
-  UPROPERTY()
-  TArray<FSensorShader> Shaders;
 
   UPROPERTY()
   TArray<FShaderFloatParameterValue> FloatShaderParams;

@@ -1172,6 +1172,12 @@ class CameraManager(object):
         self.transform_index = 1
         self.sensors = [
             ['sensor.camera.rgb', cc.Raw, 'Camera RGB', {}],
+            ['sensor.camera.faulty_rgb', cc.Raw, 'Faulty Camera RGB', {
+                                                                       "PackageLoss_Start":"5",
+                                                                       "PackageLoss_Duration":"0.5",
+                                                                       "PackageLoss_Interval":"2.7",
+                                                                       "CameraFailureState":"true"
+                                                                       }],
             ['sensor.camera.depth', cc.Raw, 'Camera Depth (Raw)', {}],
             ['sensor.camera.depth', cc.Depth, 'Camera Depth (Gray Scale)', {}],
             ['sensor.camera.depth', cc.LogarithmicDepth, 'Camera Depth (Logarithmic Gray Scale)', {}],
