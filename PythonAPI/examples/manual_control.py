@@ -1186,6 +1186,7 @@ class CameraManager(object):
             ['sensor.camera.instance_segmentation', cc.CityScapesPalette, 'Camera Instance Segmentation (CityScapes Palette)', {}],
             ['sensor.camera.instance_segmentation', cc.Raw, 'Camera Instance Segmentation (Raw)', {}],
             ['sensor.faulty_lidar.ray_cast', None, 'Lidar (Ray-Cast)', { #faulty_lidar an 3 stelle für lidar
+                                                                        'RandomSeed' : str(1202581),
                                                                         'range': '50', 
                                                                         "horizontal_fov" : "360",
                                                                         "rotation_frequency" : "25",
@@ -1347,7 +1348,7 @@ def game_loop(args):
             settings = sim_world.get_settings()
             if not settings.synchronous_mode:
                 settings.synchronous_mode = True
-                settings.fixed_delta_seconds = 0.05
+                settings.fixed_delta_seconds = 0.05 
             sim_world.apply_settings(settings)
 
             traffic_manager = client.get_trafficmanager()

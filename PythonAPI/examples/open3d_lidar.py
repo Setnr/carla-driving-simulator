@@ -19,6 +19,17 @@ import numpy as np
 from matplotlib import cm
 import open3d as o3d
 
+from enum import Enum
+class Scenario(Enum):
+    PackageLoss = 1
+    PackageDelay = 2
+    DetectionPointShift = 4
+    VelocityShift = 8
+    RangeReduction = 16
+    DetectionNonExistingPoints = 32
+    SensorShift = 64
+    SensorBlockage = 128
+
 try:
     sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
         sys.version_info.major,
@@ -28,6 +39,7 @@ except IndexError:
     pass
 
 import carla
+
 
 VIRIDIS = np.array(cm.get_cmap('plasma').colors)
 VID_RANGE = np.linspace(0.0, 1.0, VIRIDIS.shape[0])
@@ -88,7 +100,6 @@ def lidar_callback(point_cloud, point_list):
     point_list.points = o3d.utility.Vector3dVector(points)
     point_list.colors = o3d.utility.Vector3dVector(int_color)
 
-
 def semantic_lidar_callback(point_cloud, point_list):
     """Prepares a point cloud with semantic segmentation
     colors ready to be consumed by Open3D"""
@@ -110,7 +121,6 @@ def semantic_lidar_callback(point_cloud, point_list):
     # # In case you want to make the color intensity depending
     # # of the incident ray angle, you can use:
     # int_color *= np.array(data['CosAngle'])[:, None]
-
     point_list.points = o3d.utility.Vector3dVector(points)
     point_list.colors = o3d.utility.Vector3dVector(int_color)
 
@@ -120,7 +130,7 @@ def generate_lidar_bp(arg, world, blueprint_library, delta):
     if arg.semantic:
         lidar_bp = world.get_blueprint_library().find('sensor.lidar.ray_cast_semantic')
     else:
-        lidar_bp = blueprint_library.find('sensor.lidar.ray_cast')
+        lidar_bp = blueprint_library.find('sensor.faulty_lidar.ray_cast')
         if arg.no_noise:
             lidar_bp.set_attribute('dropoff_general_rate', '0.0')
             lidar_bp.set_attribute('dropoff_intensity_limit', '1.0')
@@ -134,6 +144,37 @@ def generate_lidar_bp(arg, world, blueprint_library, delta):
     lidar_bp.set_attribute('range', str(arg.range))
     lidar_bp.set_attribute('rotation_frequency', str(1.0 / delta))
     lidar_bp.set_attribute('points_per_second', str(arg.points_per_second))
+    seed = int(random.random()*100)
+    print(f"Set Seed to {seed}")
+    lidar_bp.set_attribute('RandomSeed', str(seed))
+
+    lidar_bp.set_attribute('scenario', str(Scenario.SensorBlockage.value))
+    lidar_bp.set_attribute('SensorBlockage_Start', str(15))
+    lidar_bp.set_attribute('SensorBlockage_Interval', str(5))
+    lidar_bp.set_attribute('SensorBlockage_AmountOfBlockingObjects', str(250))
+    lidar_bp.set_attribute('SensorBlockage_Type', str(0)) # 1 full range  0 close range
+    lidar_bp.set_attribute('SensorBlockage_HorFOVFlag', str(1))
+    lidar_bp.set_attribute('SensorBlockage_VertFOVFlag', str(1))
+    lidar_bp.set_attribute('SensorBlockage_LifeTime', str(0))
+
+    lidar_bp.set_attribute('PackageLoss_Interval', str(8))
+    lidar_bp.set_attribute('PackageLoss_Duration', str(1))
+    lidar_bp.set_attribute('PackageLoss_Start', str(10))
+    lidar_bp.set_attribute('PackageLoss_IntervalDegradation', str(0.3))
+
+    lidar_bp.set_attribute('RangeReduction_Start', str(10))
+    lidar_bp.set_attribute('RangeReduction_Interval', str(5))
+    lidar_bp.set_attribute('RangeReduction_Duration', str(1))
+    lidar_bp.set_attribute('RangeReduction_RangeReductionValue', str(60))
+
+    lidar_bp.set_attribute('SensorShift_Interval', "1")
+    lidar_bp.set_attribute('SensorShift_Start', "2")
+    lidar_bp.set_attribute('SensorShift_Duration', "0")
+    lidar_bp.set_attribute('SensorShift_Yaw', "2")
+    lidar_bp.set_attribute('SensorShift_Roll', "2")
+    lidar_bp.set_attribute('SensorShiftFlag', "0")
+    lidar_bp.set_attribute('SensorShiftTriggerFlag', "0")
+        
     return lidar_bp
 
 
@@ -154,30 +195,54 @@ def add_open3d_axis(vis):
         [0.0, 1.0, 0.0],
         [0.0, 0.0, 1.0]]))
     vis.add_geometry(axis)
+def spawn_vehicle(blueprint, spawn_points, world):
+        actor = ""
+        spawn = ""
+        for spawn in spawn_points:
+            actor = world.try_spawn_actor(blueprint, spawn)
+            if actor:
+                break
 
+        if spawn in spawn_points: spawn_points.remove(spawn)
+        return actor
 
 def main(arg):
     """Main function of the script"""
     client = carla.Client(arg.host, arg.port)
-    client.set_timeout(2.0)
-    world = client.get_world()
+    client.set_timeout(2000.0)
+    client.reload_world()
 
+    world = client.get_world()
+    vehicle_list = []
     try:
+        spawn_points=world.get_map().get_spawn_points()
+        blueprint_library = world.get_blueprint_library()
+        for i in range(25):
+            fresh_bp = random.choice(blueprint_library.filter('vehicle.*.*'))
+            actor = spawn_vehicle(fresh_bp,spawn_points,world)
+            if not actor:
+                print("Error spawning ego vehicle")
+                exit(1)
+            vehicle_list.append(actor)
+            actor.set_autopilot(True)
+
+
+
+
         original_settings = world.get_settings()
         settings = world.get_settings()
         traffic_manager = client.get_trafficmanager(8000)
         traffic_manager.set_synchronous_mode(True)
 
         delta = 0.05
-
+        
         settings.fixed_delta_seconds = delta
         settings.synchronous_mode = True
         settings.no_rendering_mode = arg.no_rendering
         world.apply_settings(settings)
 
-        blueprint_library = world.get_blueprint_library()
         vehicle_bp = blueprint_library.filter(arg.filter)[0]
-        vehicle_transform = random.choice(world.get_map().get_spawn_points())
+        vehicle_transform = random.choice(spawn_points)
         vehicle = world.spawn_actor(vehicle_bp, vehicle_transform)
         vehicle.set_autopilot(arg.no_autopilot)
 
@@ -210,24 +275,35 @@ def main(arg):
 
         frame = 0
         dt0 = datetime.now()
+        
+        world.tick()
+        while np.asarray(point_list.points).shape[0] == 0: # Sleep Until we recieved first data
+            time.sleep(0.001)
+        
+        vis.add_geometry(point_list)
+
         while True:
-            if frame == 2:
-                vis.add_geometry(point_list)
+            
             vis.update_geometry(point_list)
 
             vis.poll_events()
             vis.update_renderer()
             # # This can fix Open3D jittering issues:
+            
             time.sleep(0.005)
             world.tick()
 
             process_time = datetime.now() - dt0
-            sys.stdout.write('\r' + 'FPS: ' + str(1.0 / process_time.total_seconds()))
+            sys.stdout.write('\r' + f'FPS: {(1.0 / process_time.total_seconds()):.2f}'  + f' Server Time Passed: {delta*(frame+2):.2f} ')
+            
             sys.stdout.flush()
             dt0 = datetime.now()
             frame += 1
 
     finally:
+        for actor in vehicle_list:
+            actor.destroy()
+
         world.apply_settings(original_settings)
         traffic_manager.set_synchronous_mode(False)
 

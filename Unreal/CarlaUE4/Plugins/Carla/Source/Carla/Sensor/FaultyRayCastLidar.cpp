@@ -9,7 +9,17 @@
 
 FActorDefinition AFaultyRayCastLidar::GetSensorDefinition()
 {
-  return UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(TEXT("ray_cast"));
+    FActorDefinition FaultyLidarDef = UActorBlueprintFunctionLibrary::MakeFaultyLidarDefinition(TEXT("ray_cast"));
+
+    FActorVariation RandomSeed;
+    RandomSeed.Id = TEXT("RandomSeed");
+    RandomSeed.Type = EActorAttributeType::Int;
+    RandomSeed.RecommendedValues = { TEXT("9857") };
+    RandomSeed.bRestrictToRecommended = false;
+
+    FaultyLidarDef.Variations.Append({ RandomSeed });
+    UActorBlueprintFunctionLibrary::CheckActorDefinition(FaultyLidarDef);
+    return FaultyLidarDef;
 }
 
 
@@ -111,6 +121,13 @@ void AFaultyRayCastLidar::Set(const FActorDescription &ActorDescription)
   UActorBlueprintFunctionLibrary::SetFaultyLidar(ActorDescription, LidarDescription, FaultyLidarDescription);
   Super::Set(LidarDescription);
 
+  if (ActorDescription.Variations.Contains("RandomSeed"))
+  {
+      int seed = UActorBlueprintFunctionLibrary::RetrieveActorAttributeToInt("RandomSeed",ActorDescription.Variations, RandomEngineSeed);
+      gen_weibull.seed(seed);
+      gen_uniform.seed(seed);
+  }
+
 }
 
 void AFaultyRayCastLidar::EventShift()
@@ -162,7 +179,7 @@ void AFaultyRayCastLidar::GenerateHexagons()
         AHexagonActor* Hexagon = GetWorld()->SpawnActor<AHexagonActor>(EndLocation, FRotator(0.f, 0.f, 0.f));
         if (Hexagon != nullptr)
         {
-            float Radius = FMath::FRandRange(.001f, .050f);//.0001f, .0050f);
+            float Radius = FMath::FRandRange(.001f , .050f);//.0001f, .0050f);
             Hexagon->CreateHexagonMesh(Radius);
 
             FVector TargetLocation = GetActorLocation();
@@ -425,13 +442,17 @@ FVector AFaultyRayCastLidar::CalculateEndLocation(bool CloseRange, VerticalFOV_T
 
 
     float LocHepler = 1.0f;
-    if(this->Description.HorizontalFov >= 180.0f)
-        if (CreateRandomNumber(Distribution::Linear) >= 0.5f)
-            LocHepler = -1.0f;
+    //if(this->Description.HorizontalFov >= 180.0f)
+    if (CreateRandomNumber(Distribution::Linear) >= 0.5f)
+        LocHepler = -1.0f;
     float MaxRx = CreateRandomNumber(Distribution::Linear) * SpawnRange * LocHepler;
+
+    LocHepler = 1.0f;
     if (CreateRandomNumber(Distribution::Linear) >= 0.5f)
         LocHepler = -1.0f;
     float MaxRy = CreateRandomNumber(Distribution::Linear) * SpawnRange * LocHepler; 
+
+    LocHepler = 1.0f;
     if (CreateRandomNumber(Distribution::Linear) >= 0.5f)
         LocHepler = -1.0f;
     float MaxRz = CreateRandomNumber(Distribution::Linear) * SpawnRange * LocHepler;
