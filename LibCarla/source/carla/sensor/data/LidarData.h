@@ -11,7 +11,7 @@
 
 #include <cstdint>
 #include <vector>
-
+#include <random>
 namespace carla {
 
 namespace ros2 {
@@ -107,6 +107,52 @@ namespace data {
       DEBUG_ASSERT(false);
     }
 
+    void SetDetections(std::vector<float> NewData)
+    {
+        _points = NewData;
+    }
+    std::vector<float> GetDetections() { return _points; }
+    void RandomizeCoords(std::uniform_real_distribution<float>& uniform, std::mt19937& gen, float PossibilityToShiftPoint, float MaxShift)
+    {
+        for (int i = 0; i < _points.size(); i++) 
+        {
+
+            if (i % 4 != 3)
+            {
+                if ((uniform(gen) + 1.f) * .5f <= PossibilityToShiftPoint)
+                {
+                    float RandomValue = uniform(gen) * MaxShift;
+                    _points[i] += RandomValue;
+                }
+            }
+        }
+        
+    }
+    float RandomizeAdditionalData(std::uniform_real_distribution<float>& uniform, std::mt19937& gen, float PossibilityToShiftPoint, float MaxShift)
+    {
+        int ShiftCounter = 0;
+        for (int i = 0; i < _points.size(); i++)
+        {
+            if (i % 4 == 3)
+            {
+                if ((uniform(gen) + 1.f) * .5f <= PossibilityToShiftPoint)
+                {
+                    float RandomValue = uniform(gen) * MaxShift;
+                    _points[i] += RandomValue;
+                    ShiftCounter++;
+                }
+            }
+        }
+        return static_cast<float>(ShiftCounter) / static_cast<float>(_points.size());
+    }
+    void AddPoint(float azi, float ele, float dist, float x, float y, float z, float Additional)
+    {
+
+        _points.push_back(x);
+        _points.push_back(y);
+        _points.push_back(z);
+        _points.push_back(Additional);
+    }
   private:
     std::vector<float> _points;
 

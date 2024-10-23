@@ -63,8 +63,6 @@ protected:
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Detection")
   int PointsPerSecond;
 
-private:
-
   void CalculateCurrentVelocity(const float DeltaTime);
 
   void SendLineTraces(float DeltaTime);

@@ -51,6 +51,10 @@ class FWorldObserver;
 struct FCameraGBufferUint8;
 struct FCameraGBufferFloat;
 
+
+class AFaultyRadar;
+class AFaultyRayCastLidar;
+
 namespace carla {
 namespace sensor {
 
@@ -80,7 +84,11 @@ namespace sensor {
     std::pair<AInstanceSegmentationCamera *, s11n::ImageSerializer>,
     std::pair<FWorldObserver *, s11n::EpisodeStateSerializer>,
     std::pair<FCameraGBufferUint8 *, s11n::GBufferUint8Serializer>,
-    std::pair<FCameraGBufferFloat *, s11n::GBufferFloatSerializer>
+    std::pair<FCameraGBufferFloat *, s11n::GBufferFloatSerializer>,
+
+
+    std::pair<AFaultyRadar*, s11n::RadarSerializer>,
+    std::pair<AFaultyRayCastLidar*, s11n::LidarSerializer>
   >;
 
 } // namespace sensor
@@ -108,5 +116,9 @@ namespace sensor {
 #include "Carla/Sensor/SemanticSegmentationCamera.h"
 #include "Carla/Sensor/InstanceSegmentationCamera.h"
 #include "Carla/Sensor/WorldObserver.h"
+
+
+#include "Carla/Sensor/FaultyRadar.h"
+#include "Carla/Sensor/FaultyRayCastLidar.h"
 
 #endif // LIBCARLA_SENSOR_REGISTRY_WITH_SENSOR_INCLUDES

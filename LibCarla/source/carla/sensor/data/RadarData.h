@@ -9,7 +9,7 @@
 #include <cstdint>
 #include <vector>
 #include <cstdio>
-
+#include <random>
 namespace carla {
 
 namespace ros2 {
@@ -70,6 +70,48 @@ namespace data {
       _detections.push_back(detection);
     }
 
+    void SetDetections(std::vector<RadarDetection> NewData)
+    {
+        _detections = NewData;
+    }
+    std::vector<RadarDetection> GetDetections() { return _detections; }
+
+    void RandomizeCoords(std::uniform_real_distribution<float>& uniform, std::mt19937& gen, float PossibilityToShiftPoint, float MaxShift)
+    {
+        for (auto detection : _detections) 
+        {
+            if ((uniform(gen) + 1.f) * .5f <= PossibilityToShiftPoint)
+            {
+                float RandomValue = uniform(gen) * MaxShift;
+                detection.altitude += RandomValue;
+
+                RandomValue = uniform(gen) * MaxShift;
+                detection.azimuth += RandomValue;
+
+                RandomValue = uniform(gen) * MaxShift;
+                detection.depth += RandomValue;
+            }
+        }
+    }
+    float RandomizeAdditionalData(std::uniform_real_distribution<float>& uniform, std::mt19937& gen, float PossibilityToShiftPoint, float MaxShift)
+    {
+        int ShiftCounter = 0;
+        for (auto detection : _detections)
+        {
+            if ((uniform(gen) + 1.f) * .5f <= PossibilityToShiftPoint)
+            {
+                float RandomValue = uniform(gen) * MaxShift;
+                detection.velocity += RandomValue;
+                ShiftCounter++;
+            }
+        }
+        return static_cast<float>(ShiftCounter) / static_cast<float>(_detections.size());
+    }
+    void AddPoint(float azi, float ele, float dist, float x, float y, float z, float Additional) 
+    {
+        RadarDetection det = { Additional,azi, ele, dist };
+        _detections.push_back(det);
+    }
   private:
     std::vector<RadarDetection> _detections;
 

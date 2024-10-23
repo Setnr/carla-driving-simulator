@@ -1025,9 +1025,25 @@ class RadarSensor(object):
         self.velocity_range = 7.5 # m/s
         world = self._parent.get_world()
         self.debug = world.debug
-        bp = world.get_blueprint_library().find('sensor.other.radar')
-        bp.set_attribute('horizontal_fov', str(35))
-        bp.set_attribute('vertical_fov', str(20))
+        bp = world.get_blueprint_library().find('sensor.other.faulty_radar')
+        bp.set_attribute('horizontal_fov', str(90))
+        bp.set_attribute('vertical_fov', str(30))
+        bp.set_attribute('range', str(100))
+
+        bp.set_attribute('scenario', str(128))
+        bp.set_attribute('Blockage_AreaEffects_Start', str(5))
+        bp.set_attribute('Blockage_AreaEffects_Interval', str(3))
+        bp.set_attribute('Blockage_AreaEffects_Duration', str(0))
+        bp.set_attribute('Blockage_AreaEffects_CloseRange', "True")
+        bp.set_attribute('Blockage_AreaEffects_Ammount', str(20))
+        bp.set_attribute('Blockage_AreaEffects_HorizontalFlag', str(1))
+        bp.set_attribute('Blockage_AreaEffects_VerticalFlag', str(1))
+        bp.set_attribute('Blockage_AreaEffects_RandomObjectLifeTime', "False")
+        bp.set_attribute('Blockage_AreaEffects_MaxLifeTime', str(0))
+        bp.set_attribute('Blockage_AreaEffects_DropSpeed', str(0))
+        bp.set_attribute('Blockage_AreaEffects_LifeTime', str(0))
+
+
         self.sensor = world.spawn_actor(
             bp,
             carla.Transform(

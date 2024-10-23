@@ -120,13 +120,61 @@ def generate_lidar_bp(arg, world, blueprint_library, delta):
     if arg.semantic:
         lidar_bp = world.get_blueprint_library().find('sensor.lidar.ray_cast_semantic')
     else:
-        lidar_bp = blueprint_library.find('sensor.lidar.ray_cast')
+        lidar_bp = blueprint_library.find('sensor.faulty_lidar.ray_cast')
         if arg.no_noise:
             lidar_bp.set_attribute('dropoff_general_rate', '0.0')
             lidar_bp.set_attribute('dropoff_intensity_limit', '1.0')
             lidar_bp.set_attribute('dropoff_zero_intensity', '0.0')
         else:
             lidar_bp.set_attribute('noise_stddev', '0.2')
+
+        lidar_bp.set_attribute('scenario', str(2))
+
+        lidar_bp.set_attribute('PackageLoss_Start', str(5))
+        lidar_bp.set_attribute('PackageLoss_Interval', str(5))
+        lidar_bp.set_attribute('PackageLoss_Duration', str(3))
+
+        lidar_bp.set_attribute('PackageDelay_Start', str(5))
+        lidar_bp.set_attribute('PackageDelay_Interval', str(5))
+        lidar_bp.set_attribute('PackageDelay_Duration', str(3))
+        lidar_bp.set_attribute('PackageDelay_DelaySize', str(25))
+
+        lidar_bp.set_attribute('RangeReduction_Start', str(5))
+        lidar_bp.set_attribute('RangeReduction_Interval', str(5))
+        lidar_bp.set_attribute('RangeReduction_Duration', str(3))
+        lidar_bp.set_attribute('RangeReduction_Range', str(25))
+
+        lidar_bp.set_attribute('Coordinate_PointDataShift_Start', str(5))
+        lidar_bp.set_attribute('Coordinate_PointDataShift_Interval', str(5))
+        lidar_bp.set_attribute('Coordinate_PointDataShift_Duration', str(3))
+        lidar_bp.set_attribute('Coordinate_PointDataShift_PossibilityToShiftPoint', "0.001")
+        lidar_bp.set_attribute('Coordinate_PointDataShift_MaxShift', str(15))
+
+        lidar_bp.set_attribute('AdditionalData_PointDataShift_Start', str(5))
+        lidar_bp.set_attribute('AdditionalData_PointDataShift_Interval', str(5))
+        lidar_bp.set_attribute('AdditionalData_PointDataShift_Duration', str(3))
+        lidar_bp.set_attribute('AdditionalData_PointDataShift_PossibilityToShiftPoint', "0.01")
+        lidar_bp.set_attribute('AdditionalData_PointDataShift_MaxShift', str(15))
+
+        lidar_bp.set_attribute('RandomPoints_AreaEffects_Start', str(5))
+        lidar_bp.set_attribute('RandomPoints_AreaEffects_Interval', str(0.2))
+        lidar_bp.set_attribute('RandomPoints_AreaEffects_Duration', str(5))
+        lidar_bp.set_attribute('RandomPoints_AreaEffects_CloseRange', "False")
+        lidar_bp.set_attribute('RandomPoints_AreaEffects_Ammount', str(200))
+        lidar_bp.set_attribute('RandomPoints_AreaEffects_HorizontalFlag', str(1))
+        lidar_bp.set_attribute('RandomPoints_AreaEffects_VerticalFlag', str(1))
+
+        lidar_bp.set_attribute('Blockage_AreaEffects_Start', str(5))
+        lidar_bp.set_attribute('Blockage_AreaEffects_Interval', str(3))
+        lidar_bp.set_attribute('Blockage_AreaEffects_Duration', str(0))
+        lidar_bp.set_attribute('Blockage_AreaEffects_CloseRange', "True")
+        lidar_bp.set_attribute('Blockage_AreaEffects_Ammount', str(200))
+        lidar_bp.set_attribute('Blockage_AreaEffects_HorizontalFlag', str(1))
+        lidar_bp.set_attribute('Blockage_AreaEffects_VerticalFlag', str(1))
+        lidar_bp.set_attribute('Blockage_AreaEffects_RandomObjectLifeTime', "False")
+        lidar_bp.set_attribute('Blockage_AreaEffects_MaxLifeTime', str(0))
+        lidar_bp.set_attribute('Blockage_AreaEffects_DropSpeed', str(0))
+        lidar_bp.set_attribute('Blockage_AreaEffects_LifeTime', str(0))
 
     lidar_bp.set_attribute('upper_fov', str(arg.upper_fov))
     lidar_bp.set_attribute('lower_fov', str(arg.lower_fov))
@@ -242,7 +290,7 @@ if __name__ == "__main__":
     argparser.add_argument(
         '--host',
         metavar='H',
-        default='localhost',
+        default='127.0.0.1',
         help='IP of the host CARLA Simulator (default: localhost)')
     argparser.add_argument(
         '-p', '--port',

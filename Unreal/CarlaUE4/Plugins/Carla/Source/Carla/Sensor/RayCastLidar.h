@@ -37,7 +37,7 @@ public:
 
   virtual void PostPhysTick(UWorld *World, ELevelTick TickType, float DeltaTime);
 
-private:
+protected:
   /// Compute the received intensity of the point
   float ComputeIntensity(const FSemanticDetection& RawDetection) const;
   FDetection ComputeDetection(const FHitResult& HitInfo, const FTransform& SensorTransf) const;
