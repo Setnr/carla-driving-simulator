@@ -20,3 +20,4 @@ FString RangeReduction::FailureType = TEXT("RangeReduction");
 FString AreaEffects::FailureType = TEXT("AreaEffects");
 FString Blockage::Type = TEXT("Blockage");
 FString RandomPoints::Type = TEXT("RandomPoints");
+FString ShaderError::FailureType = TEXT("ShaderError");

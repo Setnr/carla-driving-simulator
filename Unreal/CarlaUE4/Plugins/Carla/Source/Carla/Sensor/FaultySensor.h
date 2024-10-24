@@ -2,7 +2,9 @@
 
 #include "Carla.h"
 #include "Carla/Sensor/Sensor.h"
+#include "Carla/Sensor/ShaderBasedSensor.h"
 #include "Carla/Actor/ActorBlueprintFunctionLibrary.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "HexagonActor.h"
 #include <random>
 
@@ -24,7 +26,8 @@ public:
 		RangeReduction = 0x10, //						16	y
 		DetectNonExistingPoints = 0x20,				//	32	y
 		SensorShift = 0x40, // Timed not Collision		64
-		SensorBlockage = 0x80//							128 y
+		SensorBlockage = 0x80,//						128 y
+		ShaderError = 0x100
 	};
 	void UpdateScenario() { ScenarioActive = !ScenarioActive; }
 	virtual bool IsScenarioActive(float CurTime)
@@ -254,7 +257,6 @@ private:
 	float Roll = .0f;
 	float Pitch = .0f;
 	bool ConstantShiftFlag = false;	
-	bool CollisionTriggerFlag = false;
 public:
 	static TArray<FActorVariation> CreateFailureDefinition()
 	{
@@ -288,13 +290,6 @@ public:
 		ConstantShiftVariation.bRestrictToRecommended = false;
 		VariationArray.Add(ConstantShiftVariation);
 
-		FActorVariation TriggerVariation;
-		TriggerVariation.Id = FailureType + TEXT("_CollisionTriggerFlag");
-		TriggerVariation.Type = EActorAttributeType::Bool;
-		TriggerVariation.RecommendedValues = { TEXT("False") };
-		TriggerVariation.bRestrictToRecommended = false;
-		VariationArray.Add(TriggerVariation);
-
 		return VariationArray;
 	}
 	void Set(const FActorDescription& ActorDescription, float CurTime)
@@ -313,14 +308,10 @@ public:
 		if (ActorDescription.Variations.Contains(FailureType + TEXT("_ConstantShiftFlag")))
 			ConstantShiftFlag = UActorBlueprintFunctionLibrary::RetrieveActorAttributeToBool(FailureType + TEXT("_ConstantShiftFlag"), ActorDescription.Variations, false);
 
-		if (ActorDescription.Variations.Contains(FailureType + TEXT("_CollisionTriggerFlag")))
-			CollisionTriggerFlag = UActorBlueprintFunctionLibrary::RetrieveActorAttributeToBool(FailureType + TEXT("_CollisionTriggerFlag"), ActorDescription.Variations, false);
 	}
 
 	void UpdateSensor(ASensor* Sensor) 
 	{
-		if (CollisionTriggerFlag)
-			return;
 		if (!ConstantShiftFlag)
 			Degredation();
 		auto RadarRot = Sensor->GetActorRotation();
@@ -728,4 +719,57 @@ public:
 protected:
 	static FString Type;
 
+};
+
+class ShaderError : public SensorFailure 
+{
+public:
+	ShaderError() {
+		ShaderCol = FLinearColor(0.f, 0.f, 0.f, 0.f);
+	}
+	static TArray<FActorVariation> CreateFailureDefinition()
+	{
+		TArray<FActorVariation> VariationArray = CreatePrimaryFailureDefinition( FailureType);
+	
+
+		return VariationArray;
+	}
+	void Set(const FActorDescription& ActorDescription, float CurTime)
+	{
+		SensorFailure::Set(ActorDescription, FailureType, CurTime);
+
+		
+	}
+	bool IsScenarioActive(float CurTime) override
+	{
+		if (ScenarioActive)
+		{
+			if (CurTime >= Start && !StartCheckd)
+			{
+				StartCheckd = true;
+				return true;
+			}
+			if (CurTime >= Start + Duration)
+			{
+				StartCheckd = false;
+				Degredation();
+				return true;
+			}
+		}
+		return false;
+	}
+	void UpdateShader(TArray<FSensorShader> Shaders)
+	{
+		if (StartCheckd)
+			ShaderCol.A = 1.f;
+		else
+			ShaderCol.A = 0.f;
+		Shaders[ShaderIndx].PostProcessMaterial->SetVectorParameterValue(FName("MyColor"), ShaderCol);
+	}
+	void SetShaderIndex(int id) { ShaderIndx = id; }
+private:
+	static FString FailureType;
+	bool StartCheckd = false;
+	FLinearColor ShaderCol;
+	int ShaderIndx = 1;
 };

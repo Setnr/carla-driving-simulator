@@ -54,6 +54,7 @@ struct FCameraGBufferFloat;
 
 class AFaultyRadar;
 class AFaultyRayCastLidar;
+class AFaultySceneCaptureCamera;
 
 namespace carla {
 namespace sensor {
@@ -88,7 +89,8 @@ namespace sensor {
 
 
     std::pair<AFaultyRadar*, s11n::RadarSerializer>,
-    std::pair<AFaultyRayCastLidar*, s11n::LidarSerializer>
+    std::pair<AFaultyRayCastLidar*, s11n::LidarSerializer>,
+    std::pair<AFaultySceneCaptureCamera *, s11n::ImageSerializer>
   >;
 
 } // namespace sensor
@@ -120,5 +122,6 @@ namespace sensor {
 
 #include "Carla/Sensor/FaultyRadar.h"
 #include "Carla/Sensor/FaultyRayCastLidar.h"
+#include "Carla/Sensor/FaultySceneCaptureCamera.h"
 
 #endif // LIBCARLA_SENSOR_REGISTRY_WITH_SENSOR_INCLUDES

@@ -128,11 +128,17 @@ def generate_lidar_bp(arg, world, blueprint_library, delta):
         else:
             lidar_bp.set_attribute('noise_stddev', '0.2')
 
-        lidar_bp.set_attribute('scenario', str(2))
+        lidar_bp.set_attribute('scenario', str(64))
 
         lidar_bp.set_attribute('PackageLoss_Start', str(5))
         lidar_bp.set_attribute('PackageLoss_Interval', str(5))
         lidar_bp.set_attribute('PackageLoss_Duration', str(3))
+
+        lidar_bp.set_attribute('ShiftSensor_Start', str(5))
+        lidar_bp.set_attribute('ShiftSensor_Interval', str(5))
+        lidar_bp.set_attribute('ShiftSensor_Duration', str(3))
+        lidar_bp.set_attribute('ShiftSensor_Roll', str(3))
+        lidar_bp.set_attribute('ShiftSensor_ConstantShiftFlag', "True")
 
         lidar_bp.set_attribute('PackageDelay_Start', str(5))
         lidar_bp.set_attribute('PackageDelay_Interval', str(5))

@@ -1126,7 +1126,19 @@ class CameraManager(object):
 
         self.transform_index = 1
         self.sensors = [
-            ['sensor.camera.rgb', cc.Raw, 'Camera RGB', {}],
+            ['sensor.camera.rgb', cc.Raw, 'Camera RGB',{}],
+            ['sensor.camera.faulty_rgb', cc.Raw, 'Faulty Camera RGB', 
+                                                                {
+                                                                "scenario"              : str(256),
+                                                                'PackageLoss_Start'     : str(5),
+                                                                'PackageLoss_Interval'  : str(5),
+                                                                'PackageLoss_Duration'  : str(3),
+
+                                                                'ShaderError_Start'  : str(3),
+                                                                'ShaderError_Interval'  : str(5),
+                                                                'ShaderError_Duration'  : str(3)
+                                                                }
+                                                                ],
             ['sensor.camera.depth', cc.Raw, 'Camera Depth (Raw)', {}],
             ['sensor.camera.depth', cc.Depth, 'Camera Depth (Gray Scale)', {}],
             ['sensor.camera.depth', cc.LogarithmicDepth, 'Camera Depth (Logarithmic Gray Scale)', {}],

@@ -80,14 +80,14 @@ protected:
 
   void SetUpSceneCaptureComponent(USceneCaptureComponent2D &SceneCapture) override;
 
-private:
+protected:
 
   UPROPERTY()
   TArray<UMaterial*> MaterialsFound;
-
+protected:
   UPROPERTY()
   TArray<FSensorShader> Shaders;
-
+private:
   UPROPERTY()
   TArray<FShaderFloatParameterValue> FloatShaderParams;
 };
