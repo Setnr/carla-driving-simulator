@@ -703,10 +703,7 @@ public:
 			float dist = sqrt((EndLocation.X - ActorLocation.X) * (EndLocation.X - ActorLocation.X)
 				+ (EndLocation.Y - ActorLocation.Y) * (EndLocation.Y - ActorLocation.Y)
 				+ (EndLocation.Z - ActorLocation.Z) * (EndLocation.Z - ActorLocation.Z));
-			struct Data
-			{
-				float azi, ele, dist, x, y, z, Additional;
-			}d;
+			T::Data d;
 			d.azi = AziEle.X;
 			d.ele = AziEle.Y;
 			d.dist = dist;
@@ -714,7 +711,7 @@ public:
 			d.y = EndLocation.Y - ActorLocation.Y;
 			d.z = EndLocation.Z - ActorLocation.Z;
 			d.Additional = AdditionalValue;
-			data.AddPoint(AziEle.X, AziEle.Y, dist, EndLocation.X - ActorLocation.X, EndLocation.Y - ActorLocation.Y, EndLocation.Z - ActorLocation.Z, AdditionalValue);
+			data.AddPoint(&d);
 		}
 	}
 	static TArray<FActorVariation> CreateFailureDefinition()

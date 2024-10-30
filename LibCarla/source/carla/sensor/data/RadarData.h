@@ -108,10 +108,10 @@ namespace data {
         return static_cast<float>(ShiftCounter) / static_cast<float>(_detections.size());
     }
 
-        struct Data
+    struct Data
     {
       float azi, ele, dist, x, y, z, Additional;
-    }
+    };
     void AddPoint(Data* d)
     {
         RadarDetection det = { d->Additional, d->azi, d->ele, d->dist };

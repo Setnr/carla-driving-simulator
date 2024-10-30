@@ -141,14 +141,14 @@ namespace data {
                     _points.at(i) = _points[i] + RandomValue;
                     ShiftCounter++;
                 }
-            }-
+            }
         }
         return static_cast<float>(ShiftCounter) / static_cast<float>(_points.size());
     }
     struct Data
     {
       float azi, ele, dist, x, y, z, Additional;
-    }
+    };
     void AddPoint(Data* d)
     {
 
