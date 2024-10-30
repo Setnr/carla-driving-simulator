@@ -703,6 +703,17 @@ public:
 			float dist = sqrt((EndLocation.X - ActorLocation.X) * (EndLocation.X - ActorLocation.X)
 				+ (EndLocation.Y - ActorLocation.Y) * (EndLocation.Y - ActorLocation.Y)
 				+ (EndLocation.Z - ActorLocation.Z) * (EndLocation.Z - ActorLocation.Z));
+			struct Data
+			{
+				float azi, ele, dist, x, y, z, Additional;
+			}d;
+			d.azi = AziEle.X;
+			d.ele = AziEle.Y;
+			d.dist = dist;
+			d.x = EndLocation.X - ActorLocation.X;
+			d.y = EndLocation.Y - ActorLocation.Y;
+			d.z = EndLocation.Z - ActorLocation.Z;
+			d.Additional = AdditionalValue;
 			data.AddPoint(AziEle.X, AziEle.Y, dist, EndLocation.X - ActorLocation.X, EndLocation.Y - ActorLocation.Y, EndLocation.Z - ActorLocation.Z, AdditionalValue);
 		}
 	}

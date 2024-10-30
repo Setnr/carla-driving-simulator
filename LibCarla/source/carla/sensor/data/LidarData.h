@@ -114,7 +114,7 @@ namespace data {
     std::vector<float> GetDetections() { return _points; }
     void RandomizeCoords(std::uniform_real_distribution<float>& uniform, std::mt19937& gen, float PossibilityToShiftPoint, float MaxShift)
     {
-        for (int i = 0; i < _points.size(); i++) 
+        for (std::vector<float>::size_type i = 0; i < _points.size(); i++) 
         {
 
             if (i % 4 != 3)
@@ -122,7 +122,7 @@ namespace data {
                 if ((uniform(gen) + 1.f) * .5f <= PossibilityToShiftPoint)
                 {
                     float RandomValue = uniform(gen) * MaxShift;
-                    _points[i] += RandomValue;
+                    _points.at(i) = _points[i] + RandomValue;
                 }
             }
         }
@@ -131,27 +131,31 @@ namespace data {
     float RandomizeAdditionalData(std::uniform_real_distribution<float>& uniform, std::mt19937& gen, float PossibilityToShiftPoint, float MaxShift)
     {
         int ShiftCounter = 0;
-        for (int i = 0; i < _points.size(); i++)
+        for (std::vector<float>::size_type i = 0; i < _points.size(); i++)
         {
             if (i % 4 == 3)
             {
                 if ((uniform(gen) + 1.f) * .5f <= PossibilityToShiftPoint)
                 {
                     float RandomValue = uniform(gen) * MaxShift;
-                    _points[i] += RandomValue;
+                    _points.at(i) = _points[i] + RandomValue;
                     ShiftCounter++;
                 }
-            }
+            }-
         }
         return static_cast<float>(ShiftCounter) / static_cast<float>(_points.size());
     }
-    void AddPoint(float azi, float ele, float dist, float x, float y, float z, float Additional)
+    struct Data
+    {
+      float azi, ele, dist, x, y, z, Additional;
+    }
+    void AddPoint(Data* d)
     {
 
-        _points.push_back(x);
-        _points.push_back(y);
-        _points.push_back(z);
-        _points.push_back(Additional);
+        _points.push_back(d->x);
+        _points.push_back(d->y);
+        _points.push_back(d->z);
+        _points.push_back(d->Additional);
     }
   private:
     std::vector<float> _points;
