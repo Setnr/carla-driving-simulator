@@ -112,8 +112,9 @@ namespace data {
     {
       float azi, ele, dist, x, y, z, Additional;
     };
-    void AddPoint(Data* d)
+    void AddPoint(void* p)
     {
+	Data* d = (Data*) p;
         RadarDetection det = { d->Additional, d->azi, d->ele, d->dist };
         _detections.push_back(det);
     }

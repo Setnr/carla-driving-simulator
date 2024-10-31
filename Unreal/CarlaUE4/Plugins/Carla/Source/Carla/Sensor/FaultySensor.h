@@ -373,18 +373,18 @@ private:
 public:
 	static TArray<FActorVariation> CreateFailureDefinition()
 	{
-		TArray<FActorVariation> VariationArray = PointDataShift::CreateFailureDefinition(TypeShift);
+		TArray<FActorVariation> VariationArray = PointDataShift<T>::CreateFailureDefinition(TypeShift);
 
 		return VariationArray;
 	}
 	void Set(const FActorDescription& ActorDescription, float CurTime)
 	{
-		PointDataShift::Set(ActorDescription, TypeShift, CurTime);
+		PointDataShift<T>::Set(ActorDescription, TypeShift, CurTime);
 
 	}
 	void UpdateData(T& data) override
 	{		
-		data.RandomizeCoords(uniform, gen_uniform, PossibilityToShiftPoint,MaxShift);
+		data.RandomizeCoords(this->uniform, this->gen_uniform, this->PossibilityToShiftPoint,this->MaxShift);
 	}
 };
 
@@ -396,18 +396,18 @@ private:
 public:
 	static TArray<FActorVariation> CreateFailureDefinition()
 	{
-		TArray<FActorVariation> VariationArray = PointDataShift::CreateFailureDefinition(TypeShift);
+		TArray<FActorVariation> VariationArray = PointDataShift<T>::CreateFailureDefinition(TypeShift);
 
 		return VariationArray;
 	}
 	void Set(const FActorDescription& ActorDescription, float CurTime)
 	{
-		PointDataShift::Set(ActorDescription, TypeShift, CurTime);
+		PointDataShift<T>::Set(ActorDescription, TypeShift, CurTime);
 
 	}
 	void UpdateData(T& data) override
 	{
-		float Changed = data.RandomizeAdditionalData(uniform, gen_uniform, PossibilityToShiftPoint, MaxShift);
+		float Changed = data.RandomizeAdditionalData(this->uniform, this->gen_uniform, this->PossibilityToShiftPoint,this->MaxShift);
 		//UE_LOG(LogTemp, Warning, TEXT("Changed %f Points"), Changed);
 	}
 };
@@ -703,7 +703,12 @@ public:
 			float dist = sqrt((EndLocation.X - ActorLocation.X) * (EndLocation.X - ActorLocation.X)
 				+ (EndLocation.Y - ActorLocation.Y) * (EndLocation.Y - ActorLocation.Y)
 				+ (EndLocation.Z - ActorLocation.Z) * (EndLocation.Z - ActorLocation.Z));
-			T::Data d;
+				
+		    struct DataStr
+		    {
+		      float azi, ele, dist, x, y, z, Additional;
+		    };
+			DataStr d;
 			d.azi = AziEle.X;
 			d.ele = AziEle.Y;
 			d.dist = dist;
@@ -711,7 +716,7 @@ public:
 			d.y = EndLocation.Y - ActorLocation.Y;
 			d.z = EndLocation.Z - ActorLocation.Z;
 			d.Additional = AdditionalValue;
-			data.AddPoint(&d);
+			data.AddPoint((void*)&d);
 		}
 	}
 	static TArray<FActorVariation> CreateFailureDefinition()

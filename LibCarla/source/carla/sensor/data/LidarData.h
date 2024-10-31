@@ -149,9 +149,9 @@ namespace data {
     {
       float azi, ele, dist, x, y, z, Additional;
     };
-    void AddPoint(Data* d)
+    void AddPoint(void* p)
     {
-
+	Data* d = (Data*) p;
         _points.push_back(d->x);
         _points.push_back(d->y);
         _points.push_back(d->z);
