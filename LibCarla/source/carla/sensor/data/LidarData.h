@@ -151,7 +151,7 @@ namespace data {
     };
     void AddPoint(void* p)
     {
-	Data* d = (Data*) p;
+	Data* d = static_cast<Data*>(p);
         _points.push_back(d->x);
         _points.push_back(d->y);
         _points.push_back(d->z);

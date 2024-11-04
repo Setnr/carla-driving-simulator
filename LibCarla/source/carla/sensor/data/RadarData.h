@@ -114,7 +114,7 @@ namespace data {
     };
     void AddPoint(void* p)
     {
-	Data* d = (Data*) p;
+	Data* d = static_cast<Data*>(p);
         RadarDetection det = { d->Additional, d->azi, d->ele, d->dist };
         _detections.push_back(det);
     }
