@@ -91,7 +91,7 @@ for PY_VERSION in ${PY_VERSION_LIST[@]} ; do
     BOOST_PACKAGE_BASENAME=boost_${BOOST_VERSION//./_}
 
     log "Retrieving boost."
-    wget "https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/source/${BOOST_PACKAGE_BASENAME}.tar.gz" || true
+    wget "https://archives.boost.io/release/${BOOST_VERSION}/source/boost_${BOOST_VERSION//./_}.tar.gz" || true
     # try to use the backup boost we have in Jenkins
     if [[ ! -f "${BOOST_PACKAGE_BASENAME}.tar.gz" ]] ; then
       log "Using boost backup"
@@ -368,14 +368,14 @@ else
 fi
 
 # ==============================================================================
-# -- Get and compile libxerces 3.2.3 ------------------------------
+# -- Get and compile libxerces 3.2.4 ------------------------------
 # ==============================================================================
 
-XERCESC_VERSION=3.2.3
+XERCESC_VERSION=3.3.0
 XERCESC_BASENAME=xerces-c-${XERCESC_VERSION}
 
 XERCESC_TEMP_FOLDER=${XERCESC_BASENAME}
-XERCESC_REPO=https://archive.apache.org/dist/xerces/c/3/sources/xerces-c-${XERCESC_VERSION}.tar.gz
+XERCESC_REPO=https://ftp.cixug.es/apache/xerces/c/3/sources/xerces-c-${XERCESC_VERSION}.tar.gz
 
 XERCESC_SRC_DIR=${XERCESC_BASENAME}-source
 XERCESC_INSTALL_DIR=${XERCESC_BASENAME}-install
