@@ -1,3 +1,200 @@
+# Carla Faulty Sensor Extension
+This repository extends the CARLA driving simulator by a fault versions of the natively implemented sensors.
+In the real world, several factors influence the normal operation of sensors and thus an ideal output may be easily simulated, yet not realistic.
+The goal of this work is to create a modified version of the existing radar, lidar and camera sensor, that is capable of producing falsified data, matching various real-world effects and influences.
+In the end, these sensors can be used to create a more realistic perception output, or to train and validate other applications with incorrect sensor outputs.
+
+## General
+The Radar, the Lidar as well as the RGB Camera got extended by the following models:
+```c++
+	enum ScenarioID : int
+	{
+      PackageLoss = 0x1,              // 1
+      PackageDelay = 0x2,             // 2
+      CoordinateDataShift = 0x4,      // 4
+      AdditonalDataShift = 0x8,       // 8
+      RangeReduction = 0x10,          // 16
+      DetectNonExistingPoints = 0x20, // 32
+      SensorShift = 0x40,             // 64
+      SensorBlockage = 0x80,          // 128
+      ShaderError = 0x100             // 256
+	};
+```
+Which model is supported by which sensor is shown in the following Table:
+
+| Failure model            | Radar | LIDAR | Camera |
+|--------------------------|:-----:|:-----:|:------:|
+| Package Loss             | ✅    | ✅    | ✅     |
+| Package Delay            | ✅    | ✅    | ❌     |
+| CoordinateDataShift      | ✅    | ✅    | ❌     |
+| AdditonalDataShift       | ✅    | ✅    | ❌     |
+| RangeReduction           | ✅    | ✅    | ❌     |
+| DetectNonExistingPoints  | ✅    | ✅    | ❌     |
+| SensorShift              | ✅    | ✅    | ❌     |
+| SensorBlockage           | ✅    | ✅    | ❌     |
+| ShaderError              | ❌    | ❌    | ✅     |
+
+To spawn a sensor (via PythonAPI) you can use the subsequent Blueprint identifiers:
+
+```python
+sensor.other.faulty_radar
+sensor.other.faulty_lidar
+sensor.camera.faulty_rgb
+```
+---
+# Failure Model Types and Parameters
+
+For each model, there are different types of parameters that can be set. Each model represents a specified failure:
+
+- **PackageLoss** 
+  - Failures where the connection between a sensor and following systems breaks during the simulation e.g. a loose connection
+- **PackageDelay**
+  - Failures where the connection between a sensor and following systems is corrupted and data is delayed e.g. an overload within the data transfer
+- **ShiftSensor**
+  - Failures where the sensor changes its FOV during the simulation e.g. the sensor is not properly connected to the vehicle frame
+- **Coordinate_PointDataShift**
+  - Failures where the coordinates of the detection points get changed e.g. due to vibrations effecting the radar/lidar sensor
+- **AdditionalData_PointDataShift**
+  - Failures where additionally collected data (radar - velocity & lidar - intensity) gets changed e.g. vibrations within a radar/lidar-sensor
+- **RangeReduction**
+  - Failures where the effective range of the sensor is reduced e.g. rain in case of lidar sensors
+- **Blockage_AreaEffects**
+  - Failures where the beams of the sensor are completely blocked e.g. dirt sticking on the radar or lidar lense
+- **RandomPoints_AreaEffects**
+  - Failures where additional points get detected e.g. due spoofing or jamming attacks on the radar/lidar
+- **ShaderError**
+  - Failures on the camera affecting the camera image (currently only used to simulate a packageloss where a picture is sent, but shows a completely black image)
+
+Additionally, each model has its own set of parameters that can be accessed by combining the failure type with the parameter name.
+
+---
+
+## Common Parameters for all Failures
+While some parameters are specific to the failure type, several parameters are used throughout all:
+
+- **_Start**  
+  First occurrence of the failure in the simulation in seconds (float, seconds)
+- **_Duration**  
+  Time duration of the failure occurrence in seconds (float, seconds)
+- **_DurationDegradation**  
+  Degradation of the duration time (failure time) in seconds (float, seconds)
+- **_Interval**  
+  The time duration between the two failure occurrences (float, seconds)
+- **_IntervalDegradation**  
+  Degradation of the occurrence interval (time between failures) in seconds (float, seconds)
+- **_seed**  
+  The seed used for everything that relies on a uniform distribution (integer, number)
+
+Note that in Python all of these inputs are handled as strings.
+
+---
+
+## Model-Specific Parameters
+
+### PackageDelay
+
+- **_DelaySize**  
+  The number of packages delayed in the specific failure occurrence (integer, number)
+- **_DegradationSize**  
+  Degradation of the delay by the increase of the number of delayed packages per failure occurrence (integer, number)
+- **_RingBufferMaxUseSize**  
+  The maximum size until a package is dropped due to a simulated overflow (cannot be larger than 128) (integer, number)
+
+---
+
+### ShiftSensor
+
+- **_Yaw**  
+  Yaw angle of the sensor shift (float, angle)
+- **_Roll**  
+  Roll angle of the sensor shift (float, angle)
+- **_Pitch**  
+  Pitch angle of the sensor shift (float, angle)
+- **_ConstantShiftFlag**  
+  If `true`, the sensor is shifted in every frame of the duration; if `false`, the sensor is shifted only once at the start of the failure occurrence (boolean, flag)
+
+---
+
+### Coordinate\_PointDataShift and AdditionalData\_PointDataShift
+
+- **_MaxShift**  
+  The number of points that will be shifted (integer, number)
+- **_PossibilityToShiftPoint**  
+  The probability that a point gets shifted (float, percentage)
+
+---
+
+### RangeReduction
+
+- **_Range**  
+  Reduction of the sensor's covered distance/range in meters (float, meter)
+
+---
+
+### Blockage\_AreaEffects and RandomPoints\_AreaEffects
+
+- **_CloseRange**  
+  If `true`, points will only spawn within 1 meter of the sensors; if `false`, points will spawn throughout the sensor's entire range (boolean, flag)
+- **_HorizontalFlag** and **_VerticalFlag**  
+  These flags determine which part of the sensor's field of view is used to spawn a blockage or a random point (int, enum). Their values are defined by the following enums:
+
+#### Horizontal Flags
+
+```c++
+enum HorizontalFOV_Type : int
+{
+    Left = 0,
+    WholeHorFOV = 1,
+    Right = 2
+};
+```
+#### Vertical Flags
+```c++
+enum VerticalFOV_Type : int
+{
+    Down = 0,
+    WholeVerFOV = 1,
+    Up = 2
+};
+```
+- **_Ammount**  
+  The number of spawned points (integer, number)
+
+### Additional Parameters for Blockage_AreaEffects
+
+- **_MaxLifeTime**  
+  The maximum lifetime per spawned blockage object (float, time)
+- **_RandomObjectLifeTime**  
+  If `true`, a random time between 0 and \_MaxLifeTime is chosen for the lifetime of a blockage object; if `false` \_LifeTime is used (boolean, flag)
+- **_LifeTime**  
+  Number of seconds an object will last during the simulation (if negative, the object will last forever) (float, seconds)
+- **_DropSpeed**  
+  The speed at which an object moves along the z-axis each frame (float, meters)
+
+# Example
+
+A sample setup code for a faulty radar with a blockage can be seen here:
+
+```python
+bp = world.get_blueprint_library().find('sensor.other.faulty_radar')
+bp.set_attribute('horizontal_fov', str(90))
+bp.set_attribute('vertical_fov', str(30))
+bp.set_attribute('range', str(100))
+
+bp.set_attribute('scenario', str(128))
+bp.set_attribute('Blockage_AreaEffects_Start', str(5))
+bp.set_attribute('Blockage_AreaEffects_Interval', str(3))
+bp.set_attribute('Blockage_AreaEffects_Duration', str(0))
+bp.set_attribute('Blockage_AreaEffects_CloseRange', "True")
+bp.set_attribute('Blockage_AreaEffects_Ammount', str(20))
+bp.set_attribute('Blockage_AreaEffects_HorizontalFlag', str(1))
+bp.set_attribute('Blockage_AreaEffects_VerticalFlag', str(1))
+bp.set_attribute('Blockage_AreaEffects_RandomObjectLifeTime', "False")
+bp.set_attribute('Blockage_AreaEffects_MaxLifeTime', str(0))
+bp.set_attribute('Blockage_AreaEffects_DropSpeed', str(0))
+bp.set_attribute('Blockage_AreaEffects_LifeTime', str(0))
+```
+
 CARLA Simulator
 ===============
 
