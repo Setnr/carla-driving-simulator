@@ -27,7 +27,7 @@ Run the following command to start the container:
 sudo docker run --privileged --gpus all --net=host -e DISPLAY=$DISPLAY carlasim/carla:0.9.15 /bin/bash ./CarlaUE4.sh
 ```
 
-For further information, see the [build_docker.md](https://github.com/carla-simulator/carla/blob/0.9.15/Docs/build_docker.md).
+For further information, see the [build\_docker.md](https://github.com/carla-simulator/carla/blob/0.9.15/Docs/build_docker.md).
 
 ---
 
@@ -62,7 +62,7 @@ Build the `carla-prerequisites` image (this step may take a while):
 docker build --build-arg EPIC_USER=<GitHubUserName> --build-arg EPIC_PASS=<GitHubPassword> -t carla-prerequisites -f Prerequisites.Dockerfile .
 ```
 
-For further information, see the [build_docker_unreal.md](https://github.com/carla-simulator/carla/blob/0.9.15/Docs/build_docker_unreal.md).
+For further information, see the [build\_docker\_unreal.md](https://github.com/carla-simulator/carla/blob/0.9.15/Docs/build_docker_unreal.md).
 
 3. **Build the main docker image**
 

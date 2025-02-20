@@ -4,6 +4,8 @@ In the real world, several factors influence the normal operation of sensors and
 The goal of this work is to create a modified version of the existing radar, lidar and camera sensor, that is capable of producing falsified data, matching various real-world effects and influences.
 In the end, these sensors can be used to create a more realistic perception output, or to train and validate other applications with incorrect sensor outputs.
 
+To setup this as a docker please follow the Install.md provided in the Util/Docker-Folder.
+
 ## General
 The Radar, the Lidar as well as the RGB Camera got extended by the following models:
 ```c++
